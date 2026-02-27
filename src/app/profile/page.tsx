@@ -152,7 +152,7 @@ export default function ProfilePage() {
                     // Preserve bookmark order
                     const ordered = postIds
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map(id => postsData.find((p: any) => p.id === id))
+                        .map((id: string) => postsData.find((p: any) => p.id === id))
                         .filter(Boolean)
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         .map((p: any) => ({
@@ -192,7 +192,7 @@ export default function ProfilePage() {
                     // Preserve bookmark order
                     const ordered = articleIds
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map(id => articlesData.find((a: any) => a.id === id))
+                        .map((id: string) => articlesData.find((a: any) => a.id === id))
                         .filter(Boolean)
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         .map((a: any) => ({
@@ -638,7 +638,7 @@ export default function ProfilePage() {
                                             <Bookmark className="h-4 w-4" />
                                             Kaydedilenler
                                         </TabsTrigger>
-                                                <TabsTrigger value="portfolio" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-sky-600 transition-all font-black text-sm uppercase tracking-widest py-2.5">
+                                        <TabsTrigger value="portfolio" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-sky-600 transition-all font-black text-sm uppercase tracking-widest py-2.5">
                                             Portfölyom
                                         </TabsTrigger>
                                     </TabsList>
