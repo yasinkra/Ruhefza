@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { X, BookOpen, Video, Image as ImageIcon, FileText, Upload, Link, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -50,7 +50,7 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
     useEffect(() => {
         if (selectedType === "article_link") {
             setLoadingArticles(true);
-            supabase.from("articles").select("id, title, category")
+            createClient().from("articles").select("id, title, category")
                 .eq("author_id", userId)
                 .order("created_at", { ascending: false })
                 .then(({ data }) => {
@@ -114,7 +114,7 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
         if ((selectedType === "image" || selectedType === "document") && file) {
             const ext = file.name.split(".").pop();
             const filePath = `${userId}/${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
-            const { error: uploadError } = await supabase.storage
+            const { error: uploadError } = await createClient().storage
                 .from("portfolio-files")
                 .upload(filePath, file);
 
@@ -124,13 +124,13 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
                 return;
             }
 
-            const { data: { publicUrl } } = supabase.storage.from("portfolio-files").getPublicUrl(filePath);
+            const { data: { publicUrl } } = createClient().storage.from("portfolio-files").getPublicUrl(filePath);
             payload.file_url = publicUrl;
             payload.file_name = file.name;
             payload.file_size_bytes = file.size;
         }
 
-        const { error } = await supabase.from("portfolio_items").insert(payload);
+        const { error } = await createClient().from("portfolio_items").insert(payload);
         if (error) {
             toast.error("Kaydedilemedi: " + error.message);
         } else {

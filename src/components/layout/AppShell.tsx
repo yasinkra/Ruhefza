@@ -3,7 +3,7 @@
 import { Sidebar } from "./Sidebar";
 import { BottomNav } from "./BottomNav";
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { ShieldAlert, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -20,9 +20,9 @@ export function AppShell({ children, fullWidth = false }: AppShellProps) {
 
     useEffect(() => {
         const checkBanStatus = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (user) {
-                const { data } = await supabase
+                const { data } = await createClient()
                     .from("profiles")
                     .select("is_banned")
                     .eq("id", user.id)
@@ -38,7 +38,7 @@ export function AppShell({ children, fullWidth = false }: AppShellProps) {
     }, []);
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        await createClient().auth.signOut();
         router.push("/login");
     };
 

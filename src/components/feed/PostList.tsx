@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { PostItem } from "./PostItem";
 
 interface Post {
@@ -39,10 +39,10 @@ export function PostList({
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => {
+        createClient().auth.getUser().then(({ data }) => {
             setUserId(data.user?.id || null);
             if (data.user?.id) {
-                supabase.from('profiles').select('is_admin').eq('id', data.user.id).single()
+                createClient().from('profiles').select('is_admin').eq('id', data.user.id).single()
                     .then(({ data: p }) => setIsAdmin(!!p?.is_admin));
             }
         });
@@ -52,7 +52,7 @@ export function PostList({
         const fetchPosts = async () => {
             setLoading(true);
 
-            let query = supabase
+            let query = createClient()
                 .from("posts")
                 .select(`
                     id,
@@ -105,12 +105,12 @@ export function PostList({
             })) as Post[];
 
             if (userId && mappedPosts.length > 0) {
-                const { data: likesData } = await supabase
+                const { data: likesData } = await createClient()
                     .from("post_likes")
                     .select("post_id")
                     .eq("user_id", userId);
 
-                const { data: bookmarksData } = await supabase
+                const { data: bookmarksData } = await createClient()
                     .from("bookmarks")
                     .select("item_id")
                     .eq("user_id", userId)

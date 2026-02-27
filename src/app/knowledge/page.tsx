@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { ArticleCard, Article } from "@/components/knowledge/ArticleCard";
 import { Input } from "@/components/ui/input";
 import { Search, Megaphone, BookOpen, Clock, User } from "lucide-react";
@@ -28,7 +28,7 @@ export default function KnowledgeBasePage() {
 
     const fetchArticles = async () => {
         setLoading(true);
-        let query = supabase
+        let query = createClient()
             .from("articles")
             .select(`
                 id,
@@ -64,10 +64,10 @@ export default function KnowledgeBasePage() {
 
     useEffect(() => {
         const checkUserStatus = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (user) {
                 setCurrentUserId(user.id);
-                const { data } = await supabase.from('profiles').select('role, is_verified_expert, verification_status, is_admin').eq('id', user.id).single();
+                const { data } = await createClient().from('profiles').select('role, is_verified_expert, verification_status, is_admin').eq('id', user.id).single();
                 if (data) {
                     const isVerifiedTeacher = data.role === 'teacher' && (data.is_verified_expert || data.verification_status === 'approved');
                     const isStudent = data.role === 'student';
@@ -75,7 +75,7 @@ export default function KnowledgeBasePage() {
                     if (data.is_admin) setIsAdmin(true);
                 }
                 // Fetch bookmarked article IDs
-                const { data: bData } = await supabase
+                const { data: bData } = await createClient()
                     .from("bookmarks")
                     .select("item_id")
                     .eq("user_id", user.id)
@@ -86,7 +86,7 @@ export default function KnowledgeBasePage() {
         };
 
         const fetchAnnouncement = async () => {
-            const { data } = await supabase
+            const { data } = await createClient()
                 .from("system_settings")
                 .select("announcement_message, is_announcement_active")
                 .eq("id", 'global')

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { AppShell } from "@/components/layout/AppShell";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/button";
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
     const [loadingStats, setLoadingStats] = useState(true);
 
     const fetchPendingTeachers = async () => {
-        const { data } = await supabase
+        const { data } = await createClient()
             .from("profiles")
             .select("id, full_name, created_at, verification_document_url")
             .eq("role", "teacher")
@@ -87,13 +87,13 @@ export default function AdminDashboard() {
 
     const fetchStats = async () => {
         setLoadingStats(true);
-        const { data } = await supabase.rpc('get_admin_stats');
+        const { data } = await createClient().rpc('get_admin_stats');
         if (data) setStats(data);
         setLoadingStats(false);
     };
 
     const fetchAnnouncement = async () => {
-        const { data } = await supabase
+        const { data } = await createClient()
             .from("system_settings")
             .select("announcement_message, is_announcement_active")
             .eq("id", 'global')
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
     };
 
     const fetchRandomUsers = async () => {
-        const { data } = await supabase
+        const { data } = await createClient()
             .from("profiles")
             .select("id, full_name, username, custom_id, role, is_admin, is_banned, created_at, avatar_url")
             .limit(5);
@@ -116,14 +116,14 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         const checkAdminAndFetchData = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
 
             if (!user) {
                 router.push("/login");
                 return;
             }
 
-            const { data: profile } = await supabase
+            const { data: profile } = await createClient()
                 .from("profiles")
                 .select("is_admin")
                 .eq("id", user.id)
@@ -151,14 +151,14 @@ export default function AdminDashboard() {
         if (query.length < 3) return;
 
         setLoadingSearch(true);
-        const { data, error } = await supabase.rpc('search_user_admin', { search_query: query });
+        const { data, error } = await createClient().rpc('search_user_admin', { search_query: query });
         if (data) setSearchResults(data);
         setLoadingSearch(false);
     };
 
     const handleUpdateAnnouncement = async () => {
         try {
-            const { error } = await supabase.rpc('update_announcement', {
+            const { error } = await createClient().rpc('update_announcement', {
                 message: announcement.message,
                 active: announcement.active
             });
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
 
     const handleToggleBan = async (userId: string) => {
         try {
-            const { error } = await supabase.rpc('toggle_user_ban', { target_user_id: userId });
+            const { error } = await createClient().rpc('toggle_user_ban', { target_user_id: userId });
             if (error) throw error;
 
             setSearchResults(prev => prev.map(u =>
@@ -193,7 +193,7 @@ export default function AdminDashboard() {
 
         try {
             // Create a short-lived signed URL to view the private document
-            const { data, error } = await supabase.storage
+            const { data, error } = await createClient().storage
                 .from("verification_documents")
                 .createSignedUrl(path, 60); // 60 seconds validity
 
@@ -214,7 +214,7 @@ export default function AdminDashboard() {
         setProcessingId(teacherId);
 
         try {
-            const { error } = await supabase.rpc('approve_teacher_verification', {
+            const { error } = await createClient().rpc('approve_teacher_verification', {
                 teacher_id: teacherId,
                 is_approved: isApproved
             });

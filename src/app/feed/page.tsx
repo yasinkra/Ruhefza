@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Filter, Info, Search, Flame, Clock, Megaphone } from "lucide-react";
 import { cn } from "@/utils/cn";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
 
 export default function FeedPage() {
@@ -31,9 +31,9 @@ export default function FeedPage() {
 
     useEffect(() => {
         const checkExpertStatus = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (user) {
-                const { data } = await supabase
+                const { data } = await createClient()
                     .from("profiles")
                     .select("role, is_verified_expert, verification_status")
                     .eq("id", user.id)
@@ -51,7 +51,7 @@ export default function FeedPage() {
             setLoadingProfile(false);
         };
         const fetchAnnouncement = async () => {
-            const { data } = await supabase
+            const { data } = await createClient()
                 .from("system_settings")
                 .select("announcement_message, is_announcement_active")
                 .eq("id", 'global')

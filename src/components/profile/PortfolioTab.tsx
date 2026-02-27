@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2, FileText, Image as ImageIcon, Video, BookOpen, ExternalLink, Download } from "lucide-react";
 import { toast } from "sonner";
@@ -59,7 +59,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
     const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
     const fetchItems = async () => {
-        const { data, error } = await supabase
+        const { data, error } = await createClient()
             .from("portfolio_items")
             .select("*")
             .eq("user_id", userId)
@@ -75,7 +75,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
 
         let articlesMap: Record<string, { title: string; category: string; id: string }> = {};
         if (articleIds.length > 0) {
-            const { data: articles } = await supabase
+            const { data: articles } = await createClient()
                 .from("articles")
                 .select("id, title, category")
                 .in("id", articleIds);
@@ -100,10 +100,10 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
         // Delete file from storage if applicable
         if ((item.type === "image" || item.type === "document") && item.file_url) {
             const path = item.file_url.split("/portfolio-files/")[1];
-            if (path) await supabase.storage.from("portfolio-files").remove([path]);
+            if (path) await createClient().storage.from("portfolio-files").remove([path]);
         }
 
-        const { error } = await supabase.from("portfolio_items").delete().eq("id", item.id);
+        const { error } = await createClient().from("portfolio_items").delete().eq("id", item.id);
         if (!error) {
             setItems(prev => prev.filter(i => i.id !== item.id));
             toast.success("Portföyden kaldırıldı.");

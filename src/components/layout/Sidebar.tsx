@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Home, MessageCircle, User, BookOpen, LogOut, Heart } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 const navigation = [
     { name: "Akış", href: "/feed", icon: Home },
@@ -24,10 +24,10 @@ export function Sidebar() {
         let mounted = true;
 
         const fetchUnreadCount = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (!user) return;
 
-            const { count, error } = await supabase
+            const { count, error } = await createClient()
                 .from('messages')
                 .select('*', { count: 'exact', head: true })
                 .eq('receiver_id', user.id)
@@ -40,12 +40,12 @@ export function Sidebar() {
 
         fetchUnreadCount();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+        const { data: { subscription } } = createClient().auth.onAuthStateChange(() => {
             fetchUnreadCount();
         });
 
         // Optional: subscribe to new messages for real-time updates
-        const channel = supabase.channel('sidebar-unread')
+        const channel = createClient().channel('sidebar-unread')
             .on(
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'messages' },
@@ -58,12 +58,12 @@ export function Sidebar() {
         return () => {
             mounted = false;
             subscription.unsubscribe();
-            supabase.removeChannel(channel);
+            createClient().removeChannel(channel);
         };
     }, []);
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        await createClient().auth.signOut();
         router.push("/login");
     };
 

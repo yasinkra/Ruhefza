@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { AppShell } from "@/components/layout/AppShell";
 import { cn } from "@/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -85,14 +85,14 @@ export default function ProfilePage() {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
 
             if (!user) {
                 router.push("/login");
                 return;
             }
 
-            const { data, error } = await supabase
+            const { data, error } = await createClient()
                 .from("profiles")
                 .select("*")
                 .eq("id", user.id)
@@ -111,13 +111,13 @@ export default function ProfilePage() {
         // ... rest of the fetchBookmarks and handlers ...
 
         const fetchBookmarks = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (!user) return;
 
             setLoadingBookmarks(true);
 
             // Step 1: Get post bookmark IDs
-            const { data: postBookmarks } = await supabase
+            const { data: postBookmarks } = await createClient()
                 .from("bookmarks")
                 .select("item_id, created_at")
                 .eq("user_id", user.id)
@@ -128,7 +128,7 @@ export default function ProfilePage() {
                 const postIds = postBookmarks.map((b: { item_id: string }) => b.item_id);
 
                 // Step 2: Fetch the actual posts
-                const { data: postsData } = await supabase
+                const { data: postsData } = await createClient()
                     .from("posts")
                     .select(`
                         id, content, is_anonymous, likes_count, created_at,
@@ -141,7 +141,7 @@ export default function ProfilePage() {
 
                 if (postsData) {
                     // Step 3: Fetch which posts user has liked
-                    const { data: likesData } = await supabase
+                    const { data: likesData } = await createClient()
                         .from("post_likes")
                         .select("post_id")
                         .eq("user_id", user.id)
@@ -169,7 +169,7 @@ export default function ProfilePage() {
             }
 
             // Step 1b: Get article bookmark IDs
-            const { data: artBookmarks } = await supabase
+            const { data: artBookmarks } = await createClient()
                 .from("bookmarks")
                 .select("item_id, created_at")
                 .eq("user_id", user.id)
@@ -180,7 +180,7 @@ export default function ProfilePage() {
                 const articleIds = artBookmarks.map((b: { item_id: string }) => b.item_id);
 
                 // Step 2b: Fetch the actual articles
-                const { data: articlesData } = await supabase
+                const { data: articlesData } = await createClient()
                     .from("articles")
                     .select(`
                         id, title, summary, category, created_at, author_id,
@@ -218,7 +218,7 @@ export default function ProfilePage() {
         setSaving(true);
 
         try {
-            const { error } = await supabase
+            const { error } = await createClient()
                 .from("profiles")
                 .update({
                     full_name: formData.full_name,
@@ -259,7 +259,7 @@ export default function ProfilePage() {
         setUsernameLoading(true);
 
         try {
-            const { data, error } = await supabase.rpc('update_username', {
+            const { data, error } = await createClient().rpc('update_username', {
                 new_username: usernameInput,
                 user_id: profile.id
             });
@@ -286,7 +286,7 @@ export default function ProfilePage() {
     };
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        await createClient().auth.signOut();
         router.push("/login");
     };
 
@@ -754,7 +754,7 @@ export default function ProfilePage() {
                                                                     </a>
                                                                     <button
                                                                         onClick={async () => {
-                                                                            const { error } = await supabase.from("bookmarks")
+                                                                            const { error } = await createClient().from("bookmarks")
                                                                                 .delete()
                                                                                 .eq("user_id", profile.id)
                                                                                 .eq("item_id", art.id)

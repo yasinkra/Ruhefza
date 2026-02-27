@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -45,7 +45,7 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
 
         setLoading(true);
         try {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
 
             if (!user) {
                 alert("Lütfen önce giriş yapın.");
@@ -62,7 +62,7 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
                 const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
                 const filePath = `${user.id}/${fileName}`;
 
-                const { error: uploadError } = await supabase.storage
+                const { error: uploadError } = await createClient().storage
                     .from('post-images')
                     .upload(filePath, imageFile);
 
@@ -71,14 +71,14 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
                     throw new Error("Görsel yüklenirken bir hata oluştu.");
                 }
 
-                const { data: { publicUrl } } = supabase.storage
+                const { data: { publicUrl } } = createClient().storage
                     .from('post-images')
                     .getPublicUrl(filePath);
 
                 imageUrl = publicUrl;
             }
 
-            const { error } = await supabase.from("posts").insert({
+            const { error } = await createClient().from("posts").insert({
                 content,
                 author_id: user.id,
                 is_anonymous: isAnonymous,

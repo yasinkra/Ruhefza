@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, UploadCloud, ShieldAlert, ShieldCheck, Clock } from "lucide-react";
@@ -70,14 +70,14 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
             const filePath = `${fileName}`;
 
             // Upload document
-            const { error: uploadError, data } = await supabase.storage
+            const { error: uploadError, data } = await createClient().storage
                 .from("verification_documents")
                 .upload(filePath, file, { upsert: true });
 
             if (uploadError) throw uploadError;
 
             // Update profile status and save the file path for admin
-            const { error: updateError } = await supabase
+            const { error: updateError } = await createClient()
                 .from("profiles")
                 .update({
                     verification_status: 'pending',

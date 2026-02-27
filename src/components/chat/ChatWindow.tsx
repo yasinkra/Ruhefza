@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Send, Paperclip, ArrowLeft, Download, FileText, Clock, X } from "lucide-react";
@@ -69,12 +69,12 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             .filter(m => m.sender_id !== userId && !m.is_read && !m._temp)
             .map(m => m.id);
         if (unreadIds.length > 0) {
-            await supabase.from("messages").update({ is_read: true }).in("id", unreadIds);
+            await createClient().from("messages").update({ is_read: true }).in("id", unreadIds);
         }
     }, []);
 
     const fetchMessages = useCallback(async (userId: string) => {
-        const { data, error } = await supabase
+        const { data, error } = await createClient()
             .from("messages")
             .select("*")
             .eq("conversation_id", conversationId)
@@ -90,14 +90,14 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
 
     useEffect(() => {
         let uid: string;
-        supabase.auth.getUser().then(({ data }) => {
+        createClient().auth.getUser().then(({ data }) => {
             if (data.user) {
                 uid = data.user.id;
                 setCurrentUserId(data.user.id);
                 fetchMessages(data.user.id);
             }
         });
-        supabase.from("profiles")
+        createClient().from("profiles")
             .select("full_name, avatar_url, role")
             .eq("id", partnerId)
             .single()
@@ -108,7 +108,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
     useEffect(() => {
         if (!currentUserId) return;
 
-        const channel = supabase
+        const channel = createClient()
             .channel(`conv:${conversationId}:${currentUserId}`)
             .on('postgres_changes', {
                 event: 'INSERT',
@@ -126,7 +126,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                 scrollToBottom();
                 // Auto-mark as read if message is from partner and we're viewing
                 if (newMsg.sender_id !== currentUserId) {
-                    supabase.from("messages").update({ is_read: true }).eq("id", newMsg.id);
+                    createClient().from("messages").update({ is_read: true }).eq("id", newMsg.id);
                     // Update local state to show as read for the partner
                     setMessages(prev => prev.map(m => m.id === newMsg.id ? { ...m, is_read: true } : m));
                 }
@@ -142,7 +142,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             })
             .subscribe();
 
-        return () => { supabase.removeChannel(channel); };
+        return () => { createClient().removeChannel(channel); };
     }, [currentUserId, conversationId]);
 
     const handleSendMessage = async (e: React.FormEvent) => {
@@ -171,7 +171,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
         setMessages(prev => [...prev, tempMsg]);
         scrollToBottom();
 
-        const { error } = await supabase.from("messages").insert({
+        const { error } = await createClient().from("messages").insert({
             conversation_id: conversationId,
             sender_id: currentUserId,
             content,
@@ -208,7 +208,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
         const ext = file.name.split(".").pop();
         const filePath = `${currentUserId}/${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}`;
 
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await createClient().storage
             .from("message-files")
             .upload(filePath, file);
 
@@ -218,9 +218,9 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             return;
         }
 
-        const { data: { publicUrl } } = supabase.storage.from("message-files").getPublicUrl(filePath);
+        const { data: { publicUrl } } = createClient().storage.from("message-files").getPublicUrl(filePath);
 
-        const { error: msgError } = await supabase.from("messages").insert({
+        const { error: msgError } = await createClient().from("messages").insert({
             conversation_id: conversationId,
             sender_id: currentUserId,
             content: null,
@@ -244,7 +244,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             )
         );
 
-        const { error } = await supabase
+        const { error } = await createClient()
             .from("messages")
             .update({ deleted_by_sender: true, content: null })
             .eq("id", messageId)

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,10 +24,10 @@ export default function CreateArticlePage() {
         setLoading(true);
 
         try {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (!user) throw new Error("Giriş yapmalısınız");
 
-            const { error } = await supabase.from("articles").insert({
+            const { error } = await createClient().from("articles").insert({
                 title,
                 summary,
                 content,

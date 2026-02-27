@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
@@ -80,7 +80,7 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
         if (!confirm("Bu gönderiyi silmek istediğinize emin misiniz?")) return;
         setIsDeleting(true);
         try {
-            const { error } = await supabase.from('posts').delete().eq('id', post.id);
+            const { error } = await createClient().from('posts').delete().eq('id', post.id);
             if (error) throw error;
             if (onDelete) onDelete(post.id);
         } catch (error) {
@@ -103,9 +103,9 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
 
         try {
             if (newLikeStatus) {
-                await supabase.from("post_likes").insert({ user_id: currentUserId, post_id: post.id });
+                await createClient().from("post_likes").insert({ user_id: currentUserId, post_id: post.id });
             } else {
-                await supabase.from("post_likes").delete().match({ user_id: currentUserId, post_id: post.id });
+                await createClient().from("post_likes").delete().match({ user_id: currentUserId, post_id: post.id });
             }
         } catch (error) {
             console.error("Error toggling like:", error);
@@ -127,9 +127,9 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
 
         try {
             if (newBookmarkStatus) {
-                await supabase.from("bookmarks").insert({ user_id: currentUserId, item_type: "post", item_id: post.id });
+                await createClient().from("bookmarks").insert({ user_id: currentUserId, item_type: "post", item_id: post.id });
             } else {
-                await supabase.from("bookmarks").delete().match({ user_id: currentUserId, item_type: "post", item_id: post.id });
+                await createClient().from("bookmarks").delete().match({ user_id: currentUserId, item_type: "post", item_id: post.id });
             }
         } catch (error) {
             console.error("Error toggling bookmark:", error);

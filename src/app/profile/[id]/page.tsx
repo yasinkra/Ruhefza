@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { AppShell } from "@/components/layout/AppShell";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -52,11 +52,11 @@ export default function PublicProfilePage() {
         if (!profileId) return;
 
         const init = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             const uid = user?.id || null;
             setCurrentUserId(uid);
 
-            const { data, error } = await supabase
+            const { data, error } = await createClient()
                 .from("profiles")
                 .select("id, full_name, avatar_url, role, bio, special_note, verification_status, is_verified_expert, custom_id, username, created_at, social_links")
                 .eq("id", profileId)
@@ -73,7 +73,7 @@ export default function PublicProfilePage() {
                 return;
             }
 
-            const { data: req } = await supabase
+            const { data: req } = await createClient()
                 .from("connection_requests")
                 .select("id, sender_id, receiver_id, status")
                 .or(`and(sender_id.eq.${uid},receiver_id.eq.${profileId}),and(sender_id.eq.${profileId},receiver_id.eq.${uid})`)
@@ -95,7 +95,7 @@ export default function PublicProfilePage() {
     const handleConnect = async () => {
         if (!currentUserId) { router.push('/login'); return; }
         setActionLoading(true);
-        const { error } = await supabase.from("connection_requests").insert({
+        const { error } = await createClient().from("connection_requests").insert({
             sender_id: currentUserId,
             receiver_id: profileId,
             status: "pending"
@@ -108,7 +108,7 @@ export default function PublicProfilePage() {
     const handleAccept = async () => {
         if (!connectionId) return;
         setActionLoading(true);
-        await supabase.from("connection_requests")
+        await createClient().from("connection_requests")
             .update({ status: "accepted", responded_at: new Date().toISOString() })
             .eq("id", connectionId);
         toast.success("Bağlantı kabul edildi!");
@@ -118,7 +118,7 @@ export default function PublicProfilePage() {
 
     const handleMessage = async () => {
         if (!currentUserId) { router.push('/login'); return; }
-        const { data: convId } = await supabase.rpc("get_or_create_conversation", {
+        const { data: convId } = await createClient().rpc("get_or_create_conversation", {
             user_a: currentUserId,
             user_b: profileId
         });

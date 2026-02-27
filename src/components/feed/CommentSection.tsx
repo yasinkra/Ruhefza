@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -38,14 +38,14 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
     const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => {
+        createClient().auth.getUser().then(({ data }) => {
             setUserId(data.user?.id || null);
         });
     }, []);
 
     useEffect(() => {
         const fetchComments = async () => {
-            const { data, error } = await supabase
+            const { data, error } = await createClient()
                 .from("post_comments")
                 .select(`
                     id,
@@ -79,7 +79,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
         fetchComments();
 
         // Subscribe to real-time changes
-        const channel = supabase
+        const channel = createClient()
             .channel(`comments:${postId}`)
             .on(
                 "postgres_changes",
@@ -96,7 +96,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
             .subscribe();
 
         return () => {
-            supabase.removeChannel(channel);
+            createClient().removeChannel(channel);
         };
     }, [postId]);
 
@@ -106,7 +106,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
 
         setSubmitting(true);
         try {
-            const { error } = await supabase.from("post_comments").insert({
+            const { error } = await createClient().from("post_comments").insert({
                 post_id: postId,
                 user_id: userId,
                 content: newComment.trim()
@@ -128,7 +128,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
         if (!confirm("Bu yorumu silmek istediğinize emin misiniz?")) return;
 
         try {
-            const { error } = await supabase.from("post_comments").delete().eq("id", commentId);
+            const { error } = await createClient().from("post_comments").delete().eq("id", commentId);
             if (error) throw error;
             // Optimistic update
             setComments(comments.filter(c => c.id !== commentId));
@@ -143,14 +143,14 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
 
         try {
             // First, unmark any existing best answers for this post
-            await supabase
+            await createClient()
                 .from("post_comments")
                 .update({ is_best_answer: false })
                 .eq("post_id", postId)
                 .eq("is_best_answer", true);
 
             // Then, mark the new best answer
-            const { error } = await supabase
+            const { error } = await createClient()
                 .from("post_comments")
                 .update({ is_best_answer: true })
                 .eq("id", commentId);
@@ -158,7 +158,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
             if (error) throw error;
 
             // Re-fetch comments to ensure correct order
-            const { data } = await supabase
+            const { data } = await createClient()
                 .from("post_comments")
                 .select(`
                     id,

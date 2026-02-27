@@ -6,7 +6,7 @@ import { ChatWindow } from "@/components/chat/ChatWindow";
 import { AppShell } from "@/components/layout/AppShell";
 import { cn } from "@/utils/cn";
 import { useSearchParams } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 function MessagesContent() {
     const searchParams = useSearchParams();
@@ -19,11 +19,11 @@ function MessagesContent() {
     useEffect(() => {
         if (!paramUserId) return;
         const initConversation = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (!user) return;
 
             // Check if there's already an accepted connection and conversation
-            const { data: convId } = await supabase.rpc("get_or_create_conversation", {
+            const { data: convId } = await createClient().rpc("get_or_create_conversation", {
                 user_a: user.id,
                 user_b: paramUserId
             });

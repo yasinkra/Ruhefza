@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +22,7 @@ export default function SignupPage() {
     // Clear any existing session when visiting signup page to avoid confusion
     useEffect(() => {
         const signOut = async () => {
-            await supabase.auth.signOut();
+            await createClient().auth.signOut();
         };
         signOut();
     }, []);
@@ -42,7 +42,7 @@ export default function SignupPage() {
             // Students are auto-approved, teachers are pending docs, parents need no verification
             const initialVerificationStatus = isStudent ? 'approved' : (role === 'teacher' ? 'unverified' : 'none');
 
-            const { data, error: signUpError } = await supabase.auth.signUp({
+            const { data, error: signUpError } = await createClient().auth.signUp({
                 email,
                 password,
                 options: {
@@ -57,7 +57,7 @@ export default function SignupPage() {
 
             // The DB trigger creates the profile row initially. We update it with the specific role info.
             if (data.user) {
-                const { error: profileError } = await supabase
+                const { error: profileError } = await createClient()
                     .from('profiles')
                     .update({
                         full_name: fullName,

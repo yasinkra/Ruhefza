@@ -6,16 +6,16 @@ import { Heart, Users, MessageCircle, BookOpen, ArrowRight, Shield, Star, CheckC
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    createClient().auth.getUser().then(({ data }) => setUser(data.user));
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
+    const { data: authListener } = createClient().auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user || null);
       }

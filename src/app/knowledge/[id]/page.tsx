@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { useParams, useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -44,7 +44,7 @@ export default function ArticleDetailPage() {
         if (!id) return;
 
         const fetchArticle = async () => {
-            const { data, error } = await supabase
+            const { data, error } = await createClient()
                 .from("articles")
                 .select(`
                     id,
@@ -75,10 +75,10 @@ export default function ArticleDetailPage() {
         };
 
         const checkUserStatus = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (user) {
                 setCurrentUserId(user.id);
-                const { data } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single();
+                const { data } = await createClient().from('profiles').select('is_admin').eq('id', user.id).single();
                 if (data) setIsAdmin(!!data.is_admin);
             }
         };
@@ -91,7 +91,7 @@ export default function ArticleDetailPage() {
         if (!confirm("Bu makaleyi silmek istediğinize emin misiniz?")) return;
         setIsDeleting(true);
         try {
-            const { error } = await supabase.from('articles').delete().eq('id', id);
+            const { error } = await createClient().from('articles').delete().eq('id', id);
             if (error) throw error;
             router.push('/knowledge');
         } catch (error) {

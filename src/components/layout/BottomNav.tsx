@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, MessageCircle, User, BookOpen } from "lucide-react";
 import { cn } from "@/utils/cn";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 const navigation = [
     { name: "Akış", href: "/feed", icon: Home },
@@ -22,10 +22,10 @@ export function BottomNav() {
         let mounted = true;
 
         const fetchUnreadCount = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await createClient().auth.getUser();
             if (!user) return;
 
-            const { count, error } = await supabase
+            const { count, error } = await createClient()
                 .from('messages')
                 .select('*', { count: 'exact', head: true })
                 .eq('receiver_id', user.id)
@@ -38,11 +38,11 @@ export function BottomNav() {
 
         fetchUnreadCount();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+        const { data: { subscription } } = createClient().auth.onAuthStateChange(() => {
             fetchUnreadCount();
         });
 
-        const channel = supabase.channel('bottomnav-unread')
+        const channel = createClient().channel('bottomnav-unread')
             .on(
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'messages' },
@@ -55,7 +55,7 @@ export function BottomNav() {
         return () => {
             mounted = false;
             subscription.unsubscribe();
-            supabase.removeChannel(channel);
+            createClient().removeChannel(channel);
         };
     }, []);
 

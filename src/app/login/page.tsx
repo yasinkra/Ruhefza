@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +19,7 @@ export default function LoginPage() {
     // Clear any existing session when visiting login page to force fresh login
     useEffect(() => {
         const signOut = async () => {
-            await supabase.auth.signOut();
+            await createClient().auth.signOut();
         };
         signOut();
     }, []);
@@ -30,7 +30,7 @@ export default function LoginPage() {
         setError(null);
 
         try {
-            const { error } = await supabase.auth.signInWithPassword({
+            const { error } = await createClient().auth.signInWithPassword({
                 email,
                 password,
             });

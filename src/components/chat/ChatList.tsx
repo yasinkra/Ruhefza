@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -55,7 +55,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
     const [connectionStatuses, setConnectionStatuses] = useState<Record<string, string>>({});
 
     useEffect(() => {
-        supabase.auth.getUser().then(({ data }) => {
+        createClient().auth.getUser().then(({ data }) => {
             if (data.user) {
                 setCurrentUserId(data.user.id);
                 fetchConversations(data.user.id);
@@ -67,18 +67,18 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
     // Real-time subscription for new messages (update chat list order)
     useEffect(() => {
         if (!currentUserId) return;
-        const channel = supabase
+        const channel = createClient()
             .channel('chatlist_realtime')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' },
                 () => fetchConversations(currentUserId))
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'connection_requests', filter: `receiver_id=eq.${currentUserId}` },
                 () => fetchPendingRequests(currentUserId))
             .subscribe();
-        return () => { supabase.removeChannel(channel); };
+        return () => { createClient().removeChannel(channel); };
     }, [currentUserId]);
 
     const fetchConversations = async (userId: string) => {
-        const { data, error } = await supabase
+        const { data, error } = await createClient()
             .from("conversations")
             .select(`
                 id,
@@ -96,13 +96,13 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
         // Get partner profiles
         const partnerIds = data.map(c => c.participant_1 === userId ? c.participant_2 : c.participant_1);
-        const { data: profiles } = await supabase
+        const { data: profiles } = await createClient()
             .from("profiles")
             .select("id, full_name, avatar_url")
             .in("id", partnerIds);
 
         // Get unread counts
-        const { data: unreadData } = await supabase
+        const { data: unreadData } = await createClient()
             .from("messages")
             .select("conversation_id")
             .in("conversation_id", data.map(c => c.id))
@@ -135,7 +135,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
     };
 
     const fetchPendingRequests = async (userId: string) => {
-        const { data } = await supabase
+        const { data } = await createClient()
             .from("connection_requests")
             .select(`
                 id,
@@ -166,7 +166,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
         const searchUsers = async () => {
             if (!searchTerm.trim() || !currentUserId) { setFoundUsers([]); return; }
             const term = searchTerm.trim();
-            let query = supabase.from("profiles").select("id, full_name, avatar_url, role, username, custom_id").neq("id", currentUserId).limit(8);
+            let query = createClient().from("profiles").select("id, full_name, avatar_url, role, username, custom_id").neq("id", currentUserId).limit(8);
             if (/^\d+$/.test(term)) query = query.eq("custom_id", parseInt(term));
             else if (term.startsWith('@')) query = query.ilike("username", `${term.substring(1)}%`);
             else query = query.or(`full_name.ilike.%${term}%,username.ilike.%${term}%`);
@@ -175,7 +175,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
             // Also fetch connection statuses for found users
             if (data && data.length > 0) {
-                const { data: reqData } = await supabase
+                const { data: reqData } = await createClient()
                     .from("connection_requests")
                     .select("receiver_id, sender_id, status")
                     .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
@@ -199,7 +199,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
     const handleSendRequest = async (receiverId: string) => {
         if (!currentUserId) return;
         setSendingRequest(receiverId);
-        const { error } = await supabase.from("connection_requests").insert({
+        const { error } = await createClient().from("connection_requests").insert({
             sender_id: currentUserId,
             receiver_id: receiverId,
             status: "pending"
@@ -215,7 +215,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
     const handleRespondRequest = async (requestId: string, senderId: string, accept: boolean) => {
         const newStatus = accept ? "accepted" : "rejected";
-        const { error } = await supabase
+        const { error } = await createClient()
             .from("connection_requests")
             .update({ status: newStatus, responded_at: new Date().toISOString() })
             .eq("id", requestId);
@@ -224,7 +224,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
         if (accept && currentUserId) {
             // Create conversation
-            const { data: convId } = await supabase.rpc("get_or_create_conversation", {
+            const { data: convId } = await createClient().rpc("get_or_create_conversation", {
                 user_a: currentUserId,
                 user_b: senderId
             });

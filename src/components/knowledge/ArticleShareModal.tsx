@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { X, Send, Check, Search } from "lucide-react";
@@ -30,7 +30,7 @@ export function ArticleShareModal({ article, currentUserId, onClose }: ArticleSh
     useEffect(() => {
         const fetchConnections = async () => {
             // Get accepted connections where user is either sender or receiver
-            const { data } = await supabase
+            const { data } = await createClient()
                 .from("connection_requests")
                 .select(`
                     sender_id,
@@ -45,7 +45,7 @@ export function ArticleShareModal({ article, currentUserId, onClose }: ArticleSh
                 r.sender_id === currentUserId ? r.receiver_id : r.sender_id
             );
 
-            const { data: profiles } = await supabase
+            const { data: profiles } = await createClient()
                 .from("profiles")
                 .select("id, full_name, avatar_url")
                 .in("id", partnerIds);
@@ -62,7 +62,7 @@ export function ArticleShareModal({ article, currentUserId, onClose }: ArticleSh
         const shareText = `📚 Sana bir makale paylaştım:\n\n*${article.title}*\n\n${articleUrl}`;
 
         // Get or create conversation
-        const { data: convId, error: convErr } = await supabase.rpc("get_or_create_conversation", {
+        const { data: convId, error: convErr } = await createClient().rpc("get_or_create_conversation", {
             user_a: currentUserId,
             user_b: partnerId
         });
@@ -73,7 +73,7 @@ export function ArticleShareModal({ article, currentUserId, onClose }: ArticleSh
             return;
         }
 
-        const { error } = await supabase.from("messages").insert({
+        const { error } = await createClient().from("messages").insert({
             conversation_id: convId,
             sender_id: currentUserId,
             content: shareText,

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, BookOpen, Trash2, Loader2, Bookmark, Share2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { ArticleShareModal } from "@/components/knowledge/ArticleShareModal";
 
@@ -48,7 +48,7 @@ export function ArticleCard({
         if (!confirm("Bu makaleyi silmek istediğinize emin misiniz?")) return;
         setIsDeleting(true);
         try {
-            const { error } = await supabase.from('articles').delete().eq('id', article.id);
+            const { error } = await createClient().from('articles').delete().eq('id', article.id);
             if (error) throw error;
             toast.success("Makale başarıyla silindi");
             if (onDelete) onDelete(article.id);
@@ -66,7 +66,7 @@ export function ArticleCard({
         if (!currentUserId) { toast.error("Lütfen giriş yapın."); return; }
         setBookmarkLoading(true);
         if (bookmarked) {
-            await supabase.from("bookmarks")
+            await createClient().from("bookmarks")
                 .delete()
                 .eq("user_id", currentUserId)
                 .eq("item_id", article.id)
@@ -74,7 +74,7 @@ export function ArticleCard({
             setBookmarked(false);
             toast.success("Kaydedilenlerden kaldırıldı.");
         } else {
-            await supabase.from("bookmarks").insert({
+            await createClient().from("bookmarks").insert({
                 user_id: currentUserId,
                 item_type: "article",
                 item_id: article.id,
