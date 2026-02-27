@@ -52,7 +52,6 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [partnerProfile, setPartnerProfile] = useState<PartnerProfile | null>(null);
     const [loading, setLoading] = useState(true);
-    const [sending, setSending] = useState(false);
     const [uploading, setUploading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -148,12 +147,11 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
         const content = newMessage.trim();
-        if (!content || !currentUserId || sending) return;
+        if (!content || !currentUserId) return;
         setNewMessage("");
-        setSending(true);
 
         // Optimistic update
-        const tempId = `temp-${Date.now()}`;
+        const tempId = `temp-${Date.now()}-${Math.random().toString(36).substring(2)}`;
         const tempMsg: Message = {
             id: tempId,
             conversation_id: conversationId,
@@ -183,8 +181,6 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             setMessages(prev => prev.filter(m => m.id !== tempId));
             setNewMessage(content);
         }
-        // Realtime subscription will replace temp with real
-        setSending(false);
     };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -466,7 +462,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                     />
                     <Button type="submit" size="icon"
                         className="shrink-0 bg-sky-500 hover:bg-sky-600 text-white shadow-md shadow-sky-200 h-10 w-10"
-                        disabled={!newMessage.trim() || sending}>
+                        disabled={!newMessage.trim()}>
                         <Send className="h-4 w-4" />
                     </Button>
                 </form>
