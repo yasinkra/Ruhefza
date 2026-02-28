@@ -264,7 +264,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             </div>
             <div className="flex-1 p-4 space-y-4 bg-stone-50/50">
                 <div className="flex justify-start"><div className="h-12 w-40 bg-stone-200 rounded-2xl rounded-bl-none"></div></div>
-                <div className="flex justify-end"><div className="h-10 w-56 bg-teal-200 rounded-2xl rounded-br-none"></div></div>
+                <div className="flex justify-end"><div className="h-10 w-56 bg-[#c3d6cb] rounded-2xl rounded-br-none"></div></div>
                 <div className="flex justify-start"><div className="h-8 w-32 bg-stone-200 rounded-2xl rounded-bl-none"></div></div>
             </div>
         </div>
@@ -302,8 +302,8 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-stone-50/40">
                 {messages.length === 0 && (
                     <div className="flex flex-col items-center justify-center h-full text-stone-400 text-center">
-                        <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mb-4">
-                            <Send className="h-6 w-6 text-teal-300" />
+                        <div className="w-16 h-16 bg-[#eaf2ed] rounded-full flex items-center justify-center mb-4">
+                            <Send className="h-6 w-6 text-[#7b9e89]" />
                         </div>
                         <p className="text-sm font-medium text-stone-500">Sohbet başlıyor!</p>
                         <p className="text-xs mt-1">İlk mesajı gönder...</p>
@@ -381,7 +381,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                                         <div className={cn(
                                             "rounded-[24px] overflow-hidden shadow-md",
                                             isMe
-                                                ? cn("rounded-br-[4px] bg-gradient-to-br from-[#0D9488] to-[#10B981] text-white", msg._temp && "opacity-60")
+                                                ? cn("rounded-br-[4px] bg-[#7b9e89] text-white", msg._temp && "opacity-60")
                                                 : "rounded-bl-[4px] bg-white text-stone-800 border border-stone-100",
                                         )}>
                                             {/* Image */}
@@ -405,7 +405,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                                                     <div className="min-w-0">
                                                         <p className="text-xs font-semibold truncate max-w-[160px]">{msg.file_name}</p>
                                                         {msg.file_size_bytes && (
-                                                            <p className={cn("text-[10px] mt-0.5", isMe ? "text-teal-100" : "text-stone-400")}>
+                                                            <p className={cn("text-[10px] mt-0.5", isMe ? "text-[#eaf2ed]" : "text-stone-400")}>
                                                                 {formatFileSize(msg.file_size_bytes)}
                                                             </p>
                                                         )}
@@ -429,7 +429,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                                                 <span className={cn(
                                                     "text-[10px] font-bold",
                                                     msg._temp ? "text-stone-300" :
-                                                        msg.is_read ? "text-teal-400" : "text-stone-300"
+                                                        msg.is_read ? "text-[#eaf2ed]" : "text-stone-300"
                                                 )}>
                                                     {msg._temp ? "⏳" : msg.is_read ? "✓✓" : "✓"}
                                                 </span>
@@ -462,12 +462,12 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                         disabled={uploading}
                     />
                     <Button type="button" variant="ghost" size="icon"
-                        className="shrink-0 text-stone-400 hover:text-teal-600 hover:bg-teal-50 h-10 w-10"
+                        className="shrink-0 text-stone-400 hover:text-[#7b9e89] hover:bg-[#eaf2ed] h-10 w-10"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
                         title="Dosya veya görsel gönder">
                         {uploading
-                            ? <div className="h-4 w-4 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" />
+                            ? <div className="h-4 w-4 border-2 border-[#7b9e89] border-t-transparent rounded-full animate-spin" />
                             : <Paperclip className="h-5 w-5" />}
                     </Button>
                     <textarea
@@ -485,10 +485,10 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                         }}
                         placeholder="Mesaj yaz"
                         rows={1}
-                        className="flex-1 resize-none rounded-xl border border-stone-200 bg-stone-50 px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 focus:bg-white transition-all max-h-32 overflow-y-auto min-h-[44px]"
+                        className="flex-1 resize-none rounded-xl border border-stone-200 bg-stone-50 px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#a2c1b1] focus:bg-white transition-all max-h-32 overflow-y-auto min-h-[44px]"
                     />
                     <Button type="submit" size="icon"
-                        className="shrink-0 bg-teal-500 hover:bg-teal-600 text-white shadow-md shadow-teal-200 h-10 w-10"
+                        className="shrink-0 bg-[#7b9e89] hover:bg-[#6ba88f] text-white shadow-md shadow-[#9abfa7] h-10 w-10"
                         disabled={!newMessage.trim()}>
                         <Send className="h-4 w-4" />
                     </Button>

@@ -222,7 +222,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                     <span className="text-xs font-semibold text-stone-900 inline-flex items-center gap-1">
                                         {comment.profiles?.full_name}
                                         {comment.profiles?.is_verified_expert && (
-                                            <BadgeCheck className="h-3.5 w-3.5 text-teal-500" aria-label="Doğrulanmış Uzman" />
+                                            <BadgeCheck className="h-3.5 w-3.5 text-[#7b9e89]" aria-label="Doğrulanmış Uzman" />
                                         )}
                                     </span>
                                     <span className="text-[10px] text-stone-400">
@@ -237,7 +237,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                 {userId === postAuthorId && isQuestion && !comment.is_best_answer && (
                                     <button
                                         onClick={() => handleMarkBestAnswer(comment.id)}
-                                        className="text-xs text-stone-400 hover:text-emerald-600 bg-white p-1 rounded-md shadow-sm border border-stone-100"
+                                        className="text-xs text-stone-400 hover:text-[#6ba88f] bg-white p-1 rounded-md shadow-sm border border-stone-100"
                                         title="Çözüm olarak işaretle"
                                     >
                                         <BadgeCheck className="h-4 w-4" />
@@ -261,7 +261,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                 <form onSubmit={handleSubmit} className="flex gap-2 items-center border-t border-stone-100 pt-3">
                     <Avatar className="h-8 w-8 hidden sm:block">
                         {/* Current user avatar would go here if we fetched it, skipping for now to keep it simple */}
-                        <AvatarFallback className="bg-teal-100 text-teal-600">S</AvatarFallback>
+                        <AvatarFallback className="bg-[#eaf2ed] text-[#557b66]">S</AvatarFallback>
                     </Avatar>
                     <Input
                         value={newComment}

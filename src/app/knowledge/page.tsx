@@ -23,13 +23,13 @@ export default function KnowledgeBasePage() {
     const [announcement, setAnnouncement] = useState<{ message: string, active: boolean } | null>(null);
     const [bookmarkedArticleIds, setBookmarkedArticleIds] = useState<Set<string>>(new Set());
 
-    // Rich categories with icons and colors
+    // Rich categories with soothing pastel colors
     const categories = [
-        { id: "Otizm", name: "Otizm", icon: <Puzzle className="h-6 w-6" />, color: "from-blue-500 to-cyan-500", lightBg: "bg-blue-50", text: "text-blue-600" },
-        { id: "DEHB", name: "DEHB", icon: <Brain className="h-6 w-6" />, color: "from-purple-500 to-fuchsia-500", lightBg: "bg-purple-50", text: "text-purple-600" },
-        { id: "Fiziksel Gelişim", name: "Fiziksel Gelişim", icon: <Activity className="h-6 w-6" />, color: "from-emerald-500 to-teal-500", lightBg: "bg-emerald-50", text: "text-emerald-600" },
-        { id: "Dil ve Konuşma", name: "Dil ve Konuşma", icon: <MessageCircle className="h-6 w-6" />, color: "from-amber-400 to-orange-500", lightBg: "bg-orange-50", text: "text-orange-600" },
-        { id: "Yasal Haklar", name: "Yasal Haklar", icon: <Scale className="h-6 w-6" />, color: "from-rose-400 to-red-500", lightBg: "bg-red-50", text: "text-red-600" },
+        { id: "Otizm", name: "Otizm", icon: <Puzzle className="h-6 w-6" />, color: "from-[#71a5d6] to-[#a0c5e8]", lightBg: "bg-[#e3eff8]", text: "text-[#71a5d6]" },
+        { id: "DEHB", name: "DEHB", icon: <Brain className="h-6 w-6" />, color: "from-[#b388c6] to-[#d4bbee]", lightBg: "bg-[#f4ebf8]", text: "text-[#b388c6]" },
+        { id: "Fiziksel Gelişim", name: "Fiziksel Gelişim", icon: <Activity className="h-6 w-6" />, color: "from-[#7b9e89] to-[#a2c1b1]", lightBg: "bg-[#eaf2ed]", text: "text-[#7b9e89]" },
+        { id: "Dil ve Konuşma", name: "Dil ve Konuşma", icon: <MessageCircle className="h-6 w-6" />, color: "from-[#f2a68d] to-[#f8c9b9]", lightBg: "bg-[#fef3ea]", text: "text-[#f2a68d]" },
+        { id: "Yasal Haklar", name: "Yasal Haklar", icon: <Scale className="h-6 w-6" />, color: "from-[#e27d73] to-[#efaaa5]", lightBg: "bg-[#faeaea]", text: "text-[#e27d73]" },
     ];
 
     const fetchArticles = async () => {
@@ -123,7 +123,7 @@ export default function KnowledgeBasePage() {
             <div className="h-full overflow-y-auto bg-stone-50 pb-20">
                 {/* Announcement Section */}
                 {announcement?.active && (
-                    <div className="bg-gradient-to-r from-teal-600 to-indigo-600 p-3 text-white">
+                    <div className="bg-gradient-to-r from-[#7b9e89] to-[#a2c1b1] p-3 text-white">
                         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center gap-3">
                             <Megaphone className="h-4 w-4 shrink-0" />
                             <p className="text-sm font-medium">{announcement.message}</p>
@@ -133,11 +133,11 @@ export default function KnowledgeBasePage() {
 
                 {/* Header */}
                 <div className="bg-white border-b border-stone-200 pt-8 pb-10 md:pt-12 md:pb-16 px-4 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-teal-50 rounded-full blur-3xl opacity-50"></div>
-                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-indigo-50 rounded-full blur-3xl opacity-50"></div>
+                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-[#7b9e89]/10 rounded-full blur-3xl opacity-70"></div>
+                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-[#f2a68d]/10 rounded-full blur-3xl opacity-70"></div>
 
-                    <div className="max-w-7xl mx-auto text-center relative">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-wider mb-4 md:mb-6 ring-1 ring-teal-100">
+                    <div className="max-w-7xl mx-auto text-center relative z-10">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fef3ea] text-[#f2a68d] text-xs font-bold uppercase tracking-wider mb-4 md:mb-6 ring-1 ring-[#f2a68d]/20">
                             <BookOpen className="h-3.5 w-3.5" />
                             Bilgi Bankası
                         </div>
@@ -150,26 +150,26 @@ export default function KnowledgeBasePage() {
                             <div className="mb-10">
                                 <Button
                                     onClick={() => router.push('/knowledge/create')}
-                                    className="bg-stone-900 hover:bg-stone-800 text-white shadow-xl shadow-slate-200 rounded-2xl h-12 px-8 font-bold transition-all hover:-translate-y-0.5"
+                                    className="bg-gradient-to-br from-[#7b9e89] to-[#8ba898] hover:to-[#7b9e89] text-white shadow-lg shadow-[#7b9e89]/20 rounded-2xl h-12 px-8 font-bold transition-all hover:-translate-y-0.5 border-none"
                                 >
                                     + Paylaşımda Bulun
                                 </Button>
                             </div>
                         ) : !loadingUser && (
-                            <div className="mb-10 inline-flex items-center gap-3 bg-white border border-stone-100 p-4 py-3 rounded-2xl shadow-sm max-w-xl mx-auto">
-                                <span className="flex h-2 w-2 rounded-full bg-amber-400"></span>
-                                <p className="text-sm font-semibold text-stone-600">
+                            <div className="mb-10 inline-flex items-center gap-3 bg-[#fef3ea] border border-[#f8c9b9] p-4 py-3 rounded-2xl shadow-sm max-w-xl mx-auto">
+                                <span className="flex h-2 w-2 rounded-full bg-[#f2a68d]"></span>
+                                <p className="text-sm font-semibold text-[#f2a68d]">
                                     Sadece doğrulanmış uzmanlar yeni bilgi paylaşabilir.
                                 </p>
                             </div>
                         )}
 
                         <div className="max-w-2xl mx-auto relative group">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-[#0D9488] transition-colors" />
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-[#7b9e89] transition-colors" />
                             <Input
                                 type="text"
                                 placeholder="Makale, konu veya yazar ara..."
-                                className="pl-16 h-14 text-[15px] bg-white border-white focus:bg-white focus:ring-[#0D9488]/20 focus:border-[#0D9488]/30 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-full"
+                                className="pl-16 h-14 text-[15px] bg-white border-white focus:bg-white focus:ring-[#7b9e89]/20 focus:border-[#7b9e89]/30 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-full"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -180,19 +180,19 @@ export default function KnowledgeBasePage() {
                             <button
                                 onClick={() => setSelectedCategory(null)}
                                 className={cn(
-                                    "flex flex-col items-center justify-center p-5 sm:p-6 rounded-[32px] border transition-all duration-300 group",
+                                    "flex flex-col items-center justify-center p-5 sm:p-6 rounded-[32px] border transition-all duration-300 group selection-bg-white relative overflow-hidden",
                                     selectedCategory === null
-                                        ? "bg-stone-900 border-stone-900 text-white shadow-xl shadow-stone-900/20 scale-105"
+                                        ? "bg-gradient-to-br from-[#7b9e89] to-[#8ba898] border-transparent text-white shadow-xl shadow-[#7b9e89]/20 scale-105"
                                         : "bg-white border-transparent shadow-[0_4px_20px_rgb(0,0,0,0.03)] text-gray-600 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5"
                                 )}
                             >
                                 <div className={cn(
                                     "w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-colors",
-                                    selectedCategory === null ? "bg-white/20 text-white" : "bg-stone-100 text-stone-500 group-hover:bg-stone-200"
+                                    selectedCategory === null ? "bg-white/20 text-white" : "bg-[#eaf2ed] text-[#7b9e89] group-hover:bg-[#d8e5de]"
                                 )}>
                                     <BookOpen className="h-6 w-6" />
                                 </div>
-                                <span className="font-bold text-sm">Tümü</span>
+                                <span className={cn("font-bold text-sm", selectedCategory === null ? "text-white" : "text-stone-700")}>Tümü</span>
                             </button>
 
                             {categories.map((cat) => (

@@ -73,7 +73,7 @@ export function AppShell({ children, fullWidth = false }: AppShellProps) {
             {/* Main Content Area */}
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
                 {fullWidth ? (
-                    <div className="flex-1 overflow-hidden pb-[72px] md:pb-0">
+                    <div className="flex-1 overflow-y-auto custom-scrollbar pb-[72px] md:pb-0">
                         {children}
                     </div>
                 ) : (

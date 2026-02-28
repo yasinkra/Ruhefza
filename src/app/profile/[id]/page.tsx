@@ -12,6 +12,7 @@ import { tr } from "date-fns/locale";
 import { toast } from "sonner";
 import Link from "next/link";
 import { PortfolioTab } from "@/components/profile/PortfolioTab";
+import { cn } from "@/utils/cn";
 
 interface PublicProfile {
     id: string;
@@ -152,92 +153,131 @@ export default function PublicProfilePage() {
 
     return (
         <AppShell>
-            <div className="max-w-2xl mx-auto px-4 py-8 pb-20">
-                {/* Back */}
+            <div className="max-w-4xl mx-auto px-4 py-8 pb-20">
+                {/* Back Link */}
                 <button onClick={() => router.back()}
-                    className="flex items-center gap-2 text-slate-500 hover:text-slate-800 mb-6 transition-colors text-sm font-medium">
-                    <ArrowLeft className="h-4 w-4" /> Geri
+                    className="flex items-center gap-2 text-stone-400 hover:text-stone-800 mb-8 transition-all group">
+                    <div className="p-2 rounded-full bg-stone-100 group-hover:bg-white group-hover:shadow-sm transition-all">
+                        <ArrowLeft className="h-4 w-4" />
+                    </div>
+                    <span className="text-sm font-bold">Geri Dön</span>
                 </button>
 
-                {/* Profile Header */}
-                <div className="glass-effect rounded-2xl shadow-xl border border-white/50 overflow-hidden mb-6 transition-transform duration-300 hover:shadow-2xl">
+                {/* Profile Header Card */}
+                <div className="bg-white rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-stone-100 overflow-hidden mb-8 group transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)]">
                     {/* Cover Area */}
-                    <div className={`h-40 bg-gradient-to-r ${profile.role === 'student' ? 'from-orange-500 via-amber-500 to-yellow-400' : profile.role === 'teacher' ? 'from-teal-500 via-blue-600 to-indigo-600' : profile.role === 'parent' ? 'from-emerald-500 via-teal-500 to-cyan-500' : 'from-violet-600 via-indigo-600 to-teal-500'} relative`}>
-                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-                        <div className="absolute -bottom-14 left-8">
-                            <Avatar className="h-28 w-28 border-4 border-white shadow-xl bg-white ring-2 ring-slate-100">
-                                <AvatarImage src={profile.avatar_url || undefined} className="object-cover" />
-                                <AvatarFallback className="text-3xl font-black text-slate-300 bg-slate-50">{profile.full_name[0]?.toUpperCase()}</AvatarFallback>
-                            </Avatar>
-                        </div>
-                    </div>
+                    <div className={cn(
+                        "h-48 relative overflow-hidden transition-all duration-700",
+                        profile.role === 'teacher' ? "bg-gradient-to-br from-[#7b9e89] via-[#a2c1b1] to-[#6ba88f]" :
+                            profile.role === 'student' ? "bg-gradient-to-br from-[#b388c6] via-[#d4a5db] to-[#9a6cb4]" :
+                                profile.role === 'parent' ? "bg-gradient-to-br from-[#e89b7b] via-[#f7c5ae] to-[#d47d55]" :
+                                    "bg-gradient-to-br from-stone-400 to-stone-600"
+                    )}>
+                        {/* Decorative elements */}
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full blur-2xl -ml-10 -mb-10"></div>
 
-                    {/* Info Area (starts below cover) */}
-                    <div className="pt-16 pb-6 px-8 relative bg-white">
-                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <h1 className="text-2xl font-black text-slate-900">{profile.full_name}</h1>
-                                    {profile.is_verified_expert && (
-                                        <ShieldCheck className="h-5 w-5 text-teal-500" aria-label="Doğrulanmış Uzman" />
-                                    )}
-                                </div>
-                                {profile.username && (
-                                    <p className="text-teal-600 font-semibold text-sm mt-0.5">@{profile.username}</p>
+                        {/* Avatar - Floating partially over cover */}
+                        <div className="absolute -bottom-16 left-10 z-10">
+                            <div className="relative group/avatar">
+                                <div className="absolute inset-0 bg-white rounded-[35%] blur-xl opacity-40 group-hover/avatar:opacity-60 transition-opacity"></div>
+                                <Avatar className="h-32 w-32 border-[6px] border-white shadow-2xl rounded-[32px] bg-white transition-transform duration-500 group-hover/avatar:scale-105">
+                                    <AvatarImage src={profile.avatar_url || undefined} className="object-cover" />
+                                    <AvatarFallback className="text-4xl font-black text-stone-200 bg-stone-50">{profile.full_name[0]?.toUpperCase()}</AvatarFallback>
+                                </Avatar>
+                                {profile.is_verified_expert && (
+                                    <div className="absolute -bottom-1 -right-1 bg-white p-1.5 rounded-2xl shadow-lg border border-stone-50">
+                                        <div className="bg-[#7b9e89] p-1.5 rounded-xl">
+                                            <ShieldCheck className="h-4 w-4 text-white" />
+                                        </div>
+                                    </div>
                                 )}
-                                <div className="flex items-center gap-3 mt-3 flex-wrap">
-                                    <span className={`text-xs font-bold px-3 py-1 rounded-full ${profile.role === 'student' ? 'bg-orange-100 text-orange-700' : profile.role === 'teacher' ? 'bg-teal-100 text-teal-700' : 'bg-emerald-100 text-emerald-700'}`}>
-                                        {profile.role === 'teacher' ? '👩‍🏫 Öğretmen' : profile.role === 'student' ? '🎓 Öğrenci' : '👨‍👩‍👧 Ebeveyn'}
-                                    </span>
-                                    {profile.custom_id && (
-                                        <span className="text-xs text-slate-400 font-mono font-medium bg-slate-50 px-2 py-0.5 rounded-md">#{profile.custom_id}</span>
-                                    )}
-                                    <span className="flex items-center gap-1 text-xs text-slate-500 font-medium">
-                                        <Clock className="h-3 w-3" />
-                                        {formatDistanceToNow(new Date(profile.created_at), { addSuffix: true, locale: tr })} katıldı
-                                    </span>
-                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    {connectionStatus !== 'self' && (
-                        <div className="flex gap-3 mt-6 pt-5 border-t border-slate-100">
-                            {connectionStatus === 'accepted' && (
-                                <Button onClick={handleMessage}
-                                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold">
-                                    <MessageCircle className="h-4 w-4 mr-2" /> Mesaj Gönder
-                                </Button>
-                            )}
-                            {connectionStatus === 'none' && (
-                                <Button onClick={handleConnect} disabled={actionLoading}
-                                    className="flex-1 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold">
-                                    {actionLoading ? "..." : "Bağlantı İsteği Gönder"}
-                                </Button>
-                            )}
-                            {connectionStatus === 'pending_sent' && (
-                                <div className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 text-amber-700 py-2.5 text-sm font-bold">
-                                    <Clock className="h-4 w-4" /> İstek Gönderildi
+                    {/* Info Section */}
+                    <div className="pt-20 pb-10 px-10">
+                        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+                            <div className="space-y-4">
+                                <div>
+                                    <div className="flex items-center gap-3 mb-1">
+                                        <h1 className="text-4xl font-black text-stone-800 tracking-tight">{profile.full_name}</h1>
+                                        {profile.is_verified_expert && (
+                                            <span className="bg-[#eaf2ed] text-[#557b66] text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider border border-[#7b9e89]/20">
+                                                Doğrulanmış
+                                            </span>
+                                        )}
+                                    </div>
+                                    {profile.username && (
+                                        <p className="text-[#7b9e89] font-bold text-lg">@{profile.username}</p>
+                                    )}
                                 </div>
-                            )}
-                            {connectionStatus === 'pending_received' && (
-                                <Button onClick={handleAccept} disabled={actionLoading}
-                                    className="flex-1 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold">
-                                    {actionLoading ? "..." : "İsteği Kabul Et"}
-                                </Button>
-                            )}
+
+                                <div className="flex flex-wrap items-center gap-4">
+                                    <div className={cn(
+                                        "flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-sm shadow-sm border",
+                                        profile.role === 'teacher' ? "bg-[#eaf2ed] text-[#557b66] border-[#7b9e89]/20" :
+                                            profile.role === 'student' ? "bg-[#f4eefa] text-[#8a5ea5] border-[#b388c6]/20" :
+                                                "bg-[#fcece6] text-[#c27658] border-[#e89b7b]/20"
+                                    )}>
+                                        <span className="text-lg">
+                                            {profile.role === 'teacher' ? '👩‍🏫' : profile.role === 'student' ? '🎓' : '👨‍👩‍👧'}
+                                        </span>
+                                        {profile.role === 'teacher' ? 'Uzman Öğretmen' : profile.role === 'student' ? 'Öğrenci' : 'Ebeveyn'}
+                                    </div>
+
+                                    {profile.custom_id && (
+                                        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 border border-stone-100 rounded-2xl text-stone-400 font-mono text-xs font-bold">
+                                            <span className="opacity-50 text-base">#</span>
+                                            {profile.custom_id}
+                                        </div>
+                                    )}
+
+                                    <div className="flex items-center gap-2 text-stone-400 font-bold text-xs uppercase tracking-widest bg-stone-50/50 px-3 py-1.5 rounded-2xl border border-stone-100/50">
+                                        <Clock className="h-3.5 w-3.5 text-[#7b9e89]" />
+                                        {formatDistanceToNow(new Date(profile.created_at), { addSuffix: true, locale: tr })} katıldı
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-3">
+                                {connectionStatus !== 'self' && (
+                                    <>
+                                        {connectionStatus === 'accepted' ? (
+                                            <Button onClick={handleMessage}
+                                                className="bg-stone-900 hover:bg-stone-800 text-white rounded-[20px] px-8 h-12 font-bold shadow-xl shadow-stone-200 transition-all hover:-translate-y-1">
+                                                <MessageCircle className="h-5 w-5 mr-2" /> Mesaj Gönder
+                                            </Button>
+                                        ) : connectionStatus === 'none' ? (
+                                            <Button onClick={handleConnect} disabled={actionLoading}
+                                                className="bg-[#7b9e89] hover:bg-[#6ba88f] text-white rounded-[20px] px-8 h-12 font-bold shadow-xl shadow-[#7b9e89]/20 transition-all hover:-translate-y-1">
+                                                {actionLoading ? "..." : "Bağlantı Kur"}
+                                            </Button>
+                                        ) : connectionStatus === 'pending_sent' ? (
+                                            <div className="flex items-center gap-3 px-6 py-3 bg-stone-50 border border-stone-100 rounded-[20px] text-stone-500 font-bold text-sm">
+                                                <Clock className="h-4 w-4 animate-pulse text-[#e89b7b]" /> İstek Beklemede
+                                            </div>
+                                        ) : (
+                                            <Button onClick={handleAccept} disabled={actionLoading}
+                                                className="bg-[#7b9e89] hover:bg-[#6ba88f] text-white rounded-[20px] px-8 h-12 font-bold shadow-xl shadow-[#7b9e89]/20 transition-all hover:-translate-y-1">
+                                                İsteği Kabul Et
+                                            </Button>
+                                        )}
+                                    </>
+                                )}
+                                {connectionStatus === 'self' && (
+                                    <Link href="/profile">
+                                        <Button variant="outline" className="rounded-[20px] px-8 h-12 font-bold border-stone-200 hover:bg-stone-50 transition-all hover:-translate-y-1">
+                                            Profil Düzenle
+                                        </Button>
+                                    </Link>
+                                )}
+                            </div>
                         </div>
-                    )}
-                    {connectionStatus === 'self' && (
-                        <div className="mt-5 pt-5 border-t border-slate-100">
-                            <Link href="/profile">
-                                <Button variant="outline" className="w-full rounded-xl font-bold">
-                                    Profilini Düzenle
-                                </Button>
-                            </Link>
-                        </div>
-                    )}
+                    </div>
                 </div>
 
                 {/* Tabs: Hakkında / Portföyosu */}
@@ -264,62 +304,107 @@ export default function PublicProfilePage() {
 
                 {/* Hakkında Tab */}
                 {activeTab === 'hakkinda' && (
-                    <div className="space-y-4">
-                        {profile.bio && (
-                            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
-                                <h2 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-3">Hakkında</h2>
-                                <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{profile.bio}</p>
-                            </div>
-                        )}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="md:col-span-2 space-y-6">
+                            {(profile.bio || profile.special_note) ? (
+                                <>
+                                    {profile.bio && (
+                                        <div className="bg-white rounded-[32px] p-8 border border-stone-100 shadow-sm transition-all hover:shadow-md">
+                                            <div className="flex items-center gap-3 mb-6">
+                                                <div className="w-1.5 h-6 bg-[#7b9e89] rounded-full" />
+                                                <h2 className="font-black text-sm uppercase tracking-[0.2em] text-stone-400">Hakkında</h2>
+                                            </div>
+                                            <p className="text-stone-700 leading-[1.8] text-lg font-medium whitespace-pre-wrap">{profile.bio}</p>
+                                        </div>
+                                    )}
 
-                        {profile.special_note && (
-                            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
-                                <h2 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-3">
-                                    {profile.role === 'teacher' ? 'Uzmanlık Alanı' : 'Notlar'}
-                                </h2>
-                                <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{profile.special_note}</p>
-                            </div>
-                        )}
-
-                        {(!profile.bio && !profile.special_note) && (
-                            <div className="text-center py-12 text-slate-400 bg-white rounded-3xl border border-dashed border-slate-200">
-                                <p className="text-sm font-medium">Bu kullanıcı henüz bio eklememiş.</p>
-                            </div>
-                        )}
-
-                        {profile.social_links && Object.values(profile.social_links).some(v => v) && (
-                            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
-                                <h2 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-4">Sosyal Medya</h2>
-                                <div className="flex flex-wrap gap-3">
-                                    {profile.social_links.instagram && (
-                                        <a href={profile.social_links.instagram.startsWith('http') ? profile.social_links.instagram : `https://instagram.com/${profile.social_links.instagram}`}
-                                            target="_blank" rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-xl text-sm font-bold shadow-sm hover:-translate-y-0.5 transition-transform">
-                                            <Instagram className="h-4 w-4" /> Instagram
-                                        </a>
+                                    {profile.special_note && (
+                                        <div className="bg-[#fcece6]/30 rounded-[32px] p-8 border border-[#e89b7b]/10 shadow-sm transition-all hover:shadow-md">
+                                            <div className="flex items-center gap-3 mb-6">
+                                                <div className="w-1.5 h-6 bg-[#e89b7b] rounded-full" />
+                                                <h2 className="font-black text-sm uppercase tracking-[0.2em] text-[#c27658]">
+                                                    {profile.role === 'teacher' ? 'Uzmanlık Alanı' : 'Özel Notlar'}
+                                                </h2>
+                                            </div>
+                                            <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/40">
+                                                <p className="text-stone-700 leading-relaxed font-bold italic">{profile.special_note}</p>
+                                            </div>
+                                        </div>
                                     )}
-                                    {profile.social_links.twitter && (
-                                        <a href={profile.social_links.twitter.startsWith('http') ? profile.social_links.twitter : `https://twitter.com/${profile.social_links.twitter}`}
-                                            target="_blank" rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-sm hover:-translate-y-0.5 transition-transform">
-                                            <Twitter className="h-4 w-4" /> X.com
-                                        </a>
-                                    )}
-                                    {profile.social_links.spotify && (
-                                        <a href={profile.social_links.spotify} target="_blank" rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 bg-[#1DB954] text-white rounded-xl text-sm font-bold shadow-sm hover:-translate-y-0.5 transition-transform">
-                                            <Music className="h-4 w-4" /> Spotify
-                                        </a>
-                                    )}
-                                    {profile.social_links.website && (
-                                        <a href={profile.social_links.website} target="_blank" rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-800 rounded-xl text-sm font-bold shadow-sm hover:-translate-y-0.5 transition-transform">
-                                            <Globe className="h-4 w-4 text-teal-500" /> Portfolyo <ExternalLink className="h-3 w-3 opacity-50" />
-                                        </a>
-                                    )}
+                                </>
+                            ) : (
+                                <div className="text-center py-20 bg-stone-50 rounded-[40px] border border-dashed border-stone-200">
+                                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                        <ShieldCheck className="h-8 w-8 text-stone-200" />
+                                    </div>
+                                    <p className="text-stone-400 font-bold">Bu kullanıcı henüz bio eklememiş.</p>
                                 </div>
+                            )}
+                        </div>
+
+                        {/* Sidebar info */}
+                        <div className="space-y-6">
+                            {/* Social Links */}
+                            {profile.social_links && Object.values(profile.social_links).some(v => v) && (
+                                <div className="bg-white rounded-[32px] p-8 border border-stone-100 shadow-sm">
+                                    <h2 className="font-black text-xs uppercase tracking-widest text-stone-400 mb-6">Sosyal Medya</h2>
+                                    <div className="flex flex-col gap-3">
+                                        {profile.social_links.instagram && (
+                                            <a href={profile.social_links.instagram.startsWith('http') ? profile.social_links.instagram : `https://instagram.com/${profile.social_links.instagram}`}
+                                                target="_blank" rel="noopener noreferrer"
+                                                className="flex items-center justify-between p-4 bg-[#f4eefa] text-[#8a5ea5] rounded-2xl font-bold transition-all hover:-translate-x-1">
+                                                <div className="flex items-center gap-3">
+                                                    <Instagram className="h-5 w-5" />
+                                                    <span>Instagram</span>
+                                                </div>
+                                                <ExternalLink className="h-4 w-4 opacity-30" />
+                                            </a>
+                                        )}
+                                        {profile.social_links.twitter && (
+                                            <a href={profile.social_links.twitter.startsWith('http') ? profile.social_links.twitter : `https://twitter.com/${profile.social_links.twitter}`}
+                                                target="_blank" rel="noopener noreferrer"
+                                                className="flex items-center justify-between p-4 bg-stone-900 text-white rounded-2xl font-bold transition-all hover:-translate-x-1">
+                                                <div className="flex items-center gap-3">
+                                                    <Twitter className="h-5 w-5" />
+                                                    <span>X.com</span>
+                                                </div>
+                                                <ExternalLink className="h-4 w-4 opacity-30" />
+                                            </a>
+                                        )}
+                                        {profile.social_links.spotify && (
+                                            <a href={profile.social_links.spotify} target="_blank" rel="noopener noreferrer"
+                                                className="flex items-center justify-between p-4 bg-[#1DB954]/10 text-[#1DB954] rounded-2xl font-bold transition-all hover:-translate-x-1">
+                                                <div className="flex items-center gap-3">
+                                                    <Music className="h-5 w-5" />
+                                                    <span>Spotify</span>
+                                                </div>
+                                                <ExternalLink className="h-4 w-4 opacity-30" />
+                                            </a>
+                                        )}
+                                        {profile.social_links.website && (
+                                            <a href={profile.social_links.website} target="_blank" rel="noopener noreferrer"
+                                                className="flex items-center justify-between p-4 bg-[#eaf2ed] text-[#557b66] rounded-2xl font-bold transition-all hover:-translate-x-1">
+                                                <div className="flex items-center gap-3">
+                                                    <Globe className="h-5 w-5" />
+                                                    <span>Web Sitesi</span>
+                                                </div>
+                                                <ExternalLink className="h-4 w-4 opacity-30" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Trust Card */}
+                            <div className="bg-gradient-to-br from-[#7b9e89] to-[#6ba88f] rounded-[32px] p-8 text-white shadow-xl shadow-[#7b9e89]/20 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                                <ShieldCheck className="h-10 w-10 mb-4 opacity-80" />
+                                <h3 className="text-xl font-black mb-2">Güvenli İletişim</h3>
+                                <p className="text-white/80 text-sm font-bold leading-relaxed">
+                                    Ruhefza üzerinden kurulan tüm bağlantılar ve mesajlaşmalar uçtan uca korunmaktadır.
+                                </p>
                             </div>
-                        )}
+                        </div>
                     </div>
                 )}
 

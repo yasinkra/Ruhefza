@@ -11,6 +11,7 @@ import { createClient } from "@/utils/supabase/client";
 const navigation = [
     { name: "Ana Sayfa", href: "/dashboard", icon: LayoutDashboard },
     { name: "Topluluk", href: "/feed", icon: Home },
+    { name: "Uzmanlar", href: "/experts", icon: Sparkles },
     { name: "Mesajlar", href: "/messages", icon: MessageCircle },
     { name: "Bilgi Bankası", href: "/knowledge", icon: BookOpen },
     { name: "Bildirimler", href: "/notifications", icon: Bell },
@@ -71,7 +72,7 @@ export function Sidebar() {
             {/* Logo Area */}
             <div className="p-6 pb-2">
                 <Link href="/dashboard" className="flex items-center gap-2.5 group">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#0D9488] to-[#10B981] flex items-center justify-center shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/40 transition-shadow">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#7b9e89] to-[#9abfa7] flex items-center justify-center shadow-lg shadow-[#7b9e89]/30 group-hover:shadow-[#7b9e89]/40 transition-shadow">
                         <Sparkles className="h-5 w-5 text-white" />
                     </div>
                     <div>
@@ -94,7 +95,7 @@ export function Sidebar() {
                             className={cn(
                                 "group flex items-center gap-3.5 px-4 py-3.5 text-[15px] font-semibold rounded-2xl transition-all duration-300",
                                 isActive
-                                    ? "bg-[#0D9488] text-white shadow-lg shadow-teal-500/25"
+                                    ? "bg-[#7b9e89] text-white shadow-lg shadow-[#7b9e89]/25"
                                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-900 active:scale-[0.98]"
                             )}
                         >

@@ -77,17 +77,17 @@ export function BottomNav() {
                             >
                                 <div className={cn(
                                     "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
-                                    isActive ? "text-teal-600" : "text-stone-400"
+                                    isActive ? "text-[#7b9e89]" : "text-stone-400"
                                 )}>
                                     {/* Active pill background */}
                                     {isActive && (
-                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-12 h-[30px] bg-teal-50 rounded-full -z-10 animate-scale-in" />
+                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-12 h-[30px] bg-[#eaf2ed] rounded-full -z-10 animate-scale-in" />
                                     )}
                                     <div className="relative">
                                         <item.icon
                                             className={cn(
                                                 "h-[22px] w-[22px] transition-all duration-200",
-                                                isActive && "text-teal-600"
+                                                isActive && "text-[#7b9e89]"
                                             )}
                                             strokeWidth={isActive ? 2.5 : 1.8}
                                         />
@@ -99,7 +99,7 @@ export function BottomNav() {
                                     </div>
                                     <span className={cn(
                                         "text-[10px] transition-all duration-200",
-                                        isActive ? "font-semibold text-teal-700" : "font-medium"
+                                        isActive ? "font-semibold text-[#6ba88f]" : "font-medium"
                                     )}>
                                         {item.name}
                                     </span>

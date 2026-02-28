@@ -268,7 +268,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                     {pendingRequests.length > 0 && (
                         <button
                             onClick={() => setShowRequests(!showRequests)}
-                            className="relative flex items-center gap-1.5 text-xs font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-full transition-colors"
+                            className="relative flex items-center gap-1.5 text-xs font-semibold text-[#7b9e89] bg-[#eaf2ed] hover:bg-[#d8e5de] px-3 py-1.5 rounded-full transition-colors"
                         >
                             <Bell className="h-3.5 w-3.5" />
                             {pendingRequests.length} İstek
@@ -280,7 +280,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                         placeholder="İsim, @kullanıcı veya #ID ile ara..."
-                        className="pl-10 bg-gray-50/80 border-gray-200/50 rounded-full text-[14px] shadow-inner focus-visible:ring-[#0D9488]/20 focus-visible:border-[#0D9488]/40"
+                        className="pl-10 bg-gray-50/80 border-gray-200/50 rounded-full text-[14px] shadow-inner focus-visible:ring-[#7b9e89]/20 focus-visible:border-[#7b9e89]/40"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -290,7 +290,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
             <div className="flex-1 overflow-y-auto">
                 {/* Pending Requests Panel */}
                 {showRequests && pendingRequests.length > 0 && (
-                    <div className="border-b border-stone-100 bg-teal-50/50 p-3 space-y-2">
+                    <div className="border-b border-stone-100 bg-[#eaf2ed]/50 p-3 space-y-2">
                         <p className="text-[11px] font-bold text-stone-500 uppercase tracking-wider px-1 mb-2">Bekleyen İstekler</p>
                         {pendingRequests.map(req => (
                             <div key={req.id} className="flex items-center gap-3 bg-white rounded-xl p-3 border border-stone-100 shadow-sm">
@@ -339,7 +339,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                                     <div className="flex-1 min-w-0">
                                         <p className="font-semibold text-sm text-stone-800 truncate">{user.full_name}</p>
                                         <div className="flex items-center gap-1.5 text-xs text-stone-400">
-                                            {user.username && <span className="text-teal-600">@{user.username}</span>}
+                                            {user.username && <span className="text-[#7b9e89]">@{user.username}</span>}
                                             {user.username && <span>·</span>}
                                             <span>{user.role === 'teacher' ? 'Öğretmen' : user.role === 'student' ? 'Öğrenci' : 'Ebeveyn'}</span>
                                         </div>
@@ -356,7 +356,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                                             <Clock className="h-3 w-3" /> Bekliyor
                                         </span>
                                     ) : (
-                                        <Button size="sm" className="text-xs h-8 rounded-full bg-teal-600 hover:bg-teal-700"
+                                        <Button size="sm" className="text-xs h-8 rounded-full bg-[#7b9e89] hover:bg-[#6ba88f]"
                                             onClick={() => handleSendRequest(user.id)}
                                             disabled={sendingRequest === user.id}>
                                             {sendingRequest === user.id ? "..." : "Bağlan"}
@@ -386,7 +386,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                         className={cn(
                             "flex items-center gap-3.5 px-3 py-3 mx-2 my-1.5 cursor-pointer transition-all rounded-[24px]",
                             selectedConversationId === conv.id
-                                ? "bg-[#0D9488]/10 border border-[#0D9488]/20 shadow-sm"
+                                ? "bg-[#7b9e89]/10 border border-[#7b9e89]/20 shadow-sm"
                                 : "hover:bg-gray-50 border border-transparent"
                         )}
                     >
@@ -396,7 +396,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                                 <AvatarFallback>{conv.full_name[0]?.toUpperCase()}</AvatarFallback>
                             </Avatar>
                             {conv.unread_count > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold text-white bg-teal-500 rounded-full flex items-center justify-center">
+                                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold text-white bg-[#7b9e89] rounded-full flex items-center justify-center">
                                     {conv.unread_count}
                                 </span>
                             )}

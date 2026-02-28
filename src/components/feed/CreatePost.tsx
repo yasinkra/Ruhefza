@@ -101,84 +101,87 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
     };
 
     return (
-        <Card className="mb-6 border-teal-100/50 rounded-2xl shadow-sm">
-            <CardContent className="pt-6">
-                <form onSubmit={handleSubmit}>
-                    <textarea
-                        className="w-full min-h-[100px] p-3 rounded-xl border border-stone-200 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-400 text-stone-700 text-sm placeholder:text-stone-400 transition-all"
-                        placeholder="Düşüncelerinizi paylaşın..."
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    />
-                    {imagePreview && (
-                        <div className="relative mt-3 mb-2 max-w-sm rounded-xl overflow-hidden border border-stone-200">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={imagePreview} alt="Preview" className="w-full h-auto object-cover max-h-48" />
-                            <button
-                                type="button"
-                                onClick={clearImage}
-                                className="absolute top-2 right-2 p-1 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
-                            >
-                                <X className="h-4 w-4" />
-                            </button>
-                        </div>
-                    )}
+        <div className="mb-6 bg-white/80 backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-[#a2c1b1]/30 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <form onSubmit={handleSubmit}>
+                <div className="flex gap-4">
+                    <div className="flex-1">
+                        <textarea
+                            className="w-full bg-transparent border-none resize-none text-stone-700 placeholder:text-stone-400 focus:ring-0 p-0 text-base sm:text-lg min-h-[60px]"
+                            placeholder="Ruha iyi gelecek bir düşünce paylaşın veya fikir sorun..."
+                            rows={2}
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                        />
+                        {imagePreview && (
+                            <div className="relative mt-3 mb-2 max-w-sm rounded-xl overflow-hidden border border-stone-200 shadow-sm">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={imagePreview} alt="Preview" className="w-full h-auto object-cover max-h-48" />
+                                <button
+                                    type="button"
+                                    onClick={clearImage}
+                                    className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors backdrop-blur-sm"
+                                >
+                                    <X className="h-4 w-4" />
+                                </button>
+                            </div>
+                        )}
 
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-4">
-                        <div className="flex flex-col gap-3">
-                            <div className="flex flex-wrap items-center gap-2">
-                                <Tag className="h-4 w-4 text-stone-400" />
+                        <div className="mt-4 pt-4 border-t border-[#7b9e89]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
                                 {categories.map(c => (
                                     <Badge
                                         key={c}
                                         variant={category === c ? "default" : "outline"}
-                                        className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${category === c ? 'bg-teal-600 hover:bg-teal-700 text-white border-0 shadow-sm' : 'text-stone-600 hover:bg-stone-100 border-stone-200'}`}
+                                        className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${category === c ? 'bg-stone-800 text-white hover:bg-stone-700 border-0 shadow-sm' : 'text-stone-600 bg-stone-50 hover:bg-[#eaf2ed] hover:text-[#7b9e89] border border-[#a2c1b1]/20'}`}
                                         onClick={() => setCategory(c)}
                                     >
                                         {c}
                                     </Badge>
                                 ))}
                             </div>
-                            <div className="flex items-center gap-4">
-                                <div>
-                                    <input
-                                        type="file"
-                                        id="image-upload"
-                                        accept="image/jpeg,image/png,image/webp"
-                                        className="hidden"
-                                        onChange={handleImageChange}
-                                        disabled={loading}
-                                    />
-                                    <label
-                                        htmlFor="image-upload"
-                                        className="flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-teal-600 cursor-pointer transition-colors"
-                                    >
-                                        <ImageIcon className="h-4 w-4" />
-                                        Görsel Ekle
-                                    </label>
+
+                            <div className="flex items-center gap-2 sm:ml-auto shrink-0 w-full sm:w-auto justify-between sm:justify-end">
+                                <div className="flex items-center gap-1">
+                                    <div>
+                                        <input
+                                            type="file"
+                                            id="image-upload"
+                                            accept="image/jpeg,image/png,image/webp"
+                                            className="hidden"
+                                            onChange={handleImageChange}
+                                            disabled={loading}
+                                        />
+                                        <label
+                                            htmlFor="image-upload"
+                                            className="p-2 sm:p-2.5 flex items-center justify-center text-[#7b9e89] hover:bg-[#7b9e89]/10 rounded-xl transition-colors cursor-pointer"
+                                            title="Görsel Ekle"
+                                        >
+                                            <ImageIcon className="h-5 w-5" />
+                                        </label>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 mx-1 px-2.5 py-1.5 rounded-xl border border-stone-100 bg-stone-50 hover:bg-stone-100 transition-colors">
+                                        <input
+                                            type="checkbox"
+                                            id="anonymous"
+                                            checked={isAnonymous}
+                                            onChange={(e) => setIsAnonymous(e.target.checked)}
+                                            className="w-4 h-4 rounded border-stone-300 text-[#7b9e89] focus:ring-[#7b9e89] accent-[#7b9e89]"
+                                        />
+                                        <label htmlFor="anonymous" className="text-xs font-medium text-stone-600 cursor-pointer select-none">
+                                            Anonim
+                                        </label>
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        id="anonymous"
-                                        checked={isAnonymous}
-                                        onChange={(e) => setIsAnonymous(e.target.checked)}
-                                        className="w-4 h-4 rounded border-stone-300 text-teal-600 focus:ring-teal-500 accent-teal-600"
-                                    />
-                                    <label htmlFor="anonymous" className="text-sm text-stone-600 cursor-pointer select-none">
-                                        Anonim olarak paylaş
-                                    </label>
-                                </div>
+                                <Button type="submit" disabled={!content.trim() || loading} className="gap-2 bg-[#7b9e89] hover:bg-[#6ba88f] text-white rounded-xl px-6 h-10 shadow-md shadow-[#7b9e89]/20 font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">
+                                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Paylaş"}
+                                </Button>
                             </div>
                         </div>
-                        <Button type="submit" disabled={!content.trim() || loading} className="gap-2 shrink-0 self-end sm:self-auto bg-teal-600 hover:bg-teal-700 text-white rounded-xl px-5 h-10 shadow-sm shadow-teal-200/50">
-                            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                            Paylaş
-                        </Button>
                     </div>
-                </form>
-            </CardContent>
-        </Card>
+                </div>
+            </form>
+        </div>
     );
 }

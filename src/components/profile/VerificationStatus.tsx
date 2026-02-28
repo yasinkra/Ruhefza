@@ -23,13 +23,13 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
 
     if (status === 'approved') {
         return (
-            <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center gap-3 mb-6">
-                <div className="bg-emerald-100 p-2 rounded-full text-emerald-600">
+            <div className="bg-[#eaf2ed] border border-[#cce0d5] p-4 rounded-xl flex items-center gap-3 mb-6">
+                <div className="bg-[#cce0d5] p-2 rounded-full text-[#557b66]">
                     <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                    <h4 className="text-emerald-800 font-semibold text-sm">Doğrulanmış Uzman</h4>
-                    <p className="text-emerald-600 inline-flex items-center gap-2 text-xs">
+                    <h4 className="text-[#2d4d3a] font-semibold text-sm">Doğrulanmış Uzman</h4>
+                    <p className="text-[#557b66] inline-flex items-center gap-2 text-xs">
                         Hesabınız onaylanmıştır. Topluluk akışına içerik ekleyebilirsiniz.
                     </p>
                 </div>
@@ -39,13 +39,13 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
 
     if (status === 'pending') {
         return (
-            <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl flex items-center gap-3 mb-6">
-                <div className="bg-amber-100 p-2 rounded-full text-amber-600">
+            <div className="bg-[#fffae8] border border-[#fcefc2] p-4 rounded-xl flex items-center gap-3 mb-6">
+                <div className="bg-[#fcefc2] p-2 rounded-full text-[#d6aa31]">
                     <Clock className="h-5 w-5" />
                 </div>
                 <div>
-                    <h4 className="text-amber-800 font-semibold text-sm">İnceleme Bekleniyor</h4>
-                    <p className="text-amber-600 text-xs mt-0.5">
+                    <h4 className="text-[#9e7610] font-semibold text-sm">İnceleme Bekleniyor</h4>
+                    <p className="text-[#b88c1c] text-xs mt-0.5">
                         Belgeleriniz alındı. Yönetici onayının ardından hesabınız doğrulanacaktır.
                     </p>
                 </div>
@@ -99,10 +99,10 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
     };
 
     return (
-        <Card className="mb-6 border-teal-100 bg-teal-50/30 overflow-hidden shadow-sm">
-            <CardHeader className="pb-3 border-b border-teal-100/50 bg-white">
+        <Card className="mb-6 border-[#cce0d5] bg-[#eaf2ed]/30 overflow-hidden shadow-sm">
+            <CardHeader className="pb-3 border-b border-[#cce0d5]/50 bg-white">
                 <div className="flex items-center gap-2">
-                    <ShieldAlert className="h-5 w-5 text-teal-500" />
+                    <ShieldAlert className="h-5 w-5 text-[#7b9e89]" />
                     <CardTitle className="text-base text-stone-800 tracking-tight">Uzman Doğrulaması Gerekli</CardTitle>
                 </div>
                 <CardDescription className="text-xs text-stone-500 mt-1">
@@ -112,14 +112,14 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
             <CardContent className="pt-4">
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                     <div className="flex-1 w-full">
-                        <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${file ? 'border-teal-400 bg-teal-50' : 'border-stone-300 hover:bg-stone-50 bg-white'}`}>
+                        <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${file ? 'border-[#a2c1b1] bg-[#eaf2ed]' : 'border-stone-300 hover:bg-stone-50 bg-white'}`}>
                             <div className="flex flex-col items-center justify-center pt-5 text-center px-4">
-                                <UploadCloud className={`w-6 h-6 mb-2 ${file ? 'text-teal-500' : 'text-stone-400'}`} />
+                                <UploadCloud className={`w-6 h-6 mb-2 ${file ? 'text-[#7b9e89]' : 'text-stone-400'}`} />
                                 <p className="mb-1 text-xs text-stone-500">
                                     {file ? (
-                                        <span className="font-semibold text-teal-600">{file.name}</span>
+                                        <span className="font-semibold text-[#557b66]">{file.name}</span>
                                     ) : (
-                                        <>Belge seçmek için <span className="font-semibold text-teal-600">tıklayın</span> veya sürükleyin</>
+                                        <>Belge seçmek için <span className="font-semibold text-[#557b66]">tıklayın</span> veya sürükleyin</>
                                     )}
                                 </p>
                             </div>
@@ -138,7 +138,7 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
                     <Button
                         onClick={handleUpload}
                         disabled={!file || uploading}
-                        className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white shrink-0"
+                        className="w-full sm:w-auto bg-[#7b9e89] hover:bg-[#6ba88f] text-white shrink-0"
                     >
                         {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Gönder"}
                     </Button>

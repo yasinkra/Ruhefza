@@ -90,12 +90,12 @@ export function ArticleCard({
 
     const getCategoryStyles = (category: string) => {
         switch (category) {
-            case "Otizm": return { gradient: "from-blue-500 to-cyan-500", icon: <Puzzle className="h-12 w-12 text-white/50 mix-blend-overlay" /> };
-            case "DEHB": return { gradient: "from-purple-500 to-fuchsia-500", icon: <Brain className="h-12 w-12 text-white/50 mix-blend-overlay" /> };
-            case "Fiziksel Gelişim": return { gradient: "from-emerald-500 to-teal-500", icon: <Activity className="h-12 w-12 text-white/50 mix-blend-overlay" /> };
-            case "Dil ve Konuşma": return { gradient: "from-amber-400 to-orange-500", icon: <MessageCircle className="h-12 w-12 text-white/50 mix-blend-overlay" /> };
-            case "Yasal Haklar": return { gradient: "from-rose-400 to-red-500", icon: <Scale className="h-12 w-12 text-white/50 mix-blend-overlay" /> };
-            default: return { gradient: "from-stone-400 to-stone-300", icon: <BookOpen className="h-12 w-12 text-white/50 mix-blend-overlay" /> };
+            case "Otizm": return { gradient: "from-[#71a5d6] to-[#a0c5e8]", icon: <Puzzle className="h-12 w-12 text-white/60 mix-blend-overlay" /> };
+            case "DEHB": return { gradient: "from-[#b388c6] to-[#d4bbee]", icon: <Brain className="h-12 w-12 text-white/60 mix-blend-overlay" /> };
+            case "Fiziksel Gelişim": return { gradient: "from-[#7b9e89] to-[#a2c1b1]", icon: <Activity className="h-12 w-12 text-white/60 mix-blend-overlay" /> };
+            case "Dil ve Konuşma": return { gradient: "from-[#f2a68d] to-[#f8c9b9]", icon: <MessageCircle className="h-12 w-12 text-white/60 mix-blend-overlay" /> };
+            case "Yasal Haklar": return { gradient: "from-[#e27d73] to-[#efaaa5]", icon: <Scale className="h-12 w-12 text-white/60 mix-blend-overlay" /> };
+            default: return { gradient: "from-[#8ba898] to-[#9abfa7]", icon: <BookOpen className="h-12 w-12 text-white/60 mix-blend-overlay" /> };
         }
     };
 
@@ -136,21 +136,21 @@ export function ArticleCard({
                                         className="h-8 w-8 transition-colors"
                                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowShareModal(true); }}
                                         title="Arkadaşına gönder">
-                                        <Share2 className="h-4 w-4 text-stone-400 hover:text-teal-500" />
+                                        <Share2 className="h-4 w-4 text-stone-400 hover:text-[#7b9e89]" />
                                     </Button>
                                     <Button variant="ghost" size="icon"
                                         className="h-8 w-8 transition-colors"
                                         onClick={handleBookmark}
                                         disabled={bookmarkLoading}
                                         title={bookmarked ? "Kaydedilenlerden kaldır" : "Kaydet"}>
-                                        <Bookmark className={bookmarkLoading ? "h-4 w-4 opacity-50" : bookmarked ? "h-4 w-4 fill-teal-500 text-teal-500" : "h-4 w-4 text-stone-400 hover:text-teal-500"} />
+                                        <Bookmark className={bookmarkLoading ? "h-4 w-4 opacity-50" : bookmarked ? "h-4 w-4 fill-[#7b9e89] text-[#7b9e89]" : "h-4 w-4 text-stone-400 hover:text-[#7b9e89]"} />
                                     </Button>
                                 </>
                             )}
-                            <BookOpen className="h-5 w-5 text-stone-300 group-hover:text-teal-500 transition-colors" />
+                            <BookOpen className="h-5 w-5 text-stone-300 group-hover:text-[#7b9e89] transition-colors" />
                         </div>
                     </div>
-                    <CardTitle className="text-xl sm:text-2xl font-bold leading-tight text-stone-900 group-hover:text-teal-700 transition-colors line-clamp-2">
+                    <CardTitle className="text-xl sm:text-2xl font-bold leading-tight text-stone-900 group-hover:text-[#7b9e89] transition-colors line-clamp-2">
                         {article.title}
                     </CardTitle>
                 </CardHeader>
@@ -173,7 +173,7 @@ export function ArticleCard({
                         </div>
                     </div>
                     <Link href={`/knowledge/${article.id}`}
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-stone-200 text-stone-400 group-hover:bg-teal-500 group-hover:text-white group-hover:border-teal-500 transition-all shadow-sm">
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-stone-200 text-stone-400 group-hover:bg-[#7b9e89] group-hover:text-white group-hover:border-[#7b9e89] transition-all shadow-sm">
                         <ArrowRight className="h-4 w-4" />
                     </Link>
                 </CardFooter>

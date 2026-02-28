@@ -92,7 +92,11 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
         setLoading(false);
     };
 
-    useEffect(() => { fetchItems(); }, [userId]);
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchItems();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userId]);
 
     const handleDelete = async (item: PortfolioItem) => {
         if (!confirm("Bu öğeyi portföyünüzden kaldırmak istiyor musunuz?")) return;
@@ -164,7 +168,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                             className={cn(
                                 "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all",
                                 activeCategory === cat.key
-                                    ? "bg-teal-500 text-white shadow-sm"
+                                    ? "bg-[#7b9e89] text-white shadow-sm"
                                     : "bg-stone-100 text-stone-500 hover:bg-stone-200"
                             )}
                         >
@@ -185,7 +189,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                     <Button
                         onClick={() => setShowAddModal(true)}
                         size="sm"
-                        className="bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold shadow-sm shrink-0"
+                        className="bg-[#7b9e89] hover:bg-[#6ba88f] text-white rounded-xl font-bold shadow-sm shrink-0"
                     >
                         <Plus className="h-4 w-4 mr-1" /> Ekle
                     </Button>
@@ -195,21 +199,21 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
             {/* Empty state */}
             {filtered.length === 0 && (
                 <div className="text-center py-20 bg-gradient-to-br from-stone-50 to-white rounded-[32px] border border-dashed border-stone-200 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl -mr-20 -mt-20 transition-transform group-hover:scale-110 duration-700"></div>
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-500/5 rounded-full blur-3xl -ml-20 -mb-20 transition-transform group-hover:scale-110 duration-700"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#7b9e89]/10 rounded-full blur-3xl -mr-20 -mt-20 transition-transform group-hover:scale-110 duration-700"></div>
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#b388c6]/10 rounded-full blur-3xl -ml-20 -mb-20 transition-transform group-hover:scale-110 duration-700"></div>
 
                     <div className="mx-auto w-32 h-32 relative mb-6">
-                        <div className="absolute inset-0 bg-teal-100 rounded-full animate-ping opacity-20 duration-1000"></div>
+                        <div className="absolute inset-0 bg-[#a2c1b1]/30 rounded-full animate-ping opacity-20 duration-1000"></div>
                         <div className="relative w-full h-full bg-white rounded-full shadow-sm border border-stone-100 flex items-center justify-center">
-                            {activeCategory === "article_link" ? <BookOpen className="h-10 w-10 text-teal-400" /> :
-                                activeCategory === "video_link" ? <Video className="h-10 w-10 text-red-400" /> :
-                                    activeCategory === "image" ? <ImageIcon className="h-10 w-10 text-violet-400" /> :
-                                        activeCategory === "document" ? <FileText className="h-10 w-10 text-amber-400" /> :
+                            {activeCategory === "article_link" ? <BookOpen className="h-10 w-10 text-[#7b9e89]" /> :
+                                activeCategory === "video_link" ? <Video className="h-10 w-10 text-[#e89b7b]" /> :
+                                    activeCategory === "image" ? <ImageIcon className="h-10 w-10 text-[#b388c6]" /> :
+                                        activeCategory === "document" ? <FileText className="h-10 w-10 text-[#fcdb9d]" /> :
                                             <div className="grid grid-cols-2 gap-2 p-2">
-                                                <div className="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center"><BookOpen className="h-4 w-4 text-teal-500" /></div>
-                                                <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center"><Video className="h-4 w-4 text-red-500" /></div>
-                                                <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center"><ImageIcon className="h-4 w-4 text-violet-500" /></div>
-                                                <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center"><FileText className="h-4 w-4 text-amber-500" /></div>
+                                                <div className="w-8 h-8 rounded-lg bg-[#eaf2ed] flex items-center justify-center"><BookOpen className="h-4 w-4 text-[#7b9e89]" /></div>
+                                                <div className="w-8 h-8 rounded-lg bg-[#fcece6] flex items-center justify-center"><Video className="h-4 w-4 text-[#e89b7b]" /></div>
+                                                <div className="w-8 h-8 rounded-lg bg-[#f4eefa] flex items-center justify-center"><ImageIcon className="h-4 w-4 text-[#b388c6]" /></div>
+                                                <div className="w-8 h-8 rounded-lg bg-[#fff7e6] flex items-center justify-center"><FileText className="h-4 w-4 text-[#e8c87b]" /></div>
                                             </div>}
                         </div>
                     </div>
@@ -240,7 +244,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                     <div className="mb-8">
                         {activeCategory === "all" && (
                             <div className="flex items-center gap-2 mb-3">
-                                <div className="w-1 h-5 bg-teal-500 rounded-full" />
+                                <div className="w-1 h-5 bg-[#7b9e89] rounded-full" />
                                 <h3 className="font-bold text-stone-700 text-xs uppercase tracking-widest flex items-center gap-1.5">
                                     <BookOpen className="h-3.5 w-3.5" /> Makaleler
                                 </h3>
@@ -248,19 +252,19 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                         )}
                         <div className="grid grid-cols-1 gap-3">
                             {filtered.filter(i => i.type === "article_link").map(item => (
-                                <div key={item.id} className="group flex items-start gap-4 p-4 bg-white rounded-2xl border border-stone-100 hover:border-teal-200 hover:shadow-md transition-all">
-                                    <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center shrink-0">
-                                        <BookOpen className="h-5 w-5 text-teal-500" />
+                                <div key={item.id} className="group flex items-start gap-4 p-4 bg-white rounded-2xl border border-stone-100 hover:border-[#a2c1b1] hover:shadow-md transition-all">
+                                    <div className="w-10 h-10 bg-[#eaf2ed] rounded-xl flex items-center justify-center shrink-0">
+                                        <BookOpen className="h-5 w-5 text-[#7b9e89]" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-xs text-teal-600 font-bold">{item.article?.category || "Makale"}</p>
+                                        <p className="text-xs text-[#557b66] font-bold">{item.article?.category || "Makale"}</p>
                                         <h4 className="font-bold text-stone-900 text-sm mt-0.5 line-clamp-1">{item.article?.title || item.title}</h4>
                                         {item.description && <p className="text-xs text-stone-500 mt-1 line-clamp-2">{item.description}</p>}
                                     </div>
                                     <div className="flex items-center gap-1 shrink-0">
                                         {item.article_id && (
                                             <a href={`/knowledge/${item.article_id}`} target="_blank" rel="noopener noreferrer"
-                                                className="p-1.5 rounded-full text-stone-400 hover:text-teal-500 hover:bg-teal-50 transition-colors">
+                                                className="p-1.5 rounded-full text-stone-400 hover:text-[#7b9e89] hover:bg-[#eaf2ed] transition-colors">
                                                 <ExternalLink className="h-4 w-4" />
                                             </a>
                                         )}
@@ -283,7 +287,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                     <div className="mb-8">
                         {activeCategory === "all" && (
                             <div className="flex items-center gap-2 mb-3">
-                                <div className="w-1 h-5 bg-red-500 rounded-full" />
+                                <div className="w-1 h-5 bg-[#e89b7b] rounded-full" />
                                 <h3 className="font-bold text-stone-700 text-xs uppercase tracking-widest flex items-center gap-1.5">
                                     <Video className="h-3.5 w-3.5" /> Videolar
                                 </h3>
@@ -319,7 +323,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                                             </div>
                                             <div className="flex items-center gap-1 ml-2">
                                                 <a href={item.video_url || "#"} target="_blank" rel="noopener noreferrer"
-                                                    className="p-1.5 rounded-full text-stone-400 hover:text-teal-500 transition-colors">
+                                                    className="p-1.5 rounded-full text-stone-400 hover:text-[#7b9e89] transition-colors">
                                                     <ExternalLink className="h-3.5 w-3.5" />
                                                 </a>
                                                 {isOwner && (
@@ -343,7 +347,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                     <div className="mb-8">
                         {activeCategory === "all" && (
                             <div className="flex items-center gap-2 mb-3">
-                                <div className="w-1 h-5 bg-violet-500 rounded-full" />
+                                <div className="w-1 h-5 bg-[#b388c6] rounded-full" />
                                 <h3 className="font-bold text-stone-700 text-xs uppercase tracking-widest flex items-center gap-1.5">
                                     <ImageIcon className="h-3.5 w-3.5" /> Görseller
                                 </h3>
@@ -379,7 +383,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                     <div className="mb-8">
                         {activeCategory === "all" && (
                             <div className="flex items-center gap-2 mb-3">
-                                <div className="w-1 h-5 bg-amber-500 rounded-full" />
+                                <div className="w-1 h-5 bg-[#e8c87b] rounded-full" />
                                 <h3 className="font-bold text-stone-700 text-xs uppercase tracking-widest flex items-center gap-1.5">
                                     <FileText className="h-3.5 w-3.5" /> Belgeler
                                 </h3>
@@ -387,9 +391,9 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                         )}
                         <div className="grid grid-cols-1 gap-3">
                             {filtered.filter(i => i.type === "document").map(item => (
-                                <div key={item.id} className="group flex items-center gap-4 p-4 bg-white rounded-2xl border border-stone-100 hover:border-amber-200 hover:shadow-md transition-all">
-                                    <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center shrink-0">
-                                        <FileText className="h-5 w-5 text-red-500" />
+                                <div key={item.id} className="group flex items-center gap-4 p-4 bg-white rounded-2xl border border-stone-100 hover:border-[#fcdb9d] hover:shadow-md transition-all">
+                                    <div className="w-10 h-10 bg-[#fcece6] rounded-xl flex items-center justify-center shrink-0">
+                                        <FileText className="h-5 w-5 text-[#e89b7b]" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className="font-bold text-sm text-stone-900 truncate">{item.title}</p>
@@ -403,7 +407,7 @@ export function PortfolioTab({ userId, isOwner, role }: PortfolioTabProps) {
                                     </div>
                                     <div className="flex items-center gap-1 shrink-0">
                                         <a href={item.file_url || "#"} download={item.file_name || "document"} target="_blank" rel="noopener noreferrer"
-                                            className="p-1.5 rounded-full text-stone-400 hover:text-amber-500 hover:bg-amber-50 transition-colors"
+                                            className="p-1.5 rounded-full text-stone-400 hover:text-[#e8c87b] hover:bg-[#fff7e6] transition-colors"
                                             onClick={e => e.stopPropagation()}>
                                             <Download className="h-4 w-4" />
                                         </a>

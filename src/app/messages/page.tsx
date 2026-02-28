@@ -66,8 +66,8 @@ function MessagesContent() {
                     />
                 ) : (
                     <div className="h-full flex flex-col items-center justify-center text-stone-400 p-4 text-center bg-stone-50/30">
-                        <div className="w-20 h-20 bg-gradient-to-br from-teal-100 to-indigo-100 rounded-3xl flex items-center justify-center mb-6 shadow-inner">
-                            <svg className="w-9 h-9 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#eaf2ed] to-[#fef3ea] rounded-3xl flex items-center justify-center mb-6 shadow-[inset_0_2px_10px_rgb(0,0,0,0.02)]">
+                            <svg className="w-9 h-9 text-[#7b9e89]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
                         </div>

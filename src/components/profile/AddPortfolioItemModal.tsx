@@ -49,14 +49,15 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
 
     useEffect(() => {
         if (selectedType === "article_link") {
-            setLoadingArticles(true);
-            createClient().from("articles").select("id, title, category")
-                .eq("author_id", userId)
-                .order("created_at", { ascending: false })
-                .then(({ data }) => {
-                    setMyArticles(data || []);
-                    setLoadingArticles(false);
-                });
+            const fetchArticles = async () => {
+                setLoadingArticles(true);
+                const { data } = await createClient().from("articles").select("id, title, category")
+                    .eq("author_id", userId)
+                    .order("created_at", { ascending: false });
+                setMyArticles(data || []);
+                setLoadingArticles(false);
+            };
+            void fetchArticles();
         }
     }, [selectedType, userId]);
 

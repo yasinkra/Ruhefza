@@ -24,13 +24,9 @@ import {
     FileText,
     UserX,
     Ban,
-    Clock,
-    XCircle,
-    BarChart3,
-    ArrowRight
+    Clock
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -151,7 +147,7 @@ export default function AdminDashboard() {
         if (query.length < 3) return;
 
         setLoadingSearch(true);
-        const { data, error } = await createClient().rpc('search_user_admin', { search_query: query });
+        const { data } = await createClient().rpc('search_user_admin', { search_query: query });
         if (data) setSearchResults(data);
         setLoadingSearch(false);
     };
@@ -164,7 +160,7 @@ export default function AdminDashboard() {
             });
             if (error) throw error;
             toast.success("Duyuru güncellendi.");
-        } catch (error) {
+        } catch (err) {
             toast.error("Duyuru güncellenemedi.");
         }
     };
@@ -180,7 +176,7 @@ export default function AdminDashboard() {
 
             toast.success("Kullanıcı durumu güncellendi.");
             fetchStats(); // Update stats
-        } catch (error) {
+        } catch (err) {
             toast.error("İşlem başarısız.");
         }
     };
@@ -539,7 +535,7 @@ export default function AdminDashboard() {
                                 {searchResults.length === 0 && !loadingSearch && searchQuery && (
                                     <div className="text-center py-12 bg-stone-50/50 rounded-[32px] border border-dashed border-stone-200">
                                         <Users className="h-10 w-10 text-stone-300 mx-auto mb-3" />
-                                        <p className="text-stone-500 font-bold">"{searchQuery}" için sonuç bulunamadı.</p>
+                                        <p className="text-stone-500 font-bold">&quot;{searchQuery}&quot; için sonuç bulunamadı.</p>
                                     </div>
                                 )}
                             </div>
