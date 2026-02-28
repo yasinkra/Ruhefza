@@ -424,8 +424,8 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             </div>
 
             {/* Input Area */}
-            <div className="p-3 bg-white border-t border-stone-100 shrink-0">
-                <form onSubmit={handleSendMessage} className="flex gap-2 items-end">
+            <div className="p-2 sm:p-3 bg-white border-t border-stone-100 shrink-0">
+                <form onSubmit={handleSendMessage} className="flex gap-1.5 sm:gap-2 items-end">
                     <input
                         ref={fileInputRef}
                         type="file"
@@ -435,7 +435,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                         disabled={uploading}
                     />
                     <Button type="button" variant="ghost" size="icon"
-                        className="shrink-0 text-stone-400 hover:text-teal-600 hover:bg-teal-50"
+                        className="shrink-0 text-stone-400 hover:text-teal-600 hover:bg-teal-50 h-10 w-10"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
                         title="Dosya veya görsel gönder">
@@ -456,9 +456,9 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                                 if (newMessage.trim()) handleSendMessage(e as unknown as React.FormEvent);
                             }
                         }}
-                        placeholder="Mesaj yaz... (Enter gönder, Shift+Enter yeni satır)"
+                        placeholder="Mesaj yaz"
                         rows={1}
-                        className="flex-1 resize-none rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 focus:bg-white transition-all max-h-32 overflow-y-auto"
+                        className="flex-1 resize-none rounded-xl border border-stone-200 bg-stone-50 px-3 sm:px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 focus:bg-white transition-all max-h-32 overflow-y-auto min-h-[44px]"
                     />
                     <Button type="submit" size="icon"
                         className="shrink-0 bg-teal-500 hover:bg-teal-600 text-white shadow-md shadow-teal-200 h-10 w-10"
@@ -466,7 +466,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                         <Send className="h-4 w-4" />
                     </Button>
                 </form>
-                <p className="text-[10px] text-stone-300 text-center mt-1.5">
+                <p className="text-[10px] text-stone-300 text-center mt-1.5 hidden sm:block">
                     Mesajlar 7 gün sonra silinir · Görsel: maks 2MB · Belge: maks 5MB
                 </p>
             </div>
