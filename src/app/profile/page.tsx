@@ -632,16 +632,18 @@ export default function ProfilePage() {
                                 )}
 
                                 <Tabs defaultValue="about" className="w-full">
-                                    <TabsList className="flex sm:grid sm:grid-cols-3 w-full mb-10 h-auto sm:h-14 bg-stone-100/50 p-1.5 rounded-2xl gap-1.5 sm:gap-1 overflow-x-auto custom-scrollbar">
-                                        <TabsTrigger value="about" className="shrink-0 sm:shrink flex-1 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-black text-[11px] sm:text-sm uppercase tracking-widest py-3 sm:py-2.5 px-4 sm:px-0">
+                                    <TabsList className="grid grid-cols-3 w-full mb-10 h-auto bg-stone-100/50 p-1 sm:p-1.5 rounded-2xl gap-1">
+                                        <TabsTrigger value="about" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-bold text-[11px] sm:text-sm uppercase tracking-wider py-2.5 sm:py-3 px-1 sm:px-2">
                                             Hakkında
                                         </TabsTrigger>
-                                        <TabsTrigger value="bookmarks" className="shrink-0 sm:shrink flex-1 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-black text-[11px] sm:text-sm uppercase tracking-widest py-3 sm:py-2.5 px-4 sm:px-0 flex items-center justify-center gap-1.5 sm:gap-2">
-                                            <Bookmark className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                                            Kaydedilenler
+                                        <TabsTrigger value="bookmarks" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-bold text-[11px] sm:text-sm uppercase tracking-wider py-2.5 sm:py-3 px-1 sm:px-2 flex items-center justify-center gap-1">
+                                            <Bookmark className="h-3 w-3 sm:h-4 sm:w-4" />
+                                            <span className="hidden sm:inline">Kaydedilenler</span>
+                                            <span className="sm:hidden">Kayıtlı</span>
                                         </TabsTrigger>
-                                        <TabsTrigger value="portfolio" className="shrink-0 sm:shrink flex-1 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-black text-[11px] sm:text-sm uppercase tracking-widest py-3 sm:py-2.5 px-4 sm:px-0">
-                                            Portfölyom
+                                        <TabsTrigger value="portfolio" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-bold text-[11px] sm:text-sm uppercase tracking-wider py-2.5 sm:py-3 px-1 sm:px-2">
+                                            <span className="hidden sm:inline">Portfölyom</span>
+                                            <span className="sm:hidden">Portföy</span>
                                         </TabsTrigger>
                                     </TabsList>
 
