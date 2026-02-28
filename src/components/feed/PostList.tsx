@@ -134,11 +134,11 @@ export function PostList({
     }, [refreshTrigger, userId, categoryFilter, searchQuery, sortOption]);
 
     if (loading) {
-        return <div className="text-center py-10 text-slate-400">Yükleniyor...</div>;
+        return <div className="text-center py-10 text-stone-400">Yükleniyor...</div>;
     }
 
     if (posts.length === 0) {
-        return <div className="text-center py-10 text-slate-500">Henüz hiç gönderi yok. İlk paylaşan siz olun!</div>;
+        return <div className="text-center py-10 text-stone-500">Henüz hiç gönderi yok. İlk paylaşan siz olun!</div>;
     }
 
     return (

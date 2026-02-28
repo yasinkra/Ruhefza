@@ -28,7 +28,7 @@ export function BottomNav() {
             const { count, error } = await createClient()
                 .from('messages')
                 .select('*', { count: 'exact', head: true })
-                .eq('receiver_id', user.id)
+                .neq('sender_id', user.id)
                 .eq('is_read', false);
 
             if (!error && count !== null && mounted) {
@@ -46,9 +46,7 @@ export function BottomNav() {
             .on(
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'messages' },
-                () => {
-                    fetchUnreadCount();
-                }
+                () => { fetchUnreadCount(); }
             )
             .subscribe();
 
@@ -60,37 +58,55 @@ export function BottomNav() {
     }, []);
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-slate-200 bg-white md:hidden shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
-            {navigation.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                return (
-                    <Link
-                        key={item.name}
-                        href={item.href}
-                        className="flex flex-col items-center justify-center w-full h-full"
-                    >
-                        <div className={cn(
-                            "flex flex-col items-center justify-center gap-1 p-2 rounded-lg transition-all relative",
-                            isActive ? "text-sky-600" : "text-slate-500 hover:text-slate-900"
-                        )}>
-                            <div className="relative">
-                                <item.icon
-                                    className={cn(
-                                        "h-6 w-6 transition-transform hover:scale-110",
-                                        isActive && "fill-current"
+        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+            {/* Glassmorphism bottom bar */}
+            <div className="glass-nav border-t border-stone-200/50 shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+                <div
+                    className="flex items-center justify-around h-[72px]"
+                    style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+                >
+                    {navigation.map((item) => {
+                        const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                        return (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className="flex flex-col items-center justify-center w-full h-full active:scale-95 transition-transform"
+                            >
+                                <div className={cn(
+                                    "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
+                                    isActive ? "text-teal-600" : "text-stone-400"
+                                )}>
+                                    {/* Active pill background */}
+                                    {isActive && (
+                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-12 h-[30px] bg-teal-50 rounded-full -z-10 animate-scale-in" />
                                     )}
-                                />
-                                {item.name === "Mesajlar" && unreadCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white shadow-sm ring-2 ring-white">
-                                        {unreadCount > 99 ? '99+' : unreadCount}
+                                    <div className="relative">
+                                        <item.icon
+                                            className={cn(
+                                                "h-[22px] w-[22px] transition-all duration-200",
+                                                isActive && "text-teal-600"
+                                            )}
+                                            strokeWidth={isActive ? 2.5 : 1.8}
+                                        />
+                                        {item.name === "Mesajlar" && unreadCount > 0 && (
+                                            <span className="absolute -top-1.5 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-2 ring-white px-0.5 animate-scale-in">
+                                                {unreadCount > 99 ? '99+' : unreadCount}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <span className={cn(
+                                        "text-[10px] transition-all duration-200",
+                                        isActive ? "font-semibold text-teal-700" : "font-medium"
+                                    )}>
+                                        {item.name}
                                     </span>
-                                )}
-                            </div>
-                            <span className="text-[10px] font-medium">{item.name}</span>
-                        </div>
-                    </Link>
-                );
-            })}
+                                </div>
+                            </Link>
+                        );
+                    })}
+                </div>
+            </div>
         </div>
     );
 }

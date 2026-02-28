@@ -1,10 +1,12 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
-const geistSans = Geist({
+const inter = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -13,13 +15,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ruhefza App - Özel Eğitim Topluluğu",
+  title: "Ruhefza — Özel Eğitim Topluluğu",
   description: "Özel eğitim için aileler ve uzmanları buluşturan platform.",
 };
 
-import { Toaster } from "sonner";
-
-// ... existing imports
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+};
 
 export default function RootLayout({
   children,
@@ -27,12 +32,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="tr">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${geistMono.variable} font-sans antialiased`}
       >
         {children}
-        <Toaster position="top-right" richColors />
+        <Toaster position="top-center" richColors toastOptions={{
+          className: "!rounded-2xl !shadow-lg !border-0",
+        }} />
       </body>
     </html>
   );

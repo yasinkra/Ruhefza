@@ -255,17 +255,17 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
 
     if (loading || !partnerProfile) return (
         <div className="flex flex-col h-full animate-pulse">
-            <div className="h-16 border-b border-slate-200 bg-white flex items-center px-4 gap-3 shrink-0">
-                <div className="h-9 w-9 bg-slate-200 rounded-full"></div>
+            <div className="h-16 border-b border-stone-200 bg-white flex items-center px-4 gap-3 shrink-0">
+                <div className="h-9 w-9 bg-stone-200 rounded-full"></div>
                 <div className="space-y-2">
-                    <div className="h-4 w-32 bg-slate-200 rounded"></div>
-                    <div className="h-3 w-20 bg-slate-100 rounded"></div>
+                    <div className="h-4 w-32 bg-stone-200 rounded"></div>
+                    <div className="h-3 w-20 bg-stone-100 rounded"></div>
                 </div>
             </div>
-            <div className="flex-1 p-4 space-y-4 bg-slate-50/50">
-                <div className="flex justify-start"><div className="h-12 w-40 bg-slate-200 rounded-2xl rounded-bl-none"></div></div>
-                <div className="flex justify-end"><div className="h-10 w-56 bg-sky-200 rounded-2xl rounded-br-none"></div></div>
-                <div className="flex justify-start"><div className="h-8 w-32 bg-slate-200 rounded-2xl rounded-bl-none"></div></div>
+            <div className="flex-1 p-4 space-y-4 bg-stone-50/50">
+                <div className="flex justify-start"><div className="h-12 w-40 bg-stone-200 rounded-2xl rounded-bl-none"></div></div>
+                <div className="flex justify-end"><div className="h-10 w-56 bg-teal-200 rounded-2xl rounded-br-none"></div></div>
+                <div className="flex justify-start"><div className="h-8 w-32 bg-stone-200 rounded-2xl rounded-bl-none"></div></div>
             </div>
         </div>
     );
@@ -273,10 +273,10 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
     return (
         <div className="flex flex-col h-full bg-white">
             {/* Header */}
-            <div className="h-16 border-b border-slate-200 bg-white flex items-center px-4 justify-between shrink-0 shadow-sm">
+            <div className="h-16 border-b border-stone-200 bg-white flex items-center px-4 justify-between shrink-0 shadow-sm">
                 <div className="flex items-center gap-3">
                     {onBack && (
-                        <Button variant="ghost" size="icon" className="md:hidden -ml-2 text-slate-500" onClick={onBack}>
+                        <Button variant="ghost" size="icon" className="md:hidden -ml-2 text-stone-500" onClick={onBack}>
                             <ArrowLeft className="h-5 w-5" />
                         </Button>
                     )}
@@ -286,8 +286,8 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                             <AvatarFallback>{partnerProfile.full_name[0]?.toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <div>
-                            <p className="font-semibold text-sm text-slate-900">{partnerProfile.full_name}</p>
-                            <p className="text-xs text-slate-400">
+                            <p className="font-semibold text-sm text-stone-900">{partnerProfile.full_name}</p>
+                            <p className="text-xs text-stone-400">
                                 {partnerProfile.role === 'teacher' ? 'Öğretmen' : partnerProfile.role === 'student' ? 'Öğrenci' : 'Ebeveyn'} · Profile git →
                             </p>
                         </div>
@@ -299,13 +299,13 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-slate-50/40">
+            <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-stone-50/40">
                 {messages.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-full text-slate-400 text-center">
-                        <div className="w-16 h-16 bg-sky-50 rounded-full flex items-center justify-center mb-4">
-                            <Send className="h-6 w-6 text-sky-300" />
+                    <div className="flex flex-col items-center justify-center h-full text-stone-400 text-center">
+                        <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mb-4">
+                            <Send className="h-6 w-6 text-teal-300" />
                         </div>
-                        <p className="text-sm font-medium text-slate-500">Sohbet başlıyor!</p>
+                        <p className="text-sm font-medium text-stone-500">Sohbet başlıyor!</p>
                         <p className="text-xs mt-1">İlk mesajı gönder...</p>
                     </div>
                 )}
@@ -319,7 +319,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                     if (msg.deleted_by_sender) {
                         return (
                             <div key={msg.id} className={cn("flex w-full", isMe ? "justify-end" : "justify-start")}>
-                                <p className="text-xs text-slate-400 italic bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+                                <p className="text-xs text-stone-400 italic bg-stone-100 px-3 py-1.5 rounded-full border border-stone-200">
                                     {isMe ? "Bu mesajı sildiniz" : "Bu mesaj silindi"}
                                 </p>
                             </div>
@@ -344,7 +344,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                             {isMe && !msg._temp && (
                                 <button
                                     onClick={() => handleDeleteMessage(msg.id)}
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-300 hover:text-red-400 shrink-0 p-1"
+                                    className="opacity-0 group-hover:opacity-100 transition-opacity text-stone-300 hover:text-red-400 shrink-0 p-1"
                                     title="Mesajı sil"
                                 >
                                     <X className="h-3.5 w-3.5" />
@@ -356,8 +356,8 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                                 <div className={cn(
                                     "rounded-2xl overflow-hidden shadow-sm",
                                     isMe
-                                        ? cn("rounded-br-none bg-sky-500 text-white", msg._temp && "opacity-60")
-                                        : "rounded-bl-none bg-white text-slate-800 border border-slate-100",
+                                        ? cn("rounded-br-none bg-teal-500 text-white", msg._temp && "opacity-60")
+                                        : "rounded-bl-none bg-white text-stone-800 border border-stone-100",
                                 )}>
                                     {/* Image */}
                                     {msg.type === "image" && msg.file_url && (
@@ -373,14 +373,14 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                                     {/* Document */}
                                     {msg.type === "document" && msg.file_url && (
                                         <a href={msg.file_url} download={msg.file_name || "document"} target="_blank" rel="noopener noreferrer"
-                                            className={cn("flex items-center gap-3 px-4 py-3 hover:opacity-90 transition-opacity", isMe ? "text-white" : "text-slate-700")}>
+                                            className={cn("flex items-center gap-3 px-4 py-3 hover:opacity-90 transition-opacity", isMe ? "text-white" : "text-stone-700")}>
                                             <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", isMe ? "bg-white/20" : "bg-red-50")}>
                                                 <FileText className={cn("h-5 w-5", isMe ? "text-white" : "text-red-500")} />
                                             </div>
                                             <div className="min-w-0">
                                                 <p className="text-xs font-semibold truncate max-w-[160px]">{msg.file_name}</p>
                                                 {msg.file_size_bytes && (
-                                                    <p className={cn("text-[10px] mt-0.5", isMe ? "text-sky-100" : "text-slate-400")}>
+                                                    <p className={cn("text-[10px] mt-0.5", isMe ? "text-teal-100" : "text-stone-400")}>
                                                         {formatFileSize(msg.file_size_bytes)}
                                                     </p>
                                                 )}
@@ -396,15 +396,15 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
 
                                 {/* Meta row */}
                                 <div className={cn("flex items-center gap-1.5 px-1", isMe ? "flex-row-reverse" : "flex-row")}>
-                                    <span className="text-[10px] text-slate-400">
+                                    <span className="text-[10px] text-stone-400">
                                         {format(new Date(msg.sent_at), "HH:mm", { locale: tr })}
                                     </span>
                                     {/* Read receipt — only for own messages */}
                                     {isMe && (
                                         <span className={cn(
                                             "text-[10px] font-bold",
-                                            msg._temp ? "text-slate-300" :
-                                                msg.is_read ? "text-sky-400" : "text-slate-300"
+                                            msg._temp ? "text-stone-300" :
+                                                msg.is_read ? "text-teal-400" : "text-stone-300"
                                         )}>
                                             {msg._temp ? "⏳" : msg.is_read ? "✓✓" : "✓"}
                                         </span>
@@ -424,7 +424,7 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
             </div>
 
             {/* Input Area */}
-            <div className="p-3 bg-white border-t border-slate-100 shrink-0">
+            <div className="p-3 bg-white border-t border-stone-100 shrink-0">
                 <form onSubmit={handleSendMessage} className="flex gap-2 items-end">
                     <input
                         ref={fileInputRef}
@@ -435,12 +435,12 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                         disabled={uploading}
                     />
                     <Button type="button" variant="ghost" size="icon"
-                        className="shrink-0 text-slate-400 hover:text-sky-600 hover:bg-sky-50"
+                        className="shrink-0 text-stone-400 hover:text-teal-600 hover:bg-teal-50"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
                         title="Dosya veya görsel gönder">
                         {uploading
-                            ? <div className="h-4 w-4 border-2 border-sky-400 border-t-transparent rounded-full animate-spin" />
+                            ? <div className="h-4 w-4 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" />
                             : <Paperclip className="h-5 w-5" />}
                     </Button>
                     <textarea
@@ -458,15 +458,15 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                         }}
                         placeholder="Mesaj yaz... (Enter gönder, Shift+Enter yeni satır)"
                         rows={1}
-                        className="flex-1 resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300 focus:bg-white transition-all max-h-32 overflow-y-auto"
+                        className="flex-1 resize-none rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-300 focus:bg-white transition-all max-h-32 overflow-y-auto"
                     />
                     <Button type="submit" size="icon"
-                        className="shrink-0 bg-sky-500 hover:bg-sky-600 text-white shadow-md shadow-sky-200 h-10 w-10"
+                        className="shrink-0 bg-teal-500 hover:bg-teal-600 text-white shadow-md shadow-teal-200 h-10 w-10"
                         disabled={!newMessage.trim()}>
                         <Send className="h-4 w-4" />
                     </Button>
                 </form>
-                <p className="text-[10px] text-slate-300 text-center mt-1.5">
+                <p className="text-[10px] text-stone-300 text-center mt-1.5">
                     Mesajlar 7 gün sonra silinir · Görsel: maks 2MB · Belge: maks 5MB
                 </p>
             </div>

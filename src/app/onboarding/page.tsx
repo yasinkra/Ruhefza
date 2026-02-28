@@ -38,8 +38,8 @@ export default function OnboardingPage() {
             <div className="w-full max-w-2xl space-y-8">
 
                 <div className="text-center space-y-2">
-                    <h1 className="text-3xl font-bold text-slate-800">Hoş Geldiniz!</h1>
-                    <p className="text-slate-600">Size en uygun deneyimi sunabilmemiz için birkaç soru.</p>
+                    <h1 className="text-3xl font-bold text-stone-800">Hoş Geldiniz!</h1>
+                    <p className="text-stone-600">Size en uygun deneyimi sunabilmemiz için birkaç soru.</p>
                 </div>
 
                 <Card>
@@ -54,36 +54,36 @@ export default function OnboardingPage() {
                             <button
                                 onClick={() => setRole("parent")}
                                 className={cn(
-                                    "flex flex-col items-center justify-center p-6 border-2 rounded-xl transition-all hover:bg-sky-50",
-                                    role === "parent" ? "border-sky-500 bg-sky-50 ring-2 ring-sky-200" : "border-slate-200 bg-white"
+                                    "flex flex-col items-center justify-center p-6 border-2 rounded-xl transition-all hover:bg-teal-50",
+                                    role === "parent" ? "border-teal-500 bg-teal-50 ring-2 ring-teal-200" : "border-stone-200 bg-white"
                                 )}
                             >
-                                <div className={cn("p-4 rounded-full mb-4", role === "parent" ? "bg-sky-100" : "bg-slate-100")}>
-                                    <Baby className={cn("h-8 w-8", role === "parent" ? "text-sky-600" : "text-slate-500")} />
+                                <div className={cn("p-4 rounded-full mb-4", role === "parent" ? "bg-teal-100" : "bg-stone-100")}>
+                                    <Baby className={cn("h-8 w-8", role === "parent" ? "text-teal-600" : "text-stone-500")} />
                                 </div>
-                                <span className="font-semibold text-lg text-slate-900">Veliyim</span>
-                                <span className="text-sm text-slate-500 text-center mt-2">Özel gereksinimli bir çocuğum var</span>
-                                {role === "parent" && <div className="absolute top-4 right-4 text-sky-600"><Check className="h-5 w-5" /></div>}
+                                <span className="font-semibold text-lg text-stone-900">Veliyim</span>
+                                <span className="text-sm text-stone-500 text-center mt-2">Özel gereksinimli bir çocuğum var</span>
+                                {role === "parent" && <div className="absolute top-4 right-4 text-teal-600"><Check className="h-5 w-5" /></div>}
                             </button>
 
                             <button
                                 onClick={() => setRole("teacher")}
                                 className={cn(
                                     "flex flex-col items-center justify-center p-6 border-2 rounded-xl transition-all hover:bg-orange-50",
-                                    role === "teacher" ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200" : "border-slate-200 bg-white"
+                                    role === "teacher" ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200" : "border-stone-200 bg-white"
                                 )}
                             >
-                                <div className={cn("p-4 rounded-full mb-4", role === "teacher" ? "bg-orange-100" : "bg-slate-100")}>
-                                    <GraduationCap className={cn("h-8 w-8", role === "teacher" ? "text-orange-600" : "text-slate-500")} />
+                                <div className={cn("p-4 rounded-full mb-4", role === "teacher" ? "bg-orange-100" : "bg-stone-100")}>
+                                    <GraduationCap className={cn("h-8 w-8", role === "teacher" ? "text-orange-600" : "text-stone-500")} />
                                 </div>
-                                <span className="font-semibold text-lg text-slate-900">Eğitmenim</span>
-                                <span className="text-sm text-slate-500 text-center mt-2">Özel eğitim öğretmeniyim</span>
+                                <span className="font-semibold text-lg text-stone-900">Eğitmenim</span>
+                                <span className="text-sm text-stone-500 text-center mt-2">Özel eğitim öğretmeniyim</span>
                             </button>
                         </div>
 
                         {role && (
                             <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
-                                <div className="border-t border-slate-100 pt-6"></div>
+                                <div className="border-t border-stone-100 pt-6"></div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                         Adınız Soyadınız
@@ -105,7 +105,7 @@ export default function OnboardingPage() {
                                             onChange={(e) => setFormData({ ...formData, specialNote: e.target.value })}
                                             placeholder="Örn: Otizm, Down Sendromu, Disleksi..."
                                         />
-                                        <p className="text-[0.8rem] text-slate-500">
+                                        <p className="text-[0.8rem] text-stone-500">
                                             Bu bilgi size uygun içerikleri göstermemize yardımcı olur.
                                         </p>
                                     </div>

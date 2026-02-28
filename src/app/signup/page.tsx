@@ -87,9 +87,9 @@ export default function SignupPage() {
             <div className="w-full max-w-md space-y-8">
                 <div className="flex flex-col items-center">
                     <Link href="/" className="flex items-center gap-2 mb-6">
-                        <Heart className="h-8 w-8 text-sky-500 fill-sky-100" />
-                        <span className="text-2xl font-bold text-slate-800 tracking-tight">
-                            Ruhefza<span className="text-sky-600">App</span>
+                        <Heart className="h-8 w-8 text-teal-500 fill-teal-100" />
+                        <span className="text-2xl font-bold text-stone-800 tracking-tight">
+                            Ruhefza<span className="text-teal-600">App</span>
                         </span>
                     </Link>
                 </div>
@@ -114,22 +114,22 @@ export default function SignupPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700">Hesap Türü</label>
+                                <label className="text-sm font-medium text-stone-700">Hesap Türü</label>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                    <label className={`flex flex-col items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'parent' ? 'border-sky-500 bg-sky-50 outline-2 outline-sky-500' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}>
+                                    <label className={`flex flex-col items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'parent' ? 'border-teal-500 bg-teal-50 outline-2 outline-teal-500' : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'}`}>
                                         <input type="radio" name="role" value="parent" className="sr-only" checked={role === 'parent'} onChange={() => setRole('parent')} />
-                                        <span className="font-semibold text-sm text-slate-800">Ebeveyn</span>
-                                        <span className="text-[10px] text-slate-500 text-center mt-1">Sadece öğrenme ve destek için</span>
+                                        <span className="font-semibold text-sm text-stone-800">Ebeveyn</span>
+                                        <span className="text-[10px] text-stone-500 text-center mt-1">Sadece öğrenme ve destek için</span>
                                     </label>
-                                    <label className={`flex flex-col items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'teacher' ? 'border-sky-500 bg-sky-50 outline-2 outline-sky-500' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}>
+                                    <label className={`flex flex-col items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'teacher' ? 'border-teal-500 bg-teal-50 outline-2 outline-teal-500' : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'}`}>
                                         <input type="radio" name="role" value="teacher" className="sr-only" checked={role === 'teacher'} onChange={() => setRole('teacher')} />
-                                        <span className="font-semibold text-sm text-slate-800">Öğretmen</span>
-                                        <span className="text-[10px] text-slate-500 text-center mt-1">Özel Eğitim Öğretmeni</span>
+                                        <span className="font-semibold text-sm text-stone-800">Öğretmen</span>
+                                        <span className="text-[10px] text-stone-500 text-center mt-1">Özel Eğitim Öğretmeni</span>
                                     </label>
-                                    <label className={`flex flex-col items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'student' ? 'border-sky-500 bg-sky-50 outline-2 outline-sky-500' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}>
+                                    <label className={`flex flex-col items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'student' ? 'border-teal-500 bg-teal-50 outline-2 outline-teal-500' : 'border-stone-200 hover:border-stone-300 hover:bg-stone-50'}`}>
                                         <input type="radio" name="role" value="student" className="sr-only" checked={role === 'student'} onChange={() => setRole('student')} />
-                                        <span className="font-semibold text-sm text-slate-800">Öğrenci</span>
-                                        <span className="text-[10px] text-slate-500 text-center mt-1">.edu.tr mail zorunlu</span>
+                                        <span className="font-semibold text-sm text-stone-800">Öğrenci</span>
+                                        <span className="text-[10px] text-stone-500 text-center mt-1">.edu.tr mail zorunlu</span>
                                     </label>
                                 </div>
                             </div>
@@ -172,9 +172,9 @@ export default function SignupPage() {
                         </form>
                     </CardContent>
                     <CardFooter className="flex flex-col gap-4 text-center">
-                        <div className="text-sm text-slate-500">
+                        <div className="text-sm text-stone-500">
                             Zaten hesabınız var mı?{" "}
-                            <Link href="/login" className="text-sky-600 hover:underline font-medium">
+                            <Link href="/login" className="text-teal-600 hover:underline font-medium">
                                 Giriş Yapın
                             </Link>
                         </div>

@@ -145,7 +145,7 @@ export default function PublicProfilePage() {
             <div className="max-w-2xl mx-auto px-4 py-12 text-center">
                 <h1 className="text-2xl font-bold text-slate-800 mb-2">Profil Bulunamadı</h1>
                 <p className="text-slate-400 mb-6">Bu kullanıcı mevcut değil veya profili gizlidir.</p>
-                <Link href="/" className="text-sky-600 underline">Ana sayfaya dön</Link>
+                <Link href="/" className="text-teal-600 underline">Ana sayfaya dön</Link>
             </div>
         </AppShell>
     );
@@ -162,7 +162,7 @@ export default function PublicProfilePage() {
                 {/* Profile Header */}
                 <div className="glass-effect rounded-2xl shadow-xl border border-white/50 overflow-hidden mb-6 transition-transform duration-300 hover:shadow-2xl">
                     {/* Cover Area */}
-                    <div className={`h-40 bg-gradient-to-r ${profile.role === 'student' ? 'from-orange-500 via-amber-500 to-yellow-400' : profile.role === 'teacher' ? 'from-sky-500 via-blue-600 to-indigo-600' : profile.role === 'parent' ? 'from-emerald-500 via-teal-500 to-cyan-500' : 'from-violet-600 via-indigo-600 to-sky-500'} relative`}>
+                    <div className={`h-40 bg-gradient-to-r ${profile.role === 'student' ? 'from-orange-500 via-amber-500 to-yellow-400' : profile.role === 'teacher' ? 'from-teal-500 via-blue-600 to-indigo-600' : profile.role === 'parent' ? 'from-emerald-500 via-teal-500 to-cyan-500' : 'from-violet-600 via-indigo-600 to-teal-500'} relative`}>
                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
                         <div className="absolute -bottom-14 left-8">
                             <Avatar className="h-28 w-28 border-4 border-white shadow-xl bg-white ring-2 ring-slate-100">
@@ -179,14 +179,14 @@ export default function PublicProfilePage() {
                                 <div className="flex items-center gap-2 flex-wrap">
                                     <h1 className="text-2xl font-black text-slate-900">{profile.full_name}</h1>
                                     {profile.is_verified_expert && (
-                                        <ShieldCheck className="h-5 w-5 text-sky-500" aria-label="Doğrulanmış Uzman" />
+                                        <ShieldCheck className="h-5 w-5 text-teal-500" aria-label="Doğrulanmış Uzman" />
                                     )}
                                 </div>
                                 {profile.username && (
-                                    <p className="text-sky-600 font-semibold text-sm mt-0.5">@{profile.username}</p>
+                                    <p className="text-teal-600 font-semibold text-sm mt-0.5">@{profile.username}</p>
                                 )}
                                 <div className="flex items-center gap-3 mt-3 flex-wrap">
-                                    <span className={`text-xs font-bold px-3 py-1 rounded-full ${profile.role === 'student' ? 'bg-orange-100 text-orange-700' : profile.role === 'teacher' ? 'bg-sky-100 text-sky-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                    <span className={`text-xs font-bold px-3 py-1 rounded-full ${profile.role === 'student' ? 'bg-orange-100 text-orange-700' : profile.role === 'teacher' ? 'bg-teal-100 text-teal-700' : 'bg-emerald-100 text-emerald-700'}`}>
                                         {profile.role === 'teacher' ? '👩‍🏫 Öğretmen' : profile.role === 'student' ? '🎓 Öğrenci' : '👨‍👩‍👧 Ebeveyn'}
                                     </span>
                                     {profile.custom_id && (
@@ -206,7 +206,7 @@ export default function PublicProfilePage() {
                         <div className="flex gap-3 mt-6 pt-5 border-t border-slate-100">
                             {connectionStatus === 'accepted' && (
                                 <Button onClick={handleMessage}
-                                    className="flex-1 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold">
+                                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold">
                                     <MessageCircle className="h-4 w-4 mr-2" /> Mesaj Gönder
                                 </Button>
                             )}
@@ -245,7 +245,7 @@ export default function PublicProfilePage() {
                     <button
                         onClick={() => setActiveTab('hakkinda')}
                         className={`flex-1 py-2.5 rounded-2xl text-sm font-bold transition-all ${activeTab === 'hakkinda'
-                            ? 'bg-white shadow-sm text-sky-600 border border-slate-200'
+                            ? 'bg-white shadow-sm text-teal-600 border border-slate-200'
                             : 'text-slate-500 hover:text-slate-700'
                             }`}
                     >
@@ -254,7 +254,7 @@ export default function PublicProfilePage() {
                     <button
                         onClick={() => setActiveTab('portfolyo')}
                         className={`flex-1 py-2.5 rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${activeTab === 'portfolyo'
-                            ? 'bg-white shadow-sm text-sky-600 border border-slate-200'
+                            ? 'bg-white shadow-sm text-teal-600 border border-slate-200'
                             : 'text-slate-500 hover:text-slate-700'
                             }`}
                     >
@@ -314,7 +314,7 @@ export default function PublicProfilePage() {
                                     {profile.social_links.website && (
                                         <a href={profile.social_links.website} target="_blank" rel="noopener noreferrer"
                                             className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-800 rounded-xl text-sm font-bold shadow-sm hover:-translate-y-0.5 transition-transform">
-                                            <Globe className="h-4 w-4 text-sky-500" /> Portfolyo <ExternalLink className="h-3 w-3 opacity-50" />
+                                            <Globe className="h-4 w-4 text-teal-500" /> Portfolyo <ExternalLink className="h-3 w-3 opacity-50" />
                                         </a>
                                     )}
                                 </div>

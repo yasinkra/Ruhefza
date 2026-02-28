@@ -22,7 +22,7 @@ export default function FeedPage() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [sortOption, setSortOption] = useState("recent"); // "recent" or "popular"
+    const [sortOption, setSortOption] = useState("recent");
     const [isExpert, setIsExpert] = useState<boolean>(false);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [announcement, setAnnouncement] = useState<{ message: string, active: boolean } | null>(null);
@@ -42,10 +42,7 @@ export default function FeedPage() {
                 if (data) {
                     const isVerifiedTeacher = data.role === 'teacher' && (data.is_verified_expert || data.verification_status === 'approved');
                     const isStudent = data.role === 'student';
-
-                    if (isVerifiedTeacher || isStudent) {
-                        setIsExpert(true);
-                    }
+                    if (isVerifiedTeacher || isStudent) setIsExpert(true);
                 }
             }
             setLoadingProfile(false);
@@ -57,10 +54,7 @@ export default function FeedPage() {
                 .eq("id", 'global')
                 .single();
             if (data && data.is_announcement_active) {
-                setAnnouncement({
-                    message: data.announcement_message,
-                    active: data.is_announcement_active
-                });
+                setAnnouncement({ message: data.announcement_message, active: data.is_announcement_active });
             }
         };
 
@@ -74,93 +68,95 @@ export default function FeedPage() {
 
     return (
         <AppShell>
-            <div className="max-w-2xl mx-auto py-6">
+            <div className="max-w-2xl mx-auto">
+                {/* Announcement Banner */}
                 {announcement?.active && (
-                    <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-md flex items-center gap-4 animate-in slide-in-from-top duration-500">
-                        <div className="bg-white/20 p-2 rounded-lg">
-                            <Megaphone className="h-5 w-5" />
+                    <div className="mb-5 p-3.5 rounded-2xl gradient-brand text-white shadow-lg shadow-teal-200/30 flex items-center gap-3 animate-fade-up">
+                        <div className="bg-white/20 p-2 rounded-xl shrink-0">
+                            <Megaphone className="h-4 w-4" />
                         </div>
-                        <div className="flex-1 font-medium text-sm">
-                            {announcement.message}
-                        </div>
+                        <p className="font-medium text-sm leading-snug">{announcement.message}</p>
                     </div>
                 )}
 
-                <h1 className="text-2xl font-bold text-slate-800 mb-6 px-1">Topluluk Akışı</h1>
-
-                {/* Filters, Search and Sort Area */}
-                <div className="mb-6 space-y-4">
-                    {/* Search and Sort Row */}
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                            <Input
-                                placeholder="Gönderilerde ara..."
-                                className="pl-9 bg-white border-slate-200 focus-visible:ring-sky-500"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                        </div>
-                        <Select value={sortOption} onValueChange={setSortOption}>
-                            <SelectTrigger className="w-full sm:w-[180px] bg-white border-slate-200">
-                                <SelectValue placeholder="Sıralama" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="recent">
-                                    <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-slate-400" /> En Yeniler</div>
-                                </SelectItem>
-                                <SelectItem value="popular">
-                                    <div className="flex items-center gap-2"><Flame className="h-4 w-4 text-orange-500" /> Popüler</div>
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    {/* Category Badges */}
-                    <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar px-1">
-                        <Filter className="h-4 w-4 text-slate-400 shrink-0 mr-1" />
-                        <Badge
-                            variant={selectedCategory === null ? "default" : "outline"}
-                            className={cn(
-                                "cursor-pointer shrink-0 transition-colors",
-                                selectedCategory === null ? "bg-slate-800 hover:bg-slate-700" : "text-slate-600 hover:bg-slate-100 border-slate-200"
-                            )}
-                            onClick={() => setSelectedCategory(null)}
-                        >
-                            Tümü
-                        </Badge>
-                        {categories.map((cat) => (
-                            <Badge
-                                key={cat}
-                                variant={selectedCategory === cat ? "default" : "outline"}
-                                className={cn(
-                                    "cursor-pointer shrink-0 transition-colors",
-                                    selectedCategory === cat ? "bg-sky-500 hover:bg-sky-600" : "text-slate-600 hover:bg-slate-100 border-slate-200"
-                                )}
-                                onClick={() => setSelectedCategory(cat)}
-                            >
-                                {cat}
-                            </Badge>
-                        ))}
-                    </div>
+                {/* Page Header */}
+                <div className="flex items-center justify-between mb-5">
+                    <h1 className="text-xl font-bold text-stone-800">Topluluk Akışı</h1>
+                    <Select value={sortOption} onValueChange={setSortOption}>
+                        <SelectTrigger className="w-[140px] bg-white border-stone-200 rounded-xl h-9 text-xs font-medium">
+                            <SelectValue placeholder="Sıralama" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="recent">
+                                <div className="flex items-center gap-2"><Clock className="h-3.5 w-3.5 text-stone-400" /> En Yeniler</div>
+                            </SelectItem>
+                            <SelectItem value="popular">
+                                <div className="flex items-center gap-2"><Flame className="h-3.5 w-3.5 text-orange-500" /> Popüler</div>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
 
+                {/* Search */}
+                <div className="relative mb-4">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                    <Input
+                        placeholder="Gönderilerde ara..."
+                        className="pl-10 bg-white border-stone-200 rounded-xl h-11 text-sm focus-visible:ring-teal-500/30 focus-visible:border-teal-400 transition-all"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+
+                {/* Category Filter Pills */}
+                <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 mb-6 -mx-1 px-1">
+                    <Filter className="h-3.5 w-3.5 text-stone-400 shrink-0" />
+                    <Badge
+                        variant={selectedCategory === null ? "default" : "outline"}
+                        className={cn(
+                            "cursor-pointer shrink-0 transition-all duration-200 rounded-lg px-3 py-1.5 text-xs font-medium",
+                            selectedCategory === null
+                                ? "bg-stone-800 hover:bg-stone-700 text-white border-0"
+                                : "text-stone-600 hover:bg-stone-100 border-stone-200 bg-white"
+                        )}
+                        onClick={() => setSelectedCategory(null)}
+                    >
+                        Tümü
+                    </Badge>
+                    {categories.map((cat) => (
+                        <Badge
+                            key={cat}
+                            variant={selectedCategory === cat ? "default" : "outline"}
+                            className={cn(
+                                "cursor-pointer shrink-0 transition-all duration-200 rounded-lg px-3 py-1.5 text-xs font-medium",
+                                selectedCategory === cat
+                                    ? "bg-teal-600 hover:bg-teal-700 text-white border-0 shadow-sm shadow-teal-200/50"
+                                    : "text-stone-600 hover:bg-stone-100 border-stone-200 bg-white"
+                            )}
+                            onClick={() => setSelectedCategory(cat)}
+                        >
+                            {cat}
+                        </Badge>
+                    ))}
+                </div>
+
+                {/* Create Post or Info Banner */}
                 {!loadingProfile && isExpert ? (
                     <CreatePost onPostCreated={handlePostCreated} />
                 ) : !loadingProfile ? (
-                    <div className="mb-6 p-4 rounded-xl border border-sky-100 bg-sky-50 flex items-start gap-4 shadow-sm animate-in fade-in duration-500">
-                        <div className="bg-white p-2 rounded-full shadow-sm shrink-0">
-                            <Info className="h-5 w-5 text-sky-500" />
+                    <div className="mb-6 p-4 rounded-2xl border border-teal-100 bg-teal-50/50 flex items-start gap-3 animate-fade-up">
+                        <div className="bg-white p-2 rounded-xl shadow-sm shrink-0">
+                            <Info className="h-4 w-4 text-teal-600" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold text-slate-800 mb-1">Bilgi Kirliliğini Önlemek İçin</h3>
-                            <p className="text-xs text-slate-600 leading-relaxed">
-                                Bu platformda yalnızca onaylı uzmanlar (Eğitimciler, Akademisyenler, Terapistler) paylaşım yapabilir. Ebeveynler uzmanların deneyimlerinden güvenle faydalanabilir, gönderileri kaydedebilir ve filtreleyebilirler.
+                            <h3 className="text-sm font-semibold text-stone-800 mb-0.5">Bilgi Kirliliğini Önlemek İçin</h3>
+                            <p className="text-xs text-stone-600 leading-relaxed">
+                                Bu platformda yalnızca onaylı uzmanlar paylaşım yapabilir. Ebeveynler uzmanların deneyimlerinden güvenle faydalanabilir.
                             </p>
                         </div>
                     </div>
                 ) : (
-                    <div className="mb-6 h-[100px] rounded-xl border border-slate-100 bg-slate-50 animate-pulse"></div>
+                    <div className="mb-6 h-[100px] rounded-2xl border border-stone-100 bg-stone-50 animate-pulse" />
                 )}
 
                 <PostList

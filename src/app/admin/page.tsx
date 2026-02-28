@@ -238,7 +238,7 @@ export default function AdminDashboard() {
         return (
             <AppShell>
                 <div className="flex h-full items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-sky-500" />
+                    <Loader2 className="h-8 w-8 animate-spin text-teal-500" />
                 </div>
             </AppShell>
         );
@@ -251,40 +251,40 @@ export default function AdminDashboard() {
             <div className="max-w-6xl mx-auto py-8 px-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                     <div className="flex items-center gap-4">
-                        <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-3.5 rounded-2xl shadow-xl shadow-slate-200 ring-1 ring-white/10">
-                            <ShieldCheck className="h-7 w-7 text-sky-400" />
+                        <div className="bg-gradient-to-br from-stone-900 to-stone-800 p-3.5 rounded-2xl shadow-xl shadow-slate-200 ring-1 ring-white/10">
+                            <ShieldCheck className="h-7 w-7 text-teal-400" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Yönetici Paneli</h1>
-                            <p className="text-slate-500 font-medium flex items-center gap-2">
+                            <h1 className="text-3xl font-bold text-stone-900 tracking-tight">Yönetici Paneli</h1>
+                            <p className="text-stone-500 font-medium flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 Sistem durumu ve kullanıcı yönetimi
                             </p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm p-1.5 rounded-xl border border-slate-200/60 shadow-sm">
-                        <div className="px-3 py-1.5 rounded-lg bg-sky-50 text-sky-700 text-xs font-bold uppercase tracking-wider border border-sky-100">
+                    <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm p-1.5 rounded-xl border border-stone-200/60 shadow-sm">
+                        <div className="px-3 py-1.5 rounded-lg bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-wider border border-teal-100">
                             Admin Modu
                         </div>
                     </div>
                 </div>
 
                 <Tabs defaultValue="stats" className="space-y-8">
-                    <TabsList className="bg-slate-200/50 backdrop-blur-md p-1.5 rounded-2xl h-auto flex-wrap justify-start gap-1.5 border border-slate-200/50 shadow-inner">
-                        <TabsTrigger value="stats" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-sky-600 transition-all font-semibold">
+                    <TabsList className="bg-stone-200/50 backdrop-blur-md p-1.5 rounded-2xl h-auto flex-wrap justify-start gap-1.5 border border-stone-200/50 shadow-inner">
+                        <TabsTrigger value="stats" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-semibold">
                             İstatistikler
                         </TabsTrigger>
-                        <TabsTrigger value="announcement" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-sky-600 transition-all font-semibold">
+                        <TabsTrigger value="announcement" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-semibold">
                             Duyuru
                         </TabsTrigger>
-                        <TabsTrigger value="approvals" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-sky-600 transition-all font-semibold flex items-center gap-2">
+                        <TabsTrigger value="approvals" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-semibold flex items-center gap-2">
                             Onaylar {pendingTeachers.length > 0 && (
                                 <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-lg shadow-red-200 animate-bounce">
                                     {pendingTeachers.length}
                                 </span>
                             )}
                         </TabsTrigger>
-                        <TabsTrigger value="users" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-sky-600 transition-all font-semibold">
+                        <TabsTrigger value="users" className="rounded-xl px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:text-teal-600 transition-all font-semibold">
                             Kullanıcılar
                         </TabsTrigger>
                     </TabsList>
@@ -293,20 +293,20 @@ export default function AdminDashboard() {
                     <TabsContent value="stats" className="focus-visible:outline-none animate-in fade-in slide-in-from-bottom-4 duration-500">
                         {loadingStats ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
-                                {[1, 2, 3, 4].map(i => <div key={i} className="h-32 bg-slate-100 rounded-3xl" />)}
+                                {[1, 2, 3, 4].map(i => <div key={i} className="h-32 bg-stone-100 rounded-3xl" />)}
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                <Card className="border-none shadow-lg shadow-sky-500/5 bg-gradient-to-br from-white to-sky-50/30 overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-3xl">
+                                <Card className="border-none shadow-lg shadow-teal-500/5 bg-gradient-to-br from-white to-teal-50/30 overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-3xl">
                                     <CardContent className="p-7">
                                         <div className="flex items-center justify-between mb-4">
-                                            <div className="bg-sky-100 p-3 rounded-2xl text-sky-600 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300 shadow-sm">
+                                            <div className="bg-teal-100 p-3 rounded-2xl text-teal-600 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300 shadow-sm">
                                                 <Users className="h-6 w-6" />
                                             </div>
-                                            <span className="text-[11px] font-black text-sky-600 bg-sky-100/50 px-2.5 py-1 rounded-lg uppercase tracking-wider">Toplam</span>
+                                            <span className="text-[11px] font-black text-teal-600 bg-teal-100/50 px-2.5 py-1 rounded-lg uppercase tracking-wider">Toplam</span>
                                         </div>
-                                        <div className="text-3xl font-black text-slate-900 tabular-nums">{stats?.total_users || 0}</div>
-                                        <div className="text-sm text-slate-500 font-semibold mt-1">Kayıtlı Kullanıcı</div>
+                                        <div className="text-3xl font-black text-stone-900 tabular-nums">{stats?.total_users || 0}</div>
+                                        <div className="text-sm text-stone-500 font-semibold mt-1">Kayıtlı Kullanıcı</div>
                                     </CardContent>
                                 </Card>
                                 <Card className="border-none shadow-lg shadow-emerald-500/5 bg-gradient-to-br from-white to-emerald-50/30 overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-3xl">
@@ -317,8 +317,8 @@ export default function AdminDashboard() {
                                             </div>
                                             <span className="text-[11px] font-black text-emerald-600 bg-emerald-100/50 px-2.5 py-1 rounded-lg uppercase tracking-wider">Aktif</span>
                                         </div>
-                                        <div className="text-3xl font-black text-slate-900 tabular-nums">{stats?.active_users || 0}</div>
-                                        <div className="text-sm text-slate-500 font-semibold mt-1">Aktif Hesaplar</div>
+                                        <div className="text-3xl font-black text-stone-900 tabular-nums">{stats?.active_users || 0}</div>
+                                        <div className="text-sm text-stone-500 font-semibold mt-1">Aktif Hesaplar</div>
                                     </CardContent>
                                 </Card>
                                 <Card className="border-none shadow-lg shadow-amber-500/5 bg-gradient-to-br from-white to-amber-50/30 overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-3xl">
@@ -329,8 +329,8 @@ export default function AdminDashboard() {
                                             </div>
                                             <span className="text-[11px] font-black text-amber-600 bg-amber-100/50 px-2.5 py-1 rounded-lg uppercase tracking-wider">Kütüphane</span>
                                         </div>
-                                        <div className="text-3xl font-black text-slate-900 tabular-nums">{stats?.total_articles || 0}</div>
-                                        <div className="text-sm text-slate-500 font-semibold mt-1">Yazılan Makale</div>
+                                        <div className="text-3xl font-black text-stone-900 tabular-nums">{stats?.total_articles || 0}</div>
+                                        <div className="text-sm text-stone-500 font-semibold mt-1">Yazılan Makale</div>
                                     </CardContent>
                                 </Card>
                                 <Card className="border-none shadow-lg shadow-indigo-500/5 bg-gradient-to-br from-white to-indigo-50/30 overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-3xl">
@@ -341,8 +341,8 @@ export default function AdminDashboard() {
                                             </div>
                                             <span className="text-[11px] font-black text-indigo-600 bg-indigo-100/50 px-2.5 py-1 rounded-lg uppercase tracking-wider">Etkileşim</span>
                                         </div>
-                                        <div className="text-3xl font-black text-slate-900 tabular-nums">{stats?.total_posts || 0}</div>
-                                        <div className="text-sm text-slate-500 font-semibold mt-1">Toplam Post</div>
+                                        <div className="text-3xl font-black text-stone-900 tabular-nums">{stats?.total_posts || 0}</div>
+                                        <div className="text-sm text-stone-500 font-semibold mt-1">Toplam Post</div>
                                     </CardContent>
                                 </Card>
                             </div>
@@ -351,10 +351,10 @@ export default function AdminDashboard() {
 
                     {/* Announcement Tab */}
                     <TabsContent value="announcement" className="focus-visible:outline-none animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <Card className="border-none shadow-xl bg-white overflow-hidden rounded-3xl ring-1 ring-slate-100">
-                            <CardHeader className="pb-6 bg-slate-50/50">
-                                <CardTitle className="text-xl flex items-center gap-3 text-slate-900">
-                                    <div className="p-2 bg-sky-500 rounded-xl">
+                        <Card className="border-none shadow-xl bg-white overflow-hidden rounded-3xl ring-1 ring-stone-100">
+                            <CardHeader className="pb-6 bg-stone-50/50">
+                                <CardTitle className="text-xl flex items-center gap-3 text-stone-900">
+                                    <div className="p-2 bg-teal-500 rounded-xl">
                                         <Megaphone className="h-5 w-5 text-white" />
                                     </div>
                                     Global Sistem Duyurusu
@@ -365,15 +365,15 @@ export default function AdminDashboard() {
                             </CardHeader>
                             <CardContent className="space-y-6 pt-8">
                                 <div className="space-y-3">
-                                    <Label className="text-sm font-bold text-slate-700 ml-1">Duyuru Metni</Label>
+                                    <Label className="text-sm font-bold text-stone-700 ml-1">Duyuru Metni</Label>
                                     <Input
                                         placeholder="Örn: Yeni güncelleme yayınlandı!"
                                         value={announcement.message}
                                         onChange={(e) => setAnnouncement(prev => ({ ...prev, message: e.target.value }))}
-                                        className="h-14 bg-slate-50 border-slate-200 focus:bg-white transition-all text-base rounded-2xl px-5"
+                                        className="h-14 bg-stone-50 border-stone-200 focus:bg-white transition-all text-base rounded-2xl px-5"
                                     />
                                 </div>
-                                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div className="flex items-center gap-3 p-4 bg-stone-50 rounded-2xl border border-stone-100">
                                     <div className="relative inline-flex items-center cursor-pointer">
                                         <input
                                             type="checkbox"
@@ -382,13 +382,13 @@ export default function AdminDashboard() {
                                             onChange={(e) => setAnnouncement(prev => ({ ...prev, active: e.target.checked }))}
                                             className="sr-only peer"
                                         />
-                                        <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+                                        <div className="w-11 h-6 bg-stone-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500"></div>
                                     </div>
-                                    <Label htmlFor="active-toggle" className="cursor-pointer font-bold text-slate-700">Duyuruyu Aktif Et</Label>
+                                    <Label htmlFor="active-toggle" className="cursor-pointer font-bold text-stone-700">Duyuruyu Aktif Et</Label>
                                 </div>
                                 <Button
                                     onClick={handleUpdateAnnouncement}
-                                    className="h-12 px-8 bg-slate-900 text-white rounded-2xl hover:bg-slate-800 transition-all font-bold shadow-lg shadow-slate-200"
+                                    className="h-12 px-8 bg-stone-900 text-white rounded-2xl hover:bg-stone-800 transition-all font-bold shadow-lg shadow-slate-200"
                                 >
                                     Güncelle ve Yayınla
                                 </Button>
@@ -399,28 +399,28 @@ export default function AdminDashboard() {
                     {/* Approvals Tab */}
                     <TabsContent value="approvals" className="focus-visible:outline-none animate-in fade-in slide-in-from-bottom-4 duration-500">
                         {pendingTeachers.length === 0 ? (
-                            <div className="text-center py-24 bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden relative group">
-                                <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-emerald-400 to-sky-400"></div>
+                            <div className="text-center py-24 bg-white rounded-[32px] border border-stone-100 shadow-xl overflow-hidden relative group">
+                                <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-emerald-400 to-teal-400"></div>
                                 <div className="bg-emerald-50 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
                                     <CheckCircle2 className="h-10 w-10 text-emerald-500" />
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-900">Bekleyen onay işlemi yok</h3>
-                                <p className="text-slate-500 mt-2 font-medium max-w-sm mx-auto px-4">Tüm öğretmen başvuruları değerlendirilmiş. Yeni başvurular geldiğinde burada listelenecektir.</p>
+                                <h3 className="text-xl font-bold text-stone-900">Bekleyen onay işlemi yok</h3>
+                                <p className="text-stone-500 mt-2 font-medium max-w-sm mx-auto px-4">Tüm öğretmen başvuruları değerlendirilmiş. Yeni başvurular geldiğinde burada listelenecektir.</p>
                             </div>
                         ) : (
                             <div className="grid gap-6">
                                 {pendingTeachers.map((teacher) => (
-                                    <Card key={teacher.id} className="overflow-hidden shadow-xl border-none bg-white hover:shadow-2xl transition-all duration-300 rounded-[28px] group ring-1 ring-slate-100">
+                                    <Card key={teacher.id} className="overflow-hidden shadow-xl border-none bg-white hover:shadow-2xl transition-all duration-300 rounded-[28px] group ring-1 ring-stone-100">
                                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-6 sm:p-8 gap-6">
                                             <div className="flex items-center gap-5">
-                                                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-sky-50 to-indigo-50 flex items-center justify-center text-sky-600 font-black text-xl shadow-inner border border-white">
+                                                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-teal-50 to-indigo-50 flex items-center justify-center text-teal-600 font-black text-xl shadow-inner border border-white">
                                                     {teacher.full_name?.[0]?.toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">{teacher.full_name}</h3>
+                                                    <h3 className="text-xl font-bold text-stone-900 tracking-tight">{teacher.full_name}</h3>
                                                     <div className="flex items-center gap-3 mt-1.5">
-                                                        <span className="bg-slate-900 text-white text-[10px] tabular-nums font-bold px-2 py-0.5 rounded-md shadow-sm">#{teacher.id.substring(0, 8)}</span>
-                                                        <div className="flex items-center gap-1.5 text-xs text-slate-500 font-semibold">
+                                                        <span className="bg-stone-900 text-white text-[10px] tabular-nums font-bold px-2 py-0.5 rounded-md shadow-sm">#{teacher.id.substring(0, 8)}</span>
+                                                        <div className="flex items-center gap-1.5 text-xs text-stone-500 font-semibold">
                                                             <Clock className="h-3.5 w-3.5" />
                                                             {format(new Date(teacher.created_at), "d MMMM yyyy", { locale: tr })}
                                                         </div>
@@ -433,9 +433,9 @@ export default function AdminDashboard() {
                                                     variant="outline"
                                                     onClick={() => handleViewDocument(teacher.verification_document_url)}
                                                     disabled={!teacher.verification_document_url || processingId === teacher.id}
-                                                    className="h-12 border-slate-200 text-slate-700 hover:bg-slate-50 flex-1 sm:flex-none font-bold rounded-2xl transition-all px-6"
+                                                    className="h-12 border-stone-200 text-stone-700 hover:bg-stone-50 flex-1 sm:flex-none font-bold rounded-2xl transition-all px-6"
                                                 >
-                                                    <FileText className="h-5 w-5 mr-2 text-sky-500" />
+                                                    <FileText className="h-5 w-5 mr-2 text-teal-500" />
                                                     Belgeyi İncele
                                                 </Button>
                                                 <Button
@@ -449,7 +449,7 @@ export default function AdminDashboard() {
                                                 <Button
                                                     onClick={() => handleAction(teacher.id, true)}
                                                     disabled={processingId === teacher.id}
-                                                    className="h-12 px-8 bg-black text-white rounded-2xl hover:bg-slate-800 transition-all font-bold shadow-lg shadow-slate-200 flex-1 sm:flex-none ring-offset-2 focus:ring-2 ring-slate-900"
+                                                    className="h-12 px-8 bg-black text-white rounded-2xl hover:bg-stone-800 transition-all font-bold shadow-lg shadow-slate-200 flex-1 sm:flex-none ring-offset-2 focus:ring-2 ring-stone-900"
                                                 >
                                                     {processingId === teacher.id ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : <ShieldCheck className="h-5 w-5 mr-2 text-emerald-400" />}
                                                     Onayla
@@ -466,16 +466,16 @@ export default function AdminDashboard() {
                     <TabsContent value="users" className="focus-visible:outline-none animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="space-y-6">
                             <div className="relative group">
-                                <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" />
+                                <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400 group-focus-within:text-teal-500 transition-colors" />
                                 <Input
                                     placeholder="Kullanıcı ara (ID veya İsim)..."
-                                    className="pl-14 h-14 bg-white border-slate-200 focus:border-sky-300 focus:ring-0 text-base rounded-[20px] transition-all shadow-sm"
+                                    className="pl-14 h-14 bg-white border-stone-200 focus:border-teal-300 focus:ring-0 text-base rounded-[20px] transition-all shadow-sm"
                                     value={searchQuery}
                                     onChange={(e) => handleSearch(e.target.value)}
                                 />
                                 {loadingSearch && (
                                     <div className="absolute right-5 top-1/2 -translate-y-1/2">
-                                        <Loader2 className="h-5 w-5 animate-spin text-sky-500" />
+                                        <Loader2 className="h-5 w-5 animate-spin text-teal-500" />
                                     </div>
                                 )}
                             </div>
@@ -484,28 +484,28 @@ export default function AdminDashboard() {
                                 {searchResults.map((u) => (
                                     <Card key={u.id} className={cn(
                                         "overflow-hidden shadow-md border-none bg-white transition-all duration-300 rounded-2xl group",
-                                        u.is_banned ? "opacity-75 grayscale-[0.3] border-l-4 border-l-red-500" : "hover:shadow-xl ring-1 ring-slate-100"
+                                        u.is_banned ? "opacity-75 grayscale-[0.3] border-l-4 border-l-red-500" : "hover:shadow-xl ring-1 ring-stone-100"
                                     )}>
                                         <div className="flex items-center justify-between p-5 flex-wrap gap-4">
                                             <div className="flex items-center gap-4">
-                                                <Avatar className="h-12 w-12 border border-slate-100">
+                                                <Avatar className="h-12 w-12 border border-stone-100">
                                                     <AvatarImage src={u.avatar_url || undefined} className="object-cover" />
                                                     <AvatarFallback className={cn(
                                                         "font-black text-base uppercase",
-                                                        u.is_banned ? "bg-red-50 text-red-600" : (u.is_admin ? "bg-slate-900 text-white" : "bg-sky-50 text-sky-600")
+                                                        u.is_banned ? "bg-red-50 text-red-600" : (u.is_admin ? "bg-stone-900 text-white" : "bg-teal-50 text-teal-600")
                                                     )}>
                                                         {u.full_name?.[0]?.toUpperCase() || "U"}
                                                     </AvatarFallback>
                                                 </Avatar>
                                                 <div>
-                                                    <div className="font-bold text-slate-900 flex items-center gap-2">
+                                                    <div className="font-bold text-stone-900 flex items-center gap-2">
                                                         {u.full_name}
-                                                        {u.is_admin && <span className="text-[10px] bg-slate-900 text-sky-400 px-2 py-0.5 rounded font-black uppercase tracking-widest">Admin</span>}
+                                                        {u.is_admin && <span className="text-[10px] bg-stone-900 text-teal-400 px-2 py-0.5 rounded font-black uppercase tracking-widest">Admin</span>}
                                                     </div>
-                                                    <div className="text-[11px] text-slate-500 flex items-center gap-x-3 gap-y-0.5 uppercase font-black tracking-tight mt-0.5 flex-wrap">
-                                                        <span className={cn(u.role === 'teacher' ? 'text-indigo-600' : 'text-slate-500')}>{u.role || 'BELİRTİLMEMİŞ'}</span>
-                                                        <span className="text-sky-600">@{u.username || "isimsiz"}</span>
-                                                        <span className="text-slate-400">#{u.custom_id || "---"}</span>
+                                                    <div className="text-[11px] text-stone-500 flex items-center gap-x-3 gap-y-0.5 uppercase font-black tracking-tight mt-0.5 flex-wrap">
+                                                        <span className={cn(u.role === 'teacher' ? 'text-indigo-600' : 'text-stone-500')}>{u.role || 'BELİRTİLMEMİŞ'}</span>
+                                                        <span className="text-teal-600">@{u.username || "isimsiz"}</span>
+                                                        <span className="text-stone-400">#{u.custom_id || "---"}</span>
                                                         <span className="font-mono text-[9px] lowercase opacity-50">{u.id.substring(0, 8)}...</span>
                                                     </div>
                                                 </div>
@@ -537,9 +537,9 @@ export default function AdminDashboard() {
                                 ))}
 
                                 {searchResults.length === 0 && !loadingSearch && searchQuery && (
-                                    <div className="text-center py-12 bg-slate-50/50 rounded-[32px] border border-dashed border-slate-200">
-                                        <Users className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-                                        <p className="text-slate-500 font-bold">"{searchQuery}" için sonuç bulunamadı.</p>
+                                    <div className="text-center py-12 bg-stone-50/50 rounded-[32px] border border-dashed border-stone-200">
+                                        <Users className="h-10 w-10 text-stone-300 mx-auto mb-3" />
+                                        <p className="text-stone-500 font-bold">"{searchQuery}" için sonuç bulunamadı.</p>
                                     </div>
                                 )}
                             </div>

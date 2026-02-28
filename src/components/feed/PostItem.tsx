@@ -49,7 +49,7 @@ const renderContent = (text: string) => {
 
     // Convert URLs to clickable links
     const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
-    processedStr = processedStr.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-sky-500 hover:text-sky-600 hover:underline break-words">$1</a>');
+    processedStr = processedStr.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-700 hover:underline break-words">$1</a>');
 
     // Bold (**text**)
     processedStr = processedStr.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -58,7 +58,7 @@ const renderContent = (text: string) => {
     processedStr = processedStr.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
 
     // Wrap in standard formatting
-    return <p className="text-slate-700 whitespace-pre-wrap leading-relaxed" dangerouslySetInnerHTML={{ __html: processedStr }} />;
+    return <p className="text-stone-700 whitespace-pre-wrap leading-relaxed text-sm" dangerouslySetInnerHTML={{ __html: processedStr }} />;
 };
 
 interface PostItemProps {
@@ -150,10 +150,10 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
     const showMessageButton = !post.is_anonymous && currentUserId && currentUserId !== post.author_id;
 
     return (
-        <Card className="overflow-hidden bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center gap-4 p-4 pb-2">
+        <Card className="overflow-hidden bg-white border-stone-200/80 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
+            <CardHeader className="flex flex-row items-center gap-3 p-4 pb-2">
                 {post.is_anonymous ? (
-                    <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-500">
+                    <div className="h-10 w-10 rounded-full bg-stone-100 flex items-center justify-center border border-stone-200 text-stone-400">
                         <Ghost className="h-5 w-5" />
                     </div>
                 ) : (
@@ -164,24 +164,24 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                 )}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                        <span className="font-semibold text-slate-900 inline-flex items-center gap-1">
+                        <span className="font-semibold text-stone-800 text-sm inline-flex items-center gap-1">
                             {post.is_anonymous ? "Anonim Üye" : post.profiles?.full_name || "İsimsiz Kullanıcı"}
                             {post.profiles?.is_verified_expert && !post.is_anonymous && (
-                                <BadgeCheck className="h-4 w-4 text-sky-500" aria-label="Doğrulanmış Uzman" />
+                                <BadgeCheck className="h-4 w-4 text-teal-500" aria-label="Doğrulanmış Uzman" />
                             )}
                         </span>
                         {!post.is_anonymous && post.profiles?.role && (
-                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase tracking-tighter border border-slate-200">
-                                {post.profiles.role === 'teacher' ? 'Uzman Öğretmen' : (post.profiles.role === 'student' ? 'Öğrenci' : 'Ebeveyn')}
+                            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-stone-100 text-stone-500 uppercase tracking-tight">
+                                {post.profiles.role === 'teacher' ? 'Uzman' : (post.profiles.role === 'student' ? 'Öğrenci' : 'Ebeveyn')}
                             </span>
                         )}
                     </div>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-stone-400">
                         {formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: tr })}
                     </span>
                 </div>
                 {post.category && (
-                    <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-600 font-medium font-mono text-[10px] hidden sm:flex">
+                    <Badge variant="secondary" className="ml-auto bg-teal-50 text-teal-700 font-medium text-[10px] rounded-lg hidden sm:flex border border-teal-100">
                         <Tag className="w-3 h-3 mr-1" />
                         {post.category}
                     </Badge>
@@ -190,7 +190,7 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                     <Button
                         variant="ghost"
                         size="sm"
-                        className={cn("text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 h-auto ml-1", !post.category && "ml-auto")}
+                        className={cn("text-stone-400 hover:text-red-500 hover:bg-red-50 p-2 h-auto ml-1 rounded-xl", !post.category && "ml-auto")}
                         onClick={handleDelete}
                         title="Gönderiyi Sil"
                         disabled={isDeleting}
@@ -199,10 +199,10 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                     </Button>
                 )}
             </CardHeader>
-            <CardContent className="p-4 pt-1">
+            <CardContent className="p-4 pt-2">
                 {renderContent(post.content)}
                 {post.image_url && (
-                    <div className="mt-4 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
+                    <div className="mt-3 rounded-xl overflow-hidden border border-stone-100 bg-stone-50 relative">
                         {/* Using standard img for external blob urls, standard practice for user uploaded media avoiding Next.js domain configs */}
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -214,15 +214,15 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                     </div>
                 )}
             </CardContent>
-            <CardFooter className="flex-col items-stretch p-0 bg-slate-50/50 border-t border-slate-50">
+            <CardFooter className="flex-col items-stretch p-0 border-t border-stone-100/60">
                 <div className="flex items-center justify-between p-4 py-2">
                     <div className="flex items-center gap-2">
                         <Button
                             variant="ghost"
                             size="sm"
                             className={cn(
-                                "gap-2 transition-colors",
-                                hasLiked ? "text-red-500 hover:text-red-600 hover:bg-red-50" : "text-slate-500 hover:text-red-500 hover:bg-red-50"
+                                "gap-1.5 transition-colors rounded-xl h-9 px-3",
+                                hasLiked ? "text-red-500 hover:text-red-600 hover:bg-red-50" : "text-stone-500 hover:text-red-500 hover:bg-red-50"
                             )}
                             onClick={handleLike}
                         >
@@ -233,8 +233,8 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                             variant="ghost"
                             size="sm"
                             className={cn(
-                                "text-slate-500 gap-2 transition-colors",
-                                showComments ? "text-sky-600 bg-sky-50" : "hover:text-sky-600 hover:bg-sky-50"
+                                "text-stone-500 gap-1.5 transition-colors rounded-xl h-9 px-3",
+                                showComments ? "text-teal-600 bg-teal-50" : "hover:text-teal-600 hover:bg-teal-50"
                             )}
                             onClick={() => setShowComments(!showComments)}
                         >
@@ -245,7 +245,7 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                             variant="ghost"
                             size="sm"
                             className={cn(
-                                "text-slate-500 gap-2 transition-colors",
+                                "text-stone-500 gap-1.5 transition-colors rounded-xl h-9 px-3",
                                 hasBookmarked ? "text-amber-500 bg-amber-50" : "hover:text-amber-500 hover:bg-amber-50"
                             )}
                             onClick={handleBookmark}
@@ -259,7 +259,7 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="text-slate-500 hover:text-sky-600 hover:bg-sky-50 gap-2 transition-colors"
+                            className="text-stone-500 hover:text-teal-600 hover:bg-teal-50 gap-1.5 transition-colors rounded-xl h-9 px-3"
                             onClick={handleMessage}
                         >
                             <Send className="h-4 w-4" />

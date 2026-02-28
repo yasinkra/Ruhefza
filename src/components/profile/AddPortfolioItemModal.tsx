@@ -10,7 +10,7 @@ import { cn } from "@/utils/cn";
 type ItemType = "article_link" | "video_link" | "image" | "document";
 
 const TYPE_CONFIG: Record<ItemType, { label: string; icon: React.ReactNode; color: string }> = {
-    article_link: { label: "Makale", icon: <BookOpen className="h-5 w-5" />, color: "bg-sky-50 text-sky-600 border-sky-200" },
+    article_link: { label: "Makale", icon: <BookOpen className="h-5 w-5" />, color: "bg-teal-50 text-teal-600 border-teal-200" },
     video_link: { label: "Video", icon: <Video className="h-5 w-5" />, color: "bg-red-50 text-red-600 border-red-200" },
     image: { label: "Görsel", icon: <ImageIcon className="h-5 w-5" />, color: "bg-violet-50 text-violet-600 border-violet-200" },
     document: { label: "Belge (PDF)", icon: <FileText className="h-5 w-5" />, color: "bg-amber-50 text-amber-600 border-amber-200" },
@@ -203,12 +203,12 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
                                                     className={cn(
                                                         "w-full text-left p-3 rounded-xl transition-colors flex items-start gap-2",
                                                         selectedArticleId === art.id
-                                                            ? "bg-sky-50 border-2 border-sky-400"
+                                                            ? "bg-teal-50 border-2 border-teal-400"
                                                             : "hover:bg-slate-50 border-2 border-transparent"
                                                     )}>
-                                                    <BookOpen className="h-4 w-4 text-sky-500 shrink-0 mt-0.5" />
+                                                    <BookOpen className="h-4 w-4 text-teal-500 shrink-0 mt-0.5" />
                                                     <div>
-                                                        <p className="text-xs font-bold text-sky-600">{art.category}</p>
+                                                        <p className="text-xs font-bold text-teal-600">{art.category}</p>
                                                         <p className="text-sm font-medium text-slate-800 line-clamp-2">{art.title}</p>
                                                     </div>
                                                 </button>
@@ -246,7 +246,7 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
                                     </label>
                                     <label className={cn(
                                         "flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-2xl p-6 cursor-pointer transition-colors",
-                                        file ? "border-sky-300 bg-sky-50" : "border-slate-200 hover:border-sky-300 hover:bg-sky-50/50"
+                                        file ? "border-teal-300 bg-teal-50" : "border-slate-200 hover:border-teal-300 hover:bg-teal-50/50"
                                     )}>
                                         <input
                                             type="file"
@@ -259,8 +259,8 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
                                             <img src={filePreview} alt="preview" className="max-h-32 rounded-xl object-contain" />
                                         ) : file ? (
                                             <div className="text-center">
-                                                <FileText className="h-8 w-8 text-sky-500 mx-auto mb-1" />
-                                                <p className="text-sm font-bold text-sky-700">{file.name}</p>
+                                                <FileText className="h-8 w-8 text-teal-500 mx-auto mb-1" />
+                                                <p className="text-sm font-bold text-teal-700">{file.name}</p>
                                                 <p className="text-xs text-slate-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                                             </div>
                                         ) : (
@@ -283,7 +283,7 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
                                     value={title}
                                     onChange={e => setTitle(e.target.value)}
                                     placeholder="Bu içerik için bir başlık..."
-                                    className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-sky-400 transition-colors"
+                                    className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-teal-400 transition-colors"
                                 />
                             </div>
 
@@ -297,7 +297,7 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
                                     onChange={e => setDescription(e.target.value)}
                                     placeholder="Kısa bir açıklama ekleyin..."
                                     rows={2}
-                                    className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-sky-400 transition-colors resize-none"
+                                    className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-teal-400 transition-colors resize-none"
                                 />
                             </div>
 
@@ -307,7 +307,7 @@ export function AddPortfolioItemModal({ userId, role, onClose, onAdded }: Props)
                                     ← Geri
                                 </Button>
                                 <Button onClick={handleSave} disabled={saving}
-                                    className="flex-1 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold">
+                                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white rounded-xl font-bold">
                                     {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Portföye Ekle"}
                                 </Button>
                             </div>

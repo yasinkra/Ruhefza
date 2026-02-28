@@ -101,17 +101,17 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
     };
 
     return (
-        <Card className="mb-6 border-sky-100 shadow-sm">
+        <Card className="mb-6 border-teal-100/50 rounded-2xl shadow-sm">
             <CardContent className="pt-6">
                 <form onSubmit={handleSubmit}>
                     <textarea
-                        className="w-full min-h-[100px] p-3 rounded-lg border border-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-sky-500/20 text-slate-700 placeholder:text-slate-400"
+                        className="w-full min-h-[100px] p-3 rounded-xl border border-stone-200 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-400 text-stone-700 text-sm placeholder:text-stone-400 transition-all"
                         placeholder="Düşüncelerinizi paylaşın..."
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                     />
                     {imagePreview && (
-                        <div className="relative mt-3 mb-2 max-w-sm rounded-lg overflow-hidden border border-slate-200">
+                        <div className="relative mt-3 mb-2 max-w-sm rounded-xl overflow-hidden border border-stone-200">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={imagePreview} alt="Preview" className="w-full h-auto object-cover max-h-48" />
                             <button
@@ -127,12 +127,12 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-4">
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-wrap items-center gap-2">
-                                <Tag className="h-4 w-4 text-slate-400" />
+                                <Tag className="h-4 w-4 text-stone-400" />
                                 {categories.map(c => (
                                     <Badge
                                         key={c}
                                         variant={category === c ? "default" : "outline"}
-                                        className={`cursor-pointer ${category === c ? 'bg-sky-500 hover:bg-sky-600' : 'text-slate-600 hover:bg-slate-100'}`}
+                                        className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${category === c ? 'bg-teal-600 hover:bg-teal-700 text-white border-0 shadow-sm' : 'text-stone-600 hover:bg-stone-100 border-stone-200'}`}
                                         onClick={() => setCategory(c)}
                                     >
                                         {c}
@@ -151,7 +151,7 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
                                     />
                                     <label
                                         htmlFor="image-upload"
-                                        className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-sky-600 cursor-pointer transition-colors"
+                                        className="flex items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-teal-600 cursor-pointer transition-colors"
                                     >
                                         <ImageIcon className="h-4 w-4" />
                                         Görsel Ekle
@@ -164,15 +164,15 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
                                         id="anonymous"
                                         checked={isAnonymous}
                                         onChange={(e) => setIsAnonymous(e.target.checked)}
-                                        className="w-4 h-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
+                                        className="w-4 h-4 rounded border-stone-300 text-teal-600 focus:ring-teal-500 accent-teal-600"
                                     />
-                                    <label htmlFor="anonymous" className="text-sm text-slate-600 cursor-pointer select-none">
+                                    <label htmlFor="anonymous" className="text-sm text-stone-600 cursor-pointer select-none">
                                         Anonim olarak paylaş
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <Button type="submit" disabled={!content.trim() || loading} className="gap-2 shrink-0 self-end sm:self-auto">
+                        <Button type="submit" disabled={!content.trim() || loading} className="gap-2 shrink-0 self-end sm:self-auto bg-teal-600 hover:bg-teal-700 text-white rounded-xl px-5 h-10 shadow-sm shadow-teal-200/50">
                             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                             Paylaş
                         </Button>

@@ -108,7 +108,7 @@ export default function ArticleDetailPage() {
                     <div className="bg-slate-50 border-b border-slate-200">
                         <div className="max-w-3xl mx-auto px-4 pt-8 pb-12">
                             <div className="h-4 w-32 bg-slate-200 rounded mb-6"></div>
-                            <div className="h-6 w-24 bg-sky-100 rounded-full mb-4"></div>
+                            <div className="h-6 w-24 bg-teal-100 rounded-full mb-4"></div>
                             <div className="h-10 w-3/4 bg-slate-200 rounded-lg mb-4"></div>
                             <div className="h-10 w-1/2 bg-slate-200 rounded-lg mb-6"></div>
                             <div className="flex items-center gap-3">
@@ -142,7 +142,7 @@ export default function ArticleDetailPage() {
                     </div>
                     <h1 className="text-2xl font-bold text-slate-800 mb-2">Makale Bulunamadı</h1>
                     <p className="text-slate-500 mb-8">Aradığınız makale silinmiş veya taşınmış olabilir.</p>
-                    <Link href="/knowledge" className="inline-flex items-center justify-center w-full px-4 py-3 bg-sky-600 hover:bg-sky-700 text-white font-medium rounded-xl transition-colors">
+                    <Link href="/knowledge" className="inline-flex items-center justify-center w-full px-4 py-3 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-xl transition-colors">
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Kütüphaneye Dön
                     </Link>
@@ -162,7 +162,7 @@ export default function ArticleDetailPage() {
                             Kütüphaneye Dön
                         </Link>
 
-                        <Badge className="bg-sky-100 text-sky-700 hover:bg-sky-200 border-none mb-4">
+                        <Badge className="bg-teal-100 text-teal-700 hover:bg-teal-200 border-none mb-4">
                             {article.category}
                         </Badge>
 

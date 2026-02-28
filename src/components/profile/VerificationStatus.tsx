@@ -99,27 +99,27 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
     };
 
     return (
-        <Card className="mb-6 border-sky-100 bg-sky-50/30 overflow-hidden shadow-sm">
-            <CardHeader className="pb-3 border-b border-sky-100/50 bg-white">
+        <Card className="mb-6 border-teal-100 bg-teal-50/30 overflow-hidden shadow-sm">
+            <CardHeader className="pb-3 border-b border-teal-100/50 bg-white">
                 <div className="flex items-center gap-2">
-                    <ShieldAlert className="h-5 w-5 text-sky-500" />
-                    <CardTitle className="text-base text-slate-800 tracking-tight">Uzman Doğrulaması Gerekli</CardTitle>
+                    <ShieldAlert className="h-5 w-5 text-teal-500" />
+                    <CardTitle className="text-base text-stone-800 tracking-tight">Uzman Doğrulaması Gerekli</CardTitle>
                 </div>
-                <CardDescription className="text-xs text-slate-500 mt-1">
+                <CardDescription className="text-xs text-stone-500 mt-1">
                     Topluluk akışına gönderi ekleyebilmek için lütfen diploması veya mesleki kimlik belgenizi yükleyiniz.
                 </CardDescription>
             </CardHeader>
             <CardContent className="pt-4">
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                     <div className="flex-1 w-full">
-                        <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${file ? 'border-sky-400 bg-sky-50' : 'border-slate-300 hover:bg-slate-50 bg-white'}`}>
+                        <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${file ? 'border-teal-400 bg-teal-50' : 'border-stone-300 hover:bg-stone-50 bg-white'}`}>
                             <div className="flex flex-col items-center justify-center pt-5 text-center px-4">
-                                <UploadCloud className={`w-6 h-6 mb-2 ${file ? 'text-sky-500' : 'text-slate-400'}`} />
-                                <p className="mb-1 text-xs text-slate-500">
+                                <UploadCloud className={`w-6 h-6 mb-2 ${file ? 'text-teal-500' : 'text-stone-400'}`} />
+                                <p className="mb-1 text-xs text-stone-500">
                                     {file ? (
-                                        <span className="font-semibold text-sky-600">{file.name}</span>
+                                        <span className="font-semibold text-teal-600">{file.name}</span>
                                     ) : (
-                                        <>Belge seçmek için <span className="font-semibold text-sky-600">tıklayın</span> veya sürükleyin</>
+                                        <>Belge seçmek için <span className="font-semibold text-teal-600">tıklayın</span> veya sürükleyin</>
                                     )}
                                 </p>
                             </div>
@@ -138,7 +138,7 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
                     <Button
                         onClick={handleUpload}
                         disabled={!file || uploading}
-                        className="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white shrink-0"
+                        className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white shrink-0"
                     >
                         {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Gönder"}
                     </Button>

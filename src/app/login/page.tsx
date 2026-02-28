@@ -51,9 +51,9 @@ export default function LoginPage() {
             <div className="w-full max-w-md space-y-8">
                 <div className="flex flex-col items-center">
                     <Link href="/" className="flex items-center gap-2 mb-6">
-                        <Heart className="h-8 w-8 text-sky-500 fill-sky-100" />
-                        <span className="text-2xl font-bold text-slate-800 tracking-tight">
-                            Ruhefza<span className="text-sky-600">App</span>
+                        <Heart className="h-8 w-8 text-teal-500 fill-teal-100" />
+                        <span className="text-2xl font-bold text-stone-800 tracking-tight">
+                            Ruhefza<span className="text-teal-600">App</span>
                         </span>
                     </Link>
                 </div>
@@ -105,9 +105,9 @@ export default function LoginPage() {
                         </form>
                     </CardContent>
                     <CardFooter className="flex flex-col gap-4 text-center">
-                        <div className="text-sm text-slate-500">
+                        <div className="text-sm text-stone-500">
                             Hesabınız yok mu?{" "}
-                            <Link href="/signup" className="text-sky-600 hover:underline font-medium">
+                            <Link href="/signup" className="text-teal-600 hover:underline font-medium">
                                 Kayıt Olun
                             </Link>
                         </div>

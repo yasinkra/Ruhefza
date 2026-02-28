@@ -243,16 +243,16 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
     if (loading) return (
         <div className="flex flex-col h-full bg-white animate-pulse">
-            <div className="p-4 border-b border-slate-100">
-                <div className="h-6 w-24 bg-slate-200 rounded mb-4"></div>
-                <div className="h-10 w-full bg-slate-100 rounded-xl"></div>
+            <div className="p-4 border-b border-stone-100">
+                <div className="h-6 w-24 bg-stone-200 rounded mb-4"></div>
+                <div className="h-10 w-full bg-stone-100 rounded-xl"></div>
             </div>
             {[1, 2, 3, 4].map(i => (
                 <div key={i} className="flex items-center gap-3 p-4">
-                    <div className="h-11 w-11 bg-slate-200 rounded-full shrink-0"></div>
+                    <div className="h-11 w-11 bg-stone-200 rounded-full shrink-0"></div>
                     <div className="flex-1">
-                        <div className="h-4 w-28 bg-slate-200 rounded mb-2"></div>
-                        <div className="h-3 w-40 bg-slate-100 rounded"></div>
+                        <div className="h-4 w-28 bg-stone-200 rounded mb-2"></div>
+                        <div className="h-3 w-40 bg-stone-100 rounded"></div>
                     </div>
                 </div>
             ))}
@@ -262,13 +262,13 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
     return (
         <div className="flex flex-col h-full bg-white">
             {/* Header */}
-            <div className="p-4 border-b border-slate-100 shrink-0">
+            <div className="p-4 border-b border-stone-100 shrink-0">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="font-bold text-lg text-slate-800">Mesajlar</h2>
+                    <h2 className="font-bold text-lg text-stone-800">Mesajlar</h2>
                     {pendingRequests.length > 0 && (
                         <button
                             onClick={() => setShowRequests(!showRequests)}
-                            className="relative flex items-center gap-1.5 text-xs font-semibold text-sky-600 bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-full transition-colors"
+                            className="relative flex items-center gap-1.5 text-xs font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-full transition-colors"
                         >
                             <Bell className="h-3.5 w-3.5" />
                             {pendingRequests.length} İstek
@@ -277,10 +277,10 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                     )}
                 </div>
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
                     <Input
                         placeholder="İsim, @kullanıcı veya #ID ile ara..."
-                        className="pl-9 bg-slate-50 border-slate-200 rounded-xl text-sm"
+                        className="pl-9 bg-stone-50 border-stone-200 rounded-xl text-sm"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -290,17 +290,17 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
             <div className="flex-1 overflow-y-auto">
                 {/* Pending Requests Panel */}
                 {showRequests && pendingRequests.length > 0 && (
-                    <div className="border-b border-slate-100 bg-sky-50/50 p-3 space-y-2">
-                        <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-1 mb-2">Bekleyen İstekler</p>
+                    <div className="border-b border-stone-100 bg-teal-50/50 p-3 space-y-2">
+                        <p className="text-[11px] font-bold text-stone-500 uppercase tracking-wider px-1 mb-2">Bekleyen İstekler</p>
                         {pendingRequests.map(req => (
-                            <div key={req.id} className="flex items-center gap-3 bg-white rounded-xl p-3 border border-slate-100 shadow-sm">
+                            <div key={req.id} className="flex items-center gap-3 bg-white rounded-xl p-3 border border-stone-100 shadow-sm">
                                 <Avatar className="h-9 w-9">
                                     <AvatarImage src={req.sender_avatar || undefined} />
                                     <AvatarFallback>{req.sender_name[0]?.toUpperCase()}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-semibold text-sm text-slate-800 truncate">{req.sender_name}</p>
-                                    <p className="text-[11px] text-slate-400">
+                                    <p className="font-semibold text-sm text-stone-800 truncate">{req.sender_name}</p>
+                                    <p className="text-[11px] text-stone-400">
                                         {formatDistanceToNow(new Date(req.created_at), { addSuffix: true, locale: tr })}
                                     </p>
                                 </div>
@@ -325,21 +325,21 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
                 {/* Search Results */}
                 {searchTerm && foundUsers.length > 0 && (
-                    <div className="border-b border-slate-100">
-                        <p className="px-4 pt-3 pb-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kullanıcılar</p>
+                    <div className="border-b border-stone-100">
+                        <p className="px-4 pt-3 pb-1 text-[11px] font-bold text-stone-400 uppercase tracking-wider">Kullanıcılar</p>
                         {foundUsers.map(user => {
                             const status = connectionStatuses[user.id];
                             const existingConv = conversations.find(c => c.partner_id === user.id);
                             return (
-                                <div key={user.id} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+                                <div key={user.id} className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors">
                                     <Avatar className="h-10 w-10">
                                         <AvatarImage src={user.avatar_url || undefined} />
                                         <AvatarFallback>{user.full_name[0]?.toUpperCase()}</AvatarFallback>
                                     </Avatar>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-sm text-slate-800 truncate">{user.full_name}</p>
-                                        <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                                            {user.username && <span className="text-sky-600">@{user.username}</span>}
+                                        <p className="font-semibold text-sm text-stone-800 truncate">{user.full_name}</p>
+                                        <div className="flex items-center gap-1.5 text-xs text-stone-400">
+                                            {user.username && <span className="text-teal-600">@{user.username}</span>}
                                             {user.username && <span>·</span>}
                                             <span>{user.role === 'teacher' ? 'Öğretmen' : user.role === 'student' ? 'Öğrenci' : 'Ebeveyn'}</span>
                                         </div>
@@ -356,7 +356,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                                             <Clock className="h-3 w-3" /> Bekliyor
                                         </span>
                                     ) : (
-                                        <Button size="sm" className="text-xs h-8 rounded-full bg-sky-600 hover:bg-sky-700"
+                                        <Button size="sm" className="text-xs h-8 rounded-full bg-teal-600 hover:bg-teal-700"
                                             onClick={() => handleSendRequest(user.id)}
                                             disabled={sendingRequest === user.id}>
                                             {sendingRequest === user.id ? "..." : "Bağlan"}
@@ -370,9 +370,9 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
                 {/* Conversations List */}
                 {!searchTerm && filteredConversations.length === 0 && (
-                    <div className="p-8 text-center text-slate-400">
-                        <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                            <Search className="h-7 w-7 text-slate-300" />
+                    <div className="p-8 text-center text-stone-400">
+                        <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <Search className="h-7 w-7 text-stone-300" />
                         </div>
                         <p className="text-sm font-medium">Henüz mesajlaşmanız yok.</p>
                         <p className="text-xs mt-1">Yukarıdan kişi arayarak bağlanın.</p>
@@ -384,10 +384,10 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                         key={conv.id}
                         onClick={() => onSelectConversation(conv.id, conv.partner_id)}
                         className={cn(
-                            "flex items-center gap-3 px-4 py-3.5 cursor-pointer transition-all border-b border-slate-50",
+                            "flex items-center gap-3 px-4 py-3.5 cursor-pointer transition-all border-b border-stone-50",
                             selectedConversationId === conv.id
-                                ? "bg-sky-50 border-r-2 border-r-sky-500"
-                                : "hover:bg-slate-50"
+                                ? "bg-teal-50 border-r-2 border-r-teal-500"
+                                : "hover:bg-stone-50"
                         )}
                     >
                         <div className="relative shrink-0">
@@ -396,23 +396,23 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                                 <AvatarFallback>{conv.full_name[0]?.toUpperCase()}</AvatarFallback>
                             </Avatar>
                             {conv.unread_count > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold text-white bg-sky-500 rounded-full flex items-center justify-center">
+                                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold text-white bg-teal-500 rounded-full flex items-center justify-center">
                                     {conv.unread_count}
                                 </span>
                             )}
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-baseline">
-                                <span className={cn("font-semibold text-sm truncate", conv.unread_count > 0 ? "text-slate-900" : "text-slate-700")}>
+                                <span className={cn("font-semibold text-sm truncate", conv.unread_count > 0 ? "text-stone-900" : "text-stone-700")}>
                                     {conv.full_name}
                                 </span>
                                 {conv.last_message_at && (
-                                    <span className="text-[10px] text-slate-400 shrink-0 ml-2">
+                                    <span className="text-[10px] text-stone-400 shrink-0 ml-2">
                                         {formatDistanceToNow(new Date(conv.last_message_at), { addSuffix: false, locale: tr })}
                                     </span>
                                 )}
                             </div>
-                            <p className={cn("text-xs truncate mt-0.5", conv.unread_count > 0 ? "text-slate-800 font-medium" : "text-slate-400")}>
+                            <p className={cn("text-xs truncate mt-0.5", conv.unread_count > 0 ? "text-stone-800 font-medium" : "text-stone-400")}>
                                 {conv.last_message_preview || "Sohbet başlat..."}
                             </p>
                         </div>

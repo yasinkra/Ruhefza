@@ -189,7 +189,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
         }
     };
 
-    if (loading) return <div className="text-center py-4 text-xs text-slate-400">Yorumlar yükleniyor...</div>;
+    if (loading) return <div className="text-center py-4 text-xs text-stone-400">Yorumlar yükleniyor...</div>;
 
     // Sort to show best answer first
     const sortedComments = [...comments].sort((a, b) => {
@@ -202,7 +202,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
         <div className="space-y-4 pt-2">
             <div className="space-y-3 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
                 {sortedComments.length === 0 ? (
-                    <p className="text-center text-sm text-slate-400 py-2">Henüz yorum yok. İlk yorumu sen yap!</p>
+                    <p className="text-center text-sm text-stone-400 py-2">Henüz yorum yok. İlk yorumu sen yap!</p>
                 ) : (
                     sortedComments.map((comment) => (
                         <div key={comment.id} className="flex gap-3 group">
@@ -211,7 +211,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                 <AvatarFallback>{comment.profiles?.full_name?.[0]?.toUpperCase() || "U"}</AvatarFallback>
                             </Avatar>
                             <div className={cn("flex-1 p-3 rounded-xl rounded-tl-none relative",
-                                comment.is_best_answer ? "bg-emerald-50 border border-emerald-100" : "bg-slate-50")}
+                                comment.is_best_answer ? "bg-emerald-50 border border-emerald-100" : "bg-stone-50")}
                             >
                                 {comment.is_best_answer && (
                                     <div className="absolute -top-3 right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1">
@@ -219,17 +219,17 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                     </div>
                                 )}
                                 <div className="flex items-center justify-between">
-                                    <span className="text-xs font-semibold text-slate-900 inline-flex items-center gap-1">
+                                    <span className="text-xs font-semibold text-stone-900 inline-flex items-center gap-1">
                                         {comment.profiles?.full_name}
                                         {comment.profiles?.is_verified_expert && (
-                                            <BadgeCheck className="h-3.5 w-3.5 text-sky-500" aria-label="Doğrulanmış Uzman" />
+                                            <BadgeCheck className="h-3.5 w-3.5 text-teal-500" aria-label="Doğrulanmış Uzman" />
                                         )}
                                     </span>
-                                    <span className="text-[10px] text-slate-400">
+                                    <span className="text-[10px] text-stone-400">
                                         {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true, locale: tr })}
                                     </span>
                                 </div>
-                                <p className={cn("text-sm mt-1", comment.is_best_answer ? "text-emerald-800 font-medium" : "text-slate-700")}>
+                                <p className={cn("text-sm mt-1", comment.is_best_answer ? "text-emerald-800 font-medium" : "text-stone-700")}>
                                     {comment.content}
                                 </p>
                             </div>
@@ -237,7 +237,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                 {userId === postAuthorId && isQuestion && !comment.is_best_answer && (
                                     <button
                                         onClick={() => handleMarkBestAnswer(comment.id)}
-                                        className="text-xs text-slate-400 hover:text-emerald-600 bg-white p-1 rounded-md shadow-sm border border-slate-100"
+                                        className="text-xs text-stone-400 hover:text-emerald-600 bg-white p-1 rounded-md shadow-sm border border-stone-100"
                                         title="Çözüm olarak işaretle"
                                     >
                                         <BadgeCheck className="h-4 w-4" />
@@ -246,7 +246,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                 {userId === comment.user_id && (
                                     <button
                                         onClick={() => handleDelete(comment.id)}
-                                        className="text-slate-400 hover:text-red-500 bg-white p-1 rounded-md shadow-sm border border-slate-100"
+                                        className="text-stone-400 hover:text-red-500 bg-white p-1 rounded-md shadow-sm border border-stone-100"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </button>
@@ -258,16 +258,16 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
             </div>
 
             {userId && (
-                <form onSubmit={handleSubmit} className="flex gap-2 items-center border-t border-slate-100 pt-3">
+                <form onSubmit={handleSubmit} className="flex gap-2 items-center border-t border-stone-100 pt-3">
                     <Avatar className="h-8 w-8 hidden sm:block">
                         {/* Current user avatar would go here if we fetched it, skipping for now to keep it simple */}
-                        <AvatarFallback className="bg-sky-100 text-sky-600">S</AvatarFallback>
+                        <AvatarFallback className="bg-teal-100 text-teal-600">S</AvatarFallback>
                     </Avatar>
                     <Input
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Bir yorum yaz..."
-                        className="flex-1 h-9 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors"
+                        className="flex-1 h-9 text-sm bg-stone-50 border-stone-200 focus:bg-white transition-colors"
                         maxLength={500}
                     />
                     <Button

@@ -89,16 +89,16 @@ export function ArticleCard({
 
     return (
         <>
-            <Card className="flex flex-col h-full hover:shadow-lg transition-shadow bg-white border-slate-200 overflow-hidden group">
+            <Card className="flex flex-col h-full hover:shadow-lg transition-shadow bg-white border-stone-200 overflow-hidden group">
                 <CardHeader className="pb-3 relative">
                     <div className="flex justify-between items-start gap-4 mb-2">
-                        <Badge variant="outline" className="bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100 transition-colors">
+                        <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100 transition-colors">
                             {article.category}
                         </Badge>
                         <div className="flex items-center gap-1">
                             {(isAuthor || isAdmin) && (
                                 <Button variant="ghost" size="icon"
-                                    className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                    className="h-8 w-8 text-stone-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                                     onClick={handleDelete} disabled={isDeleting}>
                                     {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                                 </Button>
@@ -109,44 +109,44 @@ export function ArticleCard({
                                         className="h-8 w-8 transition-colors"
                                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowShareModal(true); }}
                                         title="Arkadaşına gönder">
-                                        <Share2 className="h-4 w-4 text-slate-400 hover:text-sky-500" />
+                                        <Share2 className="h-4 w-4 text-stone-400 hover:text-teal-500" />
                                     </Button>
                                     <Button variant="ghost" size="icon"
                                         className="h-8 w-8 transition-colors"
                                         onClick={handleBookmark}
                                         disabled={bookmarkLoading}
                                         title={bookmarked ? "Kaydedilenlerden kaldır" : "Kaydet"}>
-                                        <Bookmark className={bookmarkLoading ? "h-4 w-4 opacity-50" : bookmarked ? "h-4 w-4 fill-sky-500 text-sky-500" : "h-4 w-4 text-slate-400 hover:text-sky-500"} />
+                                        <Bookmark className={bookmarkLoading ? "h-4 w-4 opacity-50" : bookmarked ? "h-4 w-4 fill-teal-500 text-teal-500" : "h-4 w-4 text-stone-400 hover:text-teal-500"} />
                                     </Button>
                                 </>
                             )}
-                            <BookOpen className="h-5 w-5 text-slate-300 group-hover:text-sky-500 transition-colors" />
+                            <BookOpen className="h-5 w-5 text-stone-300 group-hover:text-teal-500 transition-colors" />
                         </div>
                     </div>
-                    <CardTitle className="text-xl leading-tight text-slate-900 group-hover:text-sky-700 transition-colors line-clamp-2">
+                    <CardTitle className="text-xl leading-tight text-stone-900 group-hover:text-teal-700 transition-colors line-clamp-2">
                         {article.title}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 pb-3">
-                    <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">{article.summary}</p>
+                    <p className="text-stone-600 text-sm line-clamp-3 leading-relaxed">{article.summary}</p>
                 </CardContent>
-                <CardFooter className="pt-3 border-t border-slate-50 bg-slate-50/50 flex items-center justify-between">
+                <CardFooter className="pt-3 border-t border-stone-50 bg-stone-50/50 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6">
                             <AvatarImage src={article.author?.avatar_url || undefined} />
                             <AvatarFallback className="text-[10px]">{article.author?.full_name?.[0]?.toUpperCase() || "Y"}</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
-                            <span className="text-xs font-medium text-slate-900 line-clamp-1 max-w-[100px]">
+                            <span className="text-xs font-medium text-stone-900 line-clamp-1 max-w-[100px]">
                                 {article.author?.full_name || "Yazar"}
                             </span>
-                            <span className="text-[10px] text-slate-400">
+                            <span className="text-[10px] text-stone-400">
                                 {formatDistanceToNow(new Date(article.created_at), { addSuffix: true, locale: tr })}
                             </span>
                         </div>
                     </div>
                     <Link href={`/knowledge/${article.id}`}
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-400 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all shadow-sm">
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-stone-200 text-stone-400 group-hover:bg-teal-500 group-hover:text-white group-hover:border-teal-500 transition-all shadow-sm">
                         <ArrowRight className="h-4 w-4" />
                     </Link>
                 </CardFooter>

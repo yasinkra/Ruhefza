@@ -8,11 +8,11 @@ import { cn } from "@/utils/cn"
 // I'll assume I'll create utils/cn.ts.
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
     {
         variants: {
             variant: {
-                default: "bg-sky-500 text-white hover:bg-sky-600 shadow-lg shadow-sky-500/30 active:scale-95 transition-all duration-200",
+                default: "bg-teal-500 text-white hover:bg-teal-600 shadow-lg shadow-teal-500/30 active:scale-95 transition-all duration-200",
                 destructive:
                     "bg-red-500 text-white hover:bg-red-600 shadow-md shadow-red-500/20 active:scale-95 transition-all duration-200",
                 outline:
@@ -20,7 +20,7 @@ const buttonVariants = cva(
                 secondary:
                     "bg-slate-100 text-slate-900 hover:bg-slate-200 active:scale-95 transition-all duration-200",
                 ghost: "text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors",
-                link: "text-sky-600 underline-offset-4 hover:underline",
+                link: "text-teal-600 underline-offset-4 hover:underline",
             },
             size: {
                 default: "h-10 px-4 py-2",

@@ -54,10 +54,10 @@ export default function CreateArticlePage() {
                     <Button variant="ghost" size="sm" onClick={() => router.back()}>
                         <ArrowLeft className="h-4 w-4 mr-1" /> Geri
                     </Button>
-                    <h1 className="text-2xl font-bold text-slate-800">Yeni Bilgi Paylaş</h1>
+                    <h1 className="text-2xl font-bold text-stone-800">Yeni Bilgi Paylaş</h1>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div className="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
                             <Label htmlFor="title">Başlık</Label>
@@ -103,7 +103,7 @@ export default function CreateArticlePage() {
                                 className="min-h-[300px]"
                                 required
                             />
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-stone-500">
                                 Markdown formatını destekler. (Opsiyonel)
                             </p>
                         </div>
@@ -112,7 +112,7 @@ export default function CreateArticlePage() {
                             <Button type="button" variant="outline" onClick={() => router.back()}>
                                 İptal
                             </Button>
-                            <Button type="submit" className="bg-sky-600 hover:bg-sky-700 text-white" disabled={loading}>
+                            <Button type="submit" className="bg-teal-600 hover:bg-teal-700 text-white" disabled={loading}>
                                 {loading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
