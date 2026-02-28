@@ -58,7 +58,7 @@ export async function middleware(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    const protectedRoutes = ['/feed', '/messages', '/knowledge', '/profile']
+    const protectedRoutes = ['/dashboard', '/feed', '/messages', '/knowledge', '/profile']
     const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))
 
     if (isProtectedRoute && !user) {
@@ -66,7 +66,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup' || request.nextUrl.pathname === '/onboarding')) {
-        return NextResponse.redirect(new URL('/feed', request.url))
+        return NextResponse.redirect(new URL('/dashboard', request.url))
     }
 
     return response

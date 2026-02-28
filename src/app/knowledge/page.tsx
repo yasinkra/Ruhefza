@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { ArticleCard, Article } from "@/components/knowledge/ArticleCard";
 import { Input } from "@/components/ui/input";
-import { Search, Megaphone, BookOpen, Clock, User } from "lucide-react";
+import { Search, Megaphone, BookOpen, Clock, User, Puzzle, Brain, Activity, MessageCircle, Scale, ChevronRight, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppShell } from "@/components/layout/AppShell";
 import { useRouter } from "next/navigation";
@@ -23,8 +23,14 @@ export default function KnowledgeBasePage() {
     const [announcement, setAnnouncement] = useState<{ message: string, active: boolean } | null>(null);
     const [bookmarkedArticleIds, setBookmarkedArticleIds] = useState<Set<string>>(new Set());
 
-    // Dummy categories for now
-    const categories = ["Otizm", "DEHB", "Fiziksel Gelişim", "Dil ve Konuşma", "Yasal Haklar"];
+    // Rich categories with icons and colors
+    const categories = [
+        { id: "Otizm", name: "Otizm", icon: <Puzzle className="h-6 w-6" />, color: "from-blue-500 to-cyan-500", lightBg: "bg-blue-50", text: "text-blue-600" },
+        { id: "DEHB", name: "DEHB", icon: <Brain className="h-6 w-6" />, color: "from-purple-500 to-fuchsia-500", lightBg: "bg-purple-50", text: "text-purple-600" },
+        { id: "Fiziksel Gelişim", name: "Fiziksel Gelişim", icon: <Activity className="h-6 w-6" />, color: "from-emerald-500 to-teal-500", lightBg: "bg-emerald-50", text: "text-emerald-600" },
+        { id: "Dil ve Konuşma", name: "Dil ve Konuşma", icon: <MessageCircle className="h-6 w-6" />, color: "from-amber-400 to-orange-500", lightBg: "bg-orange-50", text: "text-orange-600" },
+        { id: "Yasal Haklar", name: "Yasal Haklar", icon: <Scale className="h-6 w-6" />, color: "from-rose-400 to-red-500", lightBg: "bg-red-50", text: "text-red-600" },
+    ];
 
     const fetchArticles = async () => {
         setLoading(true);
@@ -169,31 +175,56 @@ export default function KnowledgeBasePage() {
                             />
                         </div>
 
-                        <div className="flex flex-wrap justify-center gap-2.5 mt-8">
-                            <Button
-                                variant={selectedCategory === null ? "default" : "outline"}
-                                size="sm"
+                        {/* Rich Category Grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mt-12 max-w-5xl mx-auto">
+                            <button
                                 onClick={() => setSelectedCategory(null)}
                                 className={cn(
-                                    "rounded-xl px-5 h-9 font-bold transition-all",
-                                    selectedCategory === null ? "bg-stone-900 border-stone-900 shadow-md" : "bg-white text-stone-600 hover:bg-stone-50 border-stone-200"
+                                    "flex flex-col items-center justify-center p-4 sm:p-5 rounded-[24px] border transition-all duration-300 group",
+                                    selectedCategory === null
+                                        ? "bg-stone-900 border-stone-900 text-white shadow-xl shadow-stone-900/20 scale-105"
+                                        : "bg-white border-stone-200 text-stone-600 hover:border-stone-300 hover:shadow-md hover:-translate-y-1"
                                 )}
                             >
-                                Hepsi
-                            </Button>
+                                <div className={cn(
+                                    "w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-colors",
+                                    selectedCategory === null ? "bg-white/20 text-white" : "bg-stone-100 text-stone-500 group-hover:bg-stone-200"
+                                )}>
+                                    <BookOpen className="h-6 w-6" />
+                                </div>
+                                <span className="font-bold text-sm">Tümü</span>
+                            </button>
+
                             {categories.map((cat) => (
-                                <Button
-                                    key={cat}
-                                    variant={selectedCategory === cat ? "default" : "outline"}
-                                    size="sm"
-                                    onClick={() => setSelectedCategory(cat)}
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(cat.id)}
                                     className={cn(
-                                        "rounded-xl px-5 h-9 font-bold transition-all",
-                                        selectedCategory === cat ? "bg-teal-500 border-teal-500 shadow-md" : "bg-white text-stone-600 hover:bg-teal-50 border-stone-200"
+                                        "flex flex-col items-center justify-center p-4 sm:p-5 rounded-[24px] border transition-all duration-300 group relative overflow-hidden",
+                                        selectedCategory === cat.id
+                                            ? `border-transparent text-white shadow-xl scale-105`
+                                            : "bg-white border-stone-200 hover:border-stone-300 hover:shadow-md hover:-translate-y-1"
                                     )}
                                 >
-                                    {cat}
-                                </Button>
+                                    {selectedCategory === cat.id && (
+                                        <div className={cn("absolute inset-0 bg-gradient-to-br opacity-90", cat.color)} />
+                                    )}
+
+                                    <div className={cn(
+                                        "w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-all relative z-10",
+                                        selectedCategory === cat.id
+                                            ? "bg-white/20 text-white shadow-inner"
+                                            : cn(cat.lightBg, cat.text, "group-hover:scale-110 group-hover:rotate-3")
+                                    )}>
+                                        {cat.icon}
+                                    </div>
+                                    <span className={cn(
+                                        "font-bold text-sm relative z-10 text-center leading-tight",
+                                        selectedCategory === cat.id ? "text-white" : "text-stone-700 group-hover:text-stone-900"
+                                    )}>
+                                        {cat.name}
+                                    </span>
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -246,18 +277,48 @@ export default function KnowledgeBasePage() {
                             )}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {articles.map((article) => (
-                                <div key={article.id} className="h-full">
-                                    <ArticleCard
-                                        article={article}
-                                        currentUserId={currentUserId}
-                                        isAdmin={isAdmin}
-                                        onDelete={handleArticleDeleted}
-                                        isBookmarked={bookmarkedArticleIds.has(article.id)}
-                                    />
+                        <div className="space-y-12">
+                            {/* Featured Article */}
+                            {!searchTerm && !selectedCategory && articles.length > 0 && (
+                                <div className="mb-12">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-100 text-amber-600">
+                                            <Bookmark className="h-5 w-5 fill-amber-600" />
+                                        </div>
+                                        <h2 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight">Editörün Seçimi</h2>
+                                    </div>
+                                    <div className="md:h-[300px]">
+                                        {/* Render the first article as featured */}
+                                        <ArticleCard
+                                            article={articles[0]}
+                                            currentUserId={currentUserId}
+                                            isAdmin={isAdmin}
+                                            onDelete={handleArticleDeleted}
+                                            isBookmarked={bookmarkedArticleIds.has(articles[0].id)}
+                                        />
+                                    </div>
                                 </div>
-                            ))}
+                            )}
+
+                            {/* Regular Article Grid */}
+                            <div>
+                                {(!searchTerm && !selectedCategory && articles.length > 0) && (
+                                    <h2 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight mb-6 mt-4">Tüm Makaleler</h2>
+                                )}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    {(!searchTerm && !selectedCategory ? articles.slice(1) : articles).map((article) => (
+                                        <div key={article.id} className="h-full">
+                                            <ArticleCard
+                                                article={article}
+                                                currentUserId={currentUserId}
+                                                isAdmin={isAdmin}
+                                                onDelete={handleArticleDeleted}
+                                                isBookmarked={bookmarkedArticleIds.has(article.id)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>

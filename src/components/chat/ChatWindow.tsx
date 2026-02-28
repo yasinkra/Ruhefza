@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Send, Paperclip, ArrowLeft, Download, FileText, Clock, X } from "lucide-react";
 import { cn } from "@/utils/cn";
-import { format, differenceInDays } from "date-fns";
+import { format, differenceInDays, isToday, isYesterday } from "date-fns";
 import { tr } from "date-fns/locale";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -316,107 +316,134 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                     const daysLeft = getDaysUntilDeletion(msg.sent_at);
                     const isExpiringSoon = daysLeft <= 1;
 
-                    if (msg.deleted_by_sender) {
-                        return (
-                            <div key={msg.id} className={cn("flex w-full", isMe ? "justify-end" : "justify-start")}>
-                                <p className="text-xs text-stone-400 italic bg-stone-100 px-3 py-1.5 rounded-full border border-stone-200">
-                                    {isMe ? "Bu mesajı sildiniz" : "Bu mesaj silindi"}
-                                </p>
-                            </div>
-                        );
+                    const msgDate = new Date(msg.sent_at);
+                    let showDateSeparator = false;
+                    let dateLabel = "";
+
+                    if (index === 0) {
+                        showDateSeparator = true;
+                    } else {
+                        const prevDate = new Date(messages[index - 1].sent_at);
+                        if (prevDate.toDateString() !== msgDate.toDateString()) {
+                            showDateSeparator = true;
+                        }
+                    }
+
+                    if (showDateSeparator) {
+                        if (isToday(msgDate)) dateLabel = "Bugün";
+                        else if (isYesterday(msgDate)) dateLabel = "Dün";
+                        else dateLabel = format(msgDate, "d MMMM yyyy", { locale: tr });
                     }
 
                     return (
-                        <div key={msg.id} className={cn("flex w-full items-end gap-2 group", isMe ? "justify-end" : "justify-start")}>
-                            {/* Partner avatar */}
-                            {!isMe && (
-                                <div className="w-7 shrink-0">
-                                    {showAvatar ? (
-                                        <Avatar className="h-7 w-7">
-                                            <AvatarImage src={partnerProfile.avatar_url || undefined} />
-                                            <AvatarFallback className="text-[10px]">{partnerProfile.full_name[0]}</AvatarFallback>
-                                        </Avatar>
-                                    ) : null}
+                        <div key={msg.id} className="flex flex-col w-full">
+                            {showDateSeparator && (
+                                <div className="flex justify-center my-4">
+                                    <span className="text-[10px] font-medium bg-stone-200/50 text-stone-500 px-3 py-1 rounded-full">
+                                        {dateLabel}
+                                    </span>
                                 </div>
                             )}
 
-                            {/* Delete button (left of bubble for own msgs) */}
-                            {isMe && !msg._temp && (
-                                <button
-                                    onClick={() => handleDeleteMessage(msg.id)}
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity text-stone-300 hover:text-red-400 shrink-0 p-1"
-                                    title="Mesajı sil"
-                                >
-                                    <X className="h-3.5 w-3.5" />
-                                </button>
-                            )}
-
-                            <div className={cn("max-w-[72%] flex flex-col gap-0.5", isMe ? "items-end" : "items-start")}>
-                                {/* Bubble */}
-                                <div className={cn(
-                                    "rounded-2xl overflow-hidden shadow-sm",
-                                    isMe
-                                        ? cn("rounded-br-none bg-teal-500 text-white", msg._temp && "opacity-60")
-                                        : "rounded-bl-none bg-white text-stone-800 border border-stone-100",
-                                )}>
-                                    {/* Image */}
-                                    {msg.type === "image" && msg.file_url && (
-                                        <div className="relative">
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img src={msg.file_url} alt="Görsel" className="max-w-[280px] max-h-[300px] object-cover block" />
-                                            <a href={msg.file_url} download={msg.file_name || "image"} target="_blank" rel="noopener noreferrer"
-                                                className="absolute bottom-2 right-2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 transition-colors">
-                                                <Download className="h-3.5 w-3.5" />
-                                            </a>
+                            {msg.deleted_by_sender ? (
+                                <div className={cn("flex w-full", isMe ? "justify-end" : "justify-start")}>
+                                    <p className="text-xs text-stone-400 italic bg-stone-100 px-3 py-1.5 rounded-full border border-stone-200">
+                                        {isMe ? "Bu mesajı sildiniz" : "Bu mesaj silindi"}
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className={cn("flex w-full items-end gap-2 group", isMe ? "justify-end" : "justify-start")}>
+                                    {/* Partner avatar */}
+                                    {!isMe && (
+                                        <div className="w-7 shrink-0">
+                                            {showAvatar ? (
+                                                <Avatar className="h-7 w-7">
+                                                    <AvatarImage src={partnerProfile.avatar_url || undefined} />
+                                                    <AvatarFallback className="text-[10px]">{partnerProfile.full_name[0]}</AvatarFallback>
+                                                </Avatar>
+                                            ) : null}
                                         </div>
                                     )}
-                                    {/* Document */}
-                                    {msg.type === "document" && msg.file_url && (
-                                        <a href={msg.file_url} download={msg.file_name || "document"} target="_blank" rel="noopener noreferrer"
-                                            className={cn("flex items-center gap-3 px-4 py-3 hover:opacity-90 transition-opacity", isMe ? "text-white" : "text-stone-700")}>
-                                            <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", isMe ? "bg-white/20" : "bg-red-50")}>
-                                                <FileText className={cn("h-5 w-5", isMe ? "text-white" : "text-red-500")} />
-                                            </div>
-                                            <div className="min-w-0">
-                                                <p className="text-xs font-semibold truncate max-w-[160px]">{msg.file_name}</p>
-                                                {msg.file_size_bytes && (
-                                                    <p className={cn("text-[10px] mt-0.5", isMe ? "text-teal-100" : "text-stone-400")}>
-                                                        {formatFileSize(msg.file_size_bytes)}
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <Download className="h-4 w-4 shrink-0 opacity-70" />
-                                        </a>
-                                    )}
-                                    {/* Text */}
-                                    {msg.type === "text" && msg.content && (
-                                        <p className="px-4 py-2.5 text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
-                                    )}
-                                </div>
 
-                                {/* Meta row */}
-                                <div className={cn("flex items-center gap-1.5 px-1", isMe ? "flex-row-reverse" : "flex-row")}>
-                                    <span className="text-[10px] text-stone-400">
-                                        {format(new Date(msg.sent_at), "HH:mm", { locale: tr })}
-                                    </span>
-                                    {/* Read receipt — only for own messages */}
-                                    {isMe && (
-                                        <span className={cn(
-                                            "text-[10px] font-bold",
-                                            msg._temp ? "text-stone-300" :
-                                                msg.is_read ? "text-teal-400" : "text-stone-300"
+                                    {/* Delete button (left of bubble for own msgs) */}
+                                    {isMe && !msg._temp && (
+                                        <button
+                                            onClick={() => handleDeleteMessage(msg.id)}
+                                            className="opacity-0 group-hover:opacity-100 transition-opacity text-stone-300 hover:text-red-400 shrink-0 p-1"
+                                            title="Mesajı sil"
+                                        >
+                                            <X className="h-3.5 w-3.5" />
+                                        </button>
+                                    )}
+
+                                    <div className={cn("max-w-[72%] flex flex-col gap-0.5", isMe ? "items-end" : "items-start")}>
+                                        {/* Bubble */}
+                                        <div className={cn(
+                                            "rounded-2xl overflow-hidden shadow-sm",
+                                            isMe
+                                                ? cn("rounded-br-none bg-teal-500 text-white", msg._temp && "opacity-60")
+                                                : "rounded-bl-none bg-white text-stone-800 border border-stone-100",
                                         )}>
-                                            {msg._temp ? "⏳" : msg.is_read ? "✓✓" : "✓"}
-                                        </span>
-                                    )}
-                                    {isExpiringSoon && !msg._temp && (
-                                        <span className="text-[10px] text-amber-500 flex items-center gap-0.5">
-                                            <Clock className="h-2.5 w-2.5" />
-                                            {daysLeft === 0 ? "bugün silinecek" : "yarın silinecek"}
-                                        </span>
-                                    )}
+                                            {/* Image */}
+                                            {msg.type === "image" && msg.file_url && (
+                                                <div className="relative">
+                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                    <img src={msg.file_url} alt="Görsel" className="max-w-[280px] max-h-[300px] object-cover block" />
+                                                    <a href={msg.file_url} download={msg.file_name || "image"} target="_blank" rel="noopener noreferrer"
+                                                        className="absolute bottom-2 right-2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 transition-colors">
+                                                        <Download className="h-3.5 w-3.5" />
+                                                    </a>
+                                                </div>
+                                            )}
+                                            {/* Document */}
+                                            {msg.type === "document" && msg.file_url && (
+                                                <a href={msg.file_url} download={msg.file_name || "document"} target="_blank" rel="noopener noreferrer"
+                                                    className={cn("flex items-center gap-3 px-4 py-3 hover:opacity-90 transition-opacity", isMe ? "text-white" : "text-stone-700")}>
+                                                    <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", isMe ? "bg-white/20" : "bg-red-50")}>
+                                                        <FileText className={cn("h-5 w-5", isMe ? "text-white" : "text-red-500")} />
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <p className="text-xs font-semibold truncate max-w-[160px]">{msg.file_name}</p>
+                                                        {msg.file_size_bytes && (
+                                                            <p className={cn("text-[10px] mt-0.5", isMe ? "text-teal-100" : "text-stone-400")}>
+                                                                {formatFileSize(msg.file_size_bytes)}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <Download className="h-4 w-4 shrink-0 opacity-70" />
+                                                </a>
+                                            )}
+                                            {/* Text */}
+                                            {msg.type === "text" && msg.content && (
+                                                <p className="px-4 py-2.5 text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                                            )}
+                                        </div>
+
+                                        {/* Meta row */}
+                                        <div className={cn("flex items-center gap-1.5 px-1", isMe ? "flex-row-reverse" : "flex-row")}>
+                                            <span className="text-[10px] text-stone-400">
+                                                {format(new Date(msg.sent_at), "HH:mm", { locale: tr })}
+                                            </span>
+                                            {/* Read receipt — only for own messages */}
+                                            {isMe && (
+                                                <span className={cn(
+                                                    "text-[10px] font-bold",
+                                                    msg._temp ? "text-stone-300" :
+                                                        msg.is_read ? "text-teal-400" : "text-stone-300"
+                                                )}>
+                                                    {msg._temp ? "⏳" : msg.is_read ? "✓✓" : "✓"}
+                                                </span>
+                                            )}
+                                            {isExpiringSoon && !msg._temp && (
+                                                <span className="text-[10px] text-amber-500 flex items-center gap-0.5">
+                                                    <Clock className="h-2.5 w-2.5" />
+                                                    {daysLeft === 0 ? "bugün silinecek" : "yarın silinecek"}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     );
                 })}
@@ -470,6 +497,6 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                     Mesajlar 7 gün sonra silinir · Görsel: maks 2MB · Belge: maks 5MB
                 </p>
             </div>
-        </div>
+        </div >
     );
 }

@@ -13,7 +13,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { Filter, Info, Search, Flame, Clock, Megaphone } from "lucide-react";
+import { Filter, Info, Search, Flame, Clock, Megaphone, Plus, Sparkles, TrendingUp, Presentation } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
@@ -68,7 +68,7 @@ export default function FeedPage() {
 
     return (
         <AppShell>
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl mx-auto pb-20 sm:pb-0">
                 {/* Announcement Banner */}
                 {announcement?.active && (
                     <div className="mb-5 p-3.5 rounded-2xl gradient-brand text-white shadow-lg shadow-teal-200/30 flex items-center gap-3 animate-fade-up">
@@ -78,6 +78,28 @@ export default function FeedPage() {
                         <p className="font-medium text-sm leading-snug">{announcement.message}</p>
                     </div>
                 )}
+
+                {/* Highlights / Stories */}
+                <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+                    <div className="shrink-0 w-[140px] sm:w-[160px] h-24 rounded-2xl p-3 bg-gradient-to-br from-amber-400 to-orange-500 text-white flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform shadow-md shadow-orange-200/50">
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <Sparkles className="h-4 w-4" />
+                        </div>
+                        <span className="font-bold text-sm leading-tight mt-2">Haftanın En İyileri</span>
+                    </div>
+                    <div className="shrink-0 w-[140px] sm:w-[160px] h-24 rounded-2xl p-3 bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform shadow-md shadow-indigo-200/50">
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <TrendingUp className="h-4 w-4" />
+                        </div>
+                        <span className="font-bold text-sm leading-tight mt-2">Otizm Gündemi</span>
+                    </div>
+                    <div className="shrink-0 w-[140px] sm:w-[160px] h-24 rounded-2xl p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform shadow-md shadow-teal-200/50">
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <Presentation className="h-4 w-4" />
+                        </div>
+                        <span className="font-bold text-sm leading-tight mt-2">Uzmanlara Sorduk</span>
+                    </div>
+                </div>
 
                 {/* Page Header */}
                 <div className="flex items-center justify-between mb-5">
@@ -165,6 +187,21 @@ export default function FeedPage() {
                     searchQuery={searchQuery}
                     sortOption={sortOption}
                 />
+
+                {/* Mobile FAB for Creating Post */}
+                {!loadingProfile && isExpert && (
+                    <div className="fixed sm:hidden bottom-20 right-4 z-40 animate-fade-up">
+                        <button
+                            onClick={() => {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                // Focus or highlight the create post area in real implementation
+                            }}
+                            className="flex items-center justify-center w-14 h-14 bg-teal-600 text-white rounded-full shadow-lg shadow-teal-600/30 hover:bg-teal-700 hover:scale-105 active:scale-95 transition-all"
+                        >
+                            <Plus className="h-6 w-6" />
+                        </button>
+                    </div>
+                )}
             </div>
         </AppShell>
     );

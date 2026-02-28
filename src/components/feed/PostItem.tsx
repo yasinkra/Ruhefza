@@ -7,7 +7,7 @@ import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageCircle, Heart, Ghost, Send, BadgeCheck, Tag, Bookmark, Trash2, Loader2 } from "lucide-react";
+import { MessageCircle, Heart, Ghost, Send, BadgeCheck, Tag, Bookmark, Trash2, Loader2, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/utils/cn";
@@ -149,29 +149,46 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
 
     const showMessageButton = !post.is_anonymous && currentUserId && currentUserId !== post.author_id;
 
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const handleShare = async () => {
+        try {
+            await navigator.share({
+                title: "RuhefzaApp Gönderisi",
+                text: "Bu gönderiye göz at:",
+                url: window.location.origin + `/feed?post=${post.id}`
+            });
+        } catch (e) {
+            navigator.clipboard.writeText(window.location.origin + `/feed?post=${post.id}`);
+            alert("Bağlantı kopyalandı!");
+        }
+    };
+
     return (
         <Card className="overflow-hidden bg-white border-stone-200/80 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
             <CardHeader className="flex flex-row items-center gap-3 p-4 pb-2">
                 {post.is_anonymous ? (
-                    <div className="h-10 w-10 rounded-full bg-stone-100 flex items-center justify-center border border-stone-200 text-stone-400">
+                    <div className="h-10 w-10 rounded-full bg-stone-100 flex items-center justify-center border border-stone-200 text-stone-400 shrink-0">
                         <Ghost className="h-5 w-5" />
                     </div>
                 ) : (
-                    <Avatar>
+                    <Avatar className="shrink-0 border border-stone-100 shadow-sm">
                         <AvatarImage src={post.profiles?.avatar_url || undefined} />
-                        <AvatarFallback>{post.profiles?.full_name?.[0]?.toUpperCase() || "U"}</AvatarFallback>
+                        <AvatarFallback className="bg-gradient-to-br from-teal-100 to-indigo-100 text-teal-700 font-medium">
+                            {post.profiles?.full_name?.[0]?.toUpperCase() || "U"}
+                        </AvatarFallback>
                     </Avatar>
                 )}
-                <div className="flex flex-col">
+                <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="font-semibold text-stone-800 text-sm inline-flex items-center gap-1">
+                        <span className="font-semibold text-stone-800 text-sm truncate inline-flex items-center gap-1">
                             {post.is_anonymous ? "Anonim Üye" : post.profiles?.full_name || "İsimsiz Kullanıcı"}
                             {post.profiles?.is_verified_expert && !post.is_anonymous && (
-                                <BadgeCheck className="h-4 w-4 text-teal-500" aria-label="Doğrulanmış Uzman" />
+                                <BadgeCheck className="h-4 w-4 text-teal-500 shrink-0" aria-label="Doğrulanmış Uzman" />
                             )}
                         </span>
                         {!post.is_anonymous && post.profiles?.role && (
-                            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-stone-100 text-stone-500 uppercase tracking-tight">
+                            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-stone-100 text-stone-500 uppercase tracking-tight shrink-0 hidden sm:inline-block">
                                 {post.profiles.role === 'teacher' ? 'Uzman' : (post.profiles.role === 'student' ? 'Öğrenci' : 'Ebeveyn')}
                             </span>
                         )}
@@ -190,7 +207,7 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                     <Button
                         variant="ghost"
                         size="sm"
-                        className={cn("text-stone-400 hover:text-red-500 hover:bg-red-50 p-2 h-auto ml-1 rounded-xl", !post.category && "ml-auto")}
+                        className={cn("text-stone-400 hover:text-red-500 hover:bg-red-50 p-2 h-auto ml-1 rounded-xl shrink-0", !post.category && "ml-auto")}
                         onClick={handleDelete}
                         title="Gönderiyi Sil"
                         disabled={isDeleting}
@@ -200,7 +217,17 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                 )}
             </CardHeader>
             <CardContent className="p-4 pt-2">
-                {renderContent(post.content)}
+                <div className={cn("relative", !isExpanded && "line-clamp-3")}>
+                    {renderContent(post.content)}
+                </div>
+                {post.content.length > 200 && (
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
+                        className="text-teal-600 hover:text-teal-700 text-sm font-medium mt-2 focus:outline-none"
+                    >
+                        {isExpanded ? "Daha az göster" : "Devamını oku..."}
+                    </button>
+                )}
                 {post.image_url && (
                     <div className="mt-3 rounded-xl overflow-hidden border border-stone-100 bg-stone-50 relative">
                         {/* Using standard img for external blob urls, standard practice for user uploaded media avoiding Next.js domain configs */}
@@ -216,42 +243,50 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
             </CardContent>
             <CardFooter className="flex-col items-stretch p-0 border-t border-stone-100/60">
                 <div className="flex items-center justify-between p-4 py-2">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
                         <Button
                             variant="ghost"
                             size="sm"
                             className={cn(
-                                "gap-1.5 transition-colors rounded-xl h-9 px-3",
+                                "gap-1.5 transition-colors rounded-xl h-9 px-2 sm:px-3",
                                 hasLiked ? "text-red-500 hover:text-red-600 hover:bg-red-50" : "text-stone-500 hover:text-red-500 hover:bg-red-50"
                             )}
                             onClick={handleLike}
                         >
-                            <Heart className={cn("h-4 w-4", hasLiked && "fill-current")} />
-                            <span className="text-xs">{likesCount > 0 ? likesCount : "Beğen"}</span>
+                            <Heart className={cn("h-4 w-4 sm:h-5 sm:w-5 transition-transform", hasLiked && "fill-current scale-110")} />
+                            <span className="text-xs font-medium">{likesCount > 0 ? likesCount : "Beğen"}</span>
                         </Button>
                         <Button
                             variant="ghost"
                             size="sm"
                             className={cn(
-                                "text-stone-500 gap-1.5 transition-colors rounded-xl h-9 px-3",
+                                "text-stone-500 gap-1.5 transition-colors rounded-xl h-9 px-2 sm:px-3",
                                 showComments ? "text-teal-600 bg-teal-50" : "hover:text-teal-600 hover:bg-teal-50"
                             )}
                             onClick={() => setShowComments(!showComments)}
                         >
-                            <MessageCircle className="h-4 w-4" />
-                            <span className="text-xs">Yorumlar {post.comments_count ? `(${post.comments_count})` : ''}</span>
+                            <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                            <span className="text-xs font-medium">Yorumlar {post.comments_count ? `(${post.comments_count})` : ''}</span>
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-stone-500 hover:text-teal-600 hover:bg-teal-50 gap-1.5 transition-colors rounded-xl h-9 px-2 sm:px-3"
+                            onClick={handleShare}
+                        >
+                            <Share2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                            <span className="text-xs font-medium hidden sm:inline">Paylaş</span>
                         </Button>
                         <Button
                             variant="ghost"
                             size="sm"
                             className={cn(
-                                "text-stone-500 gap-1.5 transition-colors rounded-xl h-9 px-3",
+                                "text-stone-500 gap-1.5 transition-colors rounded-xl h-9 px-2 sm:px-3",
                                 hasBookmarked ? "text-amber-500 bg-amber-50" : "hover:text-amber-500 hover:bg-amber-50"
                             )}
                             onClick={handleBookmark}
                         >
-                            <Bookmark className={cn("h-4 w-4", hasBookmarked && "fill-current")} />
-                            <span className="text-xs hidden sm:inline">{hasBookmarked ? "Kaydedildi" : "Kaydet"}</span>
+                            <Bookmark className={cn("h-4 w-4 sm:h-5 sm:w-5", hasBookmarked && "fill-current")} />
                         </Button>
                     </div>
 
@@ -262,8 +297,8 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                             className="text-stone-500 hover:text-teal-600 hover:bg-teal-50 gap-1.5 transition-colors rounded-xl h-9 px-3"
                             onClick={handleMessage}
                         >
-                            <Send className="h-4 w-4" />
-                            <span className="text-xs">Mesaj</span>
+                            <Send className="h-4 w-4 sm:h-5 sm:w-5" />
+                            <span className="text-xs font-medium hidden sm:inline">Mesaj</span>
                         </Button>
                     )}
                 </div>

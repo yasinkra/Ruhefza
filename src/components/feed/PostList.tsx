@@ -134,7 +134,30 @@ export function PostList({
     }, [refreshTrigger, userId, categoryFilter, searchQuery, sortOption]);
 
     if (loading) {
-        return <div className="text-center py-10 text-stone-400">Yükleniyor...</div>;
+        return (
+            <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                    <div key={i} className="bg-white border border-stone-100 rounded-2xl p-5 shadow-sm">
+                        <div className="flex gap-3 items-center mb-4">
+                            <div className="w-10 h-10 rounded-full bg-stone-100 animate-pulse" />
+                            <div className="space-y-2">
+                                <div className="h-3 w-32 bg-stone-100 rounded animate-pulse" />
+                                <div className="h-2 w-20 bg-stone-50 rounded animate-pulse" />
+                            </div>
+                        </div>
+                        <div className="space-y-2.5 mb-5">
+                            <div className="h-3 w-full bg-stone-50 rounded animate-pulse" />
+                            <div className="h-3 w-5/6 bg-stone-50 rounded animate-pulse" />
+                            <div className="h-3 w-4/6 bg-stone-50 rounded animate-pulse" />
+                        </div>
+                        <div className="flex gap-3 pt-4 border-t border-stone-50">
+                            <div className="h-8 w-20 bg-stone-50 rounded-xl animate-pulse" />
+                            <div className="h-8 w-24 bg-stone-50 rounded-xl animate-pulse" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
     }
 
     if (posts.length === 0) {

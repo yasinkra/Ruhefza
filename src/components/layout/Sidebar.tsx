@@ -3,15 +3,17 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, MessageCircle, User, BookOpen, LogOut, Sparkles } from "lucide-react";
+import { Home, MessageCircle, User, BookOpen, LogOut, Sparkles, LayoutDashboard, Bell } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 
 const navigation = [
-    { name: "Akış", href: "/feed", icon: Home },
+    { name: "Ana Sayfa", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Topluluk", href: "/feed", icon: Home },
     { name: "Mesajlar", href: "/messages", icon: MessageCircle },
     { name: "Bilgi Bankası", href: "/knowledge", icon: BookOpen },
+    { name: "Bildirimler", href: "/notifications", icon: Bell },
     { name: "Profil", href: "/profile", icon: User },
 ];
 
@@ -68,7 +70,7 @@ export function Sidebar() {
         <div className="hidden md:flex h-full w-[260px] flex-col bg-white border-r border-stone-100">
             {/* Logo Area */}
             <div className="p-6 pb-2">
-                <Link href="/feed" className="flex items-center gap-2.5 group">
+                <Link href="/dashboard" className="flex items-center gap-2.5 group">
                     <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center shadow-md shadow-teal-200/50 group-hover:shadow-teal-300/50 transition-shadow">
                         <Sparkles className="h-4.5 w-4.5 text-white" />
                     </div>

@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, MessageCircle, User, BookOpen } from "lucide-react";
+import { Home, MessageCircle, User, BookOpen, LayoutDashboard, Bell } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { createClient } from "@/utils/supabase/client";
 
 const navigation = [
-    { name: "Akış", href: "/feed", icon: Home },
+    { name: "Ana Sayfa", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Topluluk", href: "/feed", icon: Home },
     { name: "Mesajlar", href: "/messages", icon: MessageCircle },
     { name: "Bilgi", href: "/knowledge", icon: BookOpen },
+    { name: "Bildirim", href: "/notifications", icon: Bell },
     { name: "Profil", href: "/profile", icon: User },
 ];
 
