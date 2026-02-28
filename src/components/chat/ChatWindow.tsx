@@ -379,10 +379,10 @@ export function ChatWindow({ conversationId, partnerId, onBack }: ChatWindowProp
                                     <div className={cn("max-w-[72%] flex flex-col gap-0.5", isMe ? "items-end" : "items-start")}>
                                         {/* Bubble */}
                                         <div className={cn(
-                                            "rounded-2xl overflow-hidden shadow-sm",
+                                            "rounded-[24px] overflow-hidden shadow-md",
                                             isMe
-                                                ? cn("rounded-br-none bg-teal-500 text-white", msg._temp && "opacity-60")
-                                                : "rounded-bl-none bg-white text-stone-800 border border-stone-100",
+                                                ? cn("rounded-br-[4px] bg-gradient-to-br from-[#0D9488] to-[#10B981] text-white", msg._temp && "opacity-60")
+                                                : "rounded-bl-[4px] bg-white text-stone-800 border border-stone-100",
                                         )}>
                                             {/* Image */}
                                             {msg.type === "image" && msg.file_url && (

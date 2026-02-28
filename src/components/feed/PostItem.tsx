@@ -165,35 +165,35 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
     };
 
     return (
-        <Card className="overflow-hidden bg-white border-stone-200/80 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
-            <CardHeader className="flex flex-row items-center gap-3 p-4 pb-2">
+        <Card className="overflow-hidden bg-white border-stone-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-xl hover:shadow-stone-200/50 transition-all duration-300 mb-6">
+            <CardHeader className="flex flex-row items-center gap-4 p-5 sm:p-6 pb-3">
                 {post.is_anonymous ? (
                     <div className="h-10 w-10 rounded-full bg-stone-100 flex items-center justify-center border border-stone-200 text-stone-400 shrink-0">
                         <Ghost className="h-5 w-5" />
                     </div>
                 ) : (
-                    <Avatar className="shrink-0 border border-stone-100 shadow-sm">
+                    <Avatar className="h-12 w-12 shrink-0 border border-stone-100 shadow-sm">
                         <AvatarImage src={post.profiles?.avatar_url || undefined} />
-                        <AvatarFallback className="bg-gradient-to-br from-teal-100 to-indigo-100 text-teal-700 font-medium">
+                        <AvatarFallback className="bg-gradient-to-br from-[#0D9488] to-[#10B981] text-white font-bold">
                             {post.profiles?.full_name?.[0]?.toUpperCase() || "U"}
                         </AvatarFallback>
                     </Avatar>
                 )}
                 <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="font-semibold text-stone-800 text-sm truncate inline-flex items-center gap-1">
+                        <span className="font-bold text-gray-900 text-[15px] truncate inline-flex items-center gap-1">
                             {post.is_anonymous ? "Anonim Üye" : post.profiles?.full_name || "İsimsiz Kullanıcı"}
                             {post.profiles?.is_verified_expert && !post.is_anonymous && (
-                                <BadgeCheck className="h-4 w-4 text-teal-500 shrink-0" aria-label="Doğrulanmış Uzman" />
+                                <BadgeCheck className="h-4.5 w-4.5 text-[#0D9488] shrink-0" aria-label="Doğrulanmış Uzman" />
                             )}
                         </span>
                         {!post.is_anonymous && post.profiles?.role && (
-                            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-stone-100 text-stone-500 uppercase tracking-tight shrink-0 hidden sm:inline-block">
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 uppercase tracking-wider shrink-0 hidden sm:inline-block">
                                 {post.profiles.role === 'teacher' ? 'Uzman' : (post.profiles.role === 'student' ? 'Öğrenci' : 'Ebeveyn')}
                             </span>
                         )}
                     </div>
-                    <span className="text-xs text-stone-400">
+                    <span className="text-[13px] text-gray-400 font-medium">
                         {formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: tr })}
                     </span>
                 </div>
@@ -216,8 +216,8 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                     </Button>
                 )}
             </CardHeader>
-            <CardContent className="p-4 pt-2">
-                <div className={cn("relative", !isExpanded && "line-clamp-3")}>
+            <CardContent className="p-5 sm:p-6 pt-2">
+                <div className={cn("relative text-[15px] text-gray-700 leading-relaxed", !isExpanded && "line-clamp-3")}>
                     {renderContent(post.content)}
                 </div>
                 {post.content.length > 200 && (
@@ -241,9 +241,9 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                     </div>
                 )}
             </CardContent>
-            <CardFooter className="flex-col items-stretch p-0 border-t border-stone-100/60">
-                <div className="flex items-center justify-between p-4 py-2">
-                    <div className="flex items-center gap-1 sm:gap-2">
+            <CardFooter className="flex-col items-stretch p-0 border-t border-stone-100/60 bg-gray-50/50">
+                <div className="flex items-center justify-between p-4 sm:p-5 py-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
                         <Button
                             variant="ghost"
                             size="sm"

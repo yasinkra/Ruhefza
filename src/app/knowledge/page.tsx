@@ -165,11 +165,11 @@ export default function KnowledgeBasePage() {
                         )}
 
                         <div className="max-w-2xl mx-auto relative group">
-                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400 group-focus-within:text-teal-500 transition-colors" />
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-[#0D9488] transition-colors" />
                             <Input
                                 type="text"
                                 placeholder="Makale, konu veya yazar ara..."
-                                className="pl-14 h-14 text-base bg-stone-50 border-stone-200 focus:bg-white focus:ring-0 focus:border-teal-200 transition-all shadow-sm rounded-2xl"
+                                className="pl-16 h-14 text-[15px] bg-white border-white focus:bg-white focus:ring-[#0D9488]/20 focus:border-[#0D9488]/30 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-full"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -180,10 +180,10 @@ export default function KnowledgeBasePage() {
                             <button
                                 onClick={() => setSelectedCategory(null)}
                                 className={cn(
-                                    "flex flex-col items-center justify-center p-4 sm:p-5 rounded-[24px] border transition-all duration-300 group",
+                                    "flex flex-col items-center justify-center p-5 sm:p-6 rounded-[32px] border transition-all duration-300 group",
                                     selectedCategory === null
                                         ? "bg-stone-900 border-stone-900 text-white shadow-xl shadow-stone-900/20 scale-105"
-                                        : "bg-white border-stone-200 text-stone-600 hover:border-stone-300 hover:shadow-md hover:-translate-y-1"
+                                        : "bg-white border-transparent shadow-[0_4px_20px_rgb(0,0,0,0.03)] text-gray-600 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5"
                                 )}
                             >
                                 <div className={cn(
@@ -200,10 +200,10 @@ export default function KnowledgeBasePage() {
                                     key={cat.id}
                                     onClick={() => setSelectedCategory(cat.id)}
                                     className={cn(
-                                        "flex flex-col items-center justify-center p-4 sm:p-5 rounded-[24px] border transition-all duration-300 group relative overflow-hidden",
+                                        "flex flex-col items-center justify-center p-5 sm:p-6 rounded-[32px] border transition-all duration-300 group relative overflow-hidden",
                                         selectedCategory === cat.id
                                             ? `border-transparent text-white shadow-xl scale-105`
-                                            : "bg-white border-stone-200 hover:border-stone-300 hover:shadow-md hover:-translate-y-1"
+                                            : "bg-white border-transparent shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5"
                                     )}
                                 >
                                     {selectedCategory === cat.id && (
@@ -235,7 +235,7 @@ export default function KnowledgeBasePage() {
                     {loading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {[1, 2, 3, 4, 5, 6].map((i) => (
-                                <div key={i} className="flex flex-col bg-white rounded-[28px] border border-stone-100 shadow-sm animate-pulse h-[340px] overflow-hidden">
+                                <div key={i} className="flex flex-col bg-white rounded-[32px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] animate-pulse h-[340px] overflow-hidden">
                                     <div className="h-2 bg-stone-100 w-full mb-6"></div>
                                     <div className="px-7 pt-2">
                                         <div className="h-4 w-24 bg-stone-100 rounded-full mb-5"></div>

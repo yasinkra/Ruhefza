@@ -198,10 +198,10 @@ export default function DashboardPage() {
 
     return (
         <AppShell>
-            <div className="max-w-4xl mx-auto py-4 sm:py-6 px-4 space-y-5 sm:space-y-6 animate-fade-up">
+            <div className="max-w-4xl mx-auto py-6 sm:py-10 px-4 space-y-8 animate-fade-up">
 
                 {/* Welcome Card */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 via-teal-600 to-indigo-600 p-5 sm:p-7 text-white shadow-xl shadow-teal-200/30">
+                <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0D9488] via-teal-600 to-[#10B981] p-6 sm:p-10 text-white shadow-xl shadow-teal-500/20">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-2xl" />
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-400/10 rounded-full -ml-16 -mb-16 blur-2xl" />
                     <div className="relative z-10">
@@ -223,10 +223,10 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
                     {statCards.map((stat) => (
-                        <Card key={stat.label} className="p-4 rounded-2xl border-0 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 cursor-default group">
-                            <div className={`w-10 h-10 ${stat.bg} ${stat.ring} ring-1 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                        <Card key={stat.label} className="p-5 rounded-[28px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-xl hover:shadow-stone-200/50 transition-all duration-300 hover:-translate-y-1 cursor-default group bg-white">
+                            <div className={`w-12 h-12 ${stat.bg} ${stat.ring} ring-1 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                                 <stat.icon className={`h-5 w-5 ${stat.color}`} />
                             </div>
                             <p className="text-2xl font-bold text-stone-900 tabular-nums">{stat.value}</p>
@@ -236,9 +236,9 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Two Column: Trending + Featured Article */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Trending */}
-                    <Card className="p-5 rounded-2xl border-stone-100 shadow-sm">
+                    <Card className="p-6 sm:p-8 rounded-[32px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center">
                                 <TrendingUp className="h-4 w-4 text-orange-500" />
@@ -264,7 +264,7 @@ export default function DashboardPage() {
                     </Card>
 
                     {/* Featured Article */}
-                    <Card className="p-5 rounded-2xl border-stone-100 shadow-sm">
+                    <Card className="p-6 sm:p-8 rounded-[32px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
                                 <Sparkles className="h-4 w-4 text-indigo-500" />
@@ -302,7 +302,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Recent Activities */}
-                <Card className="p-5 rounded-2xl border-stone-100 shadow-sm">
+                <Card className="p-6 sm:p-8 rounded-[32px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
                             <div className="w-8 h-8 bg-rose-50 rounded-lg flex items-center justify-center">
@@ -350,18 +350,18 @@ export default function DashboardPage() {
                 </Card>
 
                 {/* Quick Actions */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <Link href="/feed" className="flex items-center gap-3 p-4 bg-teal-50 hover:bg-teal-100 rounded-2xl transition-all group">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <Link href="/feed" className="flex items-center gap-4 p-5 sm:p-6 bg-teal-50 hover:bg-teal-100 border border-teal-100/50 rounded-[28px] transition-all group shadow-sm shadow-teal-100/50 hover:shadow-md hover:-translate-y-1">
                         <FileText className="h-5 w-5 text-teal-600" />
                         <span className="text-sm font-semibold text-teal-700 group-hover:text-teal-800">Akışa Git</span>
                     </Link>
-                    <Link href="/messages" className="flex items-center gap-3 p-4 bg-indigo-50 hover:bg-indigo-100 rounded-2xl transition-all group">
-                        <MessageCircle className="h-5 w-5 text-indigo-600" />
-                        <span className="text-sm font-semibold text-indigo-700 group-hover:text-indigo-800">Mesajlar</span>
+                    <Link href="/messages" className="flex items-center gap-4 p-5 sm:p-6 bg-zinc-50 hover:bg-zinc-100 border border-zinc-100/50 rounded-[28px] transition-all group shadow-sm shadow-zinc-100/50 hover:shadow-md hover:-translate-y-1">
+                        <MessageCircle className="h-6 w-6 text-zinc-600 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-bold text-zinc-700 group-hover:text-zinc-900">Mesajlar</span>
                     </Link>
-                    <Link href="/knowledge" className="flex items-center gap-3 p-4 bg-emerald-50 hover:bg-emerald-100 rounded-2xl transition-all group col-span-2 sm:col-span-1">
-                        <BookOpen className="h-5 w-5 text-emerald-600" />
-                        <span className="text-sm font-semibold text-emerald-700 group-hover:text-emerald-800">Kütüphane</span>
+                    <Link href="/knowledge" className="flex items-center gap-4 p-5 sm:p-6 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100/50 rounded-[28px] transition-all group shadow-sm shadow-emerald-100/50 hover:shadow-md hover:-translate-y-1 col-span-2 sm:col-span-1">
+                        <BookOpen className="h-6 w-6 text-emerald-600 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-bold text-emerald-700 group-hover:text-emerald-900">Kütüphane</span>
                     </Link>
                 </div>
             </div>

@@ -277,10 +277,10 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                     )}
                 </div>
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                         placeholder="İsim, @kullanıcı veya #ID ile ara..."
-                        className="pl-9 bg-stone-50 border-stone-200 rounded-xl text-sm"
+                        className="pl-10 bg-gray-50/80 border-gray-200/50 rounded-full text-[14px] shadow-inner focus-visible:ring-[#0D9488]/20 focus-visible:border-[#0D9488]/40"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -384,10 +384,10 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                         key={conv.id}
                         onClick={() => onSelectConversation(conv.id, conv.partner_id)}
                         className={cn(
-                            "flex items-center gap-3 px-4 py-3.5 cursor-pointer transition-all border-b border-stone-50",
+                            "flex items-center gap-3.5 px-3 py-3 mx-2 my-1.5 cursor-pointer transition-all rounded-[24px]",
                             selectedConversationId === conv.id
-                                ? "bg-teal-50 border-r-2 border-r-teal-500"
-                                : "hover:bg-stone-50"
+                                ? "bg-[#0D9488]/10 border border-[#0D9488]/20 shadow-sm"
+                                : "hover:bg-gray-50 border border-transparent"
                         )}
                     >
                         <div className="relative shrink-0">

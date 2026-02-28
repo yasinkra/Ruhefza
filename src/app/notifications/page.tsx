@@ -145,7 +145,7 @@ export default function NotificationsPage() {
                 </div>
 
                 {/* Notifications List */}
-                <div className="bg-white rounded-[24px] border border-stone-100 shadow-sm overflow-hidden flex flex-col gap-px bg-stone-100">
+                <div className="bg-white rounded-[32px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden flex flex-col gap-px bg-stone-50">
                     {notifications.length === 0 ? (
                         <div className="bg-white py-16 px-6 text-center flex flex-col items-center justify-center">
                             <div className="h-20 w-20 bg-stone-50 rounded-full flex items-center justify-center mb-4">
@@ -160,12 +160,12 @@ export default function NotificationsPage() {
                                 key={notification.id}
                                 className={cn(
                                     "bg-white p-4 sm:p-5 flex gap-4 transition-colors hover:bg-stone-50 cursor-pointer group relative",
-                                    notification.isUnread ? "bg-indigo-50/20" : ""
+                                    notification.isUnread ? "bg-[#0D9488]/5" : ""
                                 )}
                             >
                                 {/* Unread indicator line */}
                                 {notification.isUnread && (
-                                    <div className="absolute top-0 bottom-0 left-0 w-1 bg-indigo-500 rounded-r-md"></div>
+                                    <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-[#0D9488] rounded-r-md"></div>
                                 )}
 
                                 <div className="relative shrink-0 mt-1">
@@ -216,7 +216,7 @@ export default function NotificationsPage() {
                                 {/* Read toggle bubble */}
                                 {notification.isUnread && (
                                     <button
-                                        className="shrink-0 h-3 w-3 rounded-full bg-indigo-500 opacity-60 hover:opacity-100 transition-opacity self-center sm:self-start mt-2 mr-2"
+                                        className="shrink-0 h-3 w-3 rounded-full bg-[#0D9488] opacity-60 hover:opacity-100 transition-opacity self-center sm:self-start mt-2 mr-2 shadow-sm"
                                         title="Okundu olarak işaretle"
                                         onClick={(e) => markAsRead(notification.id, e)}
                                     ></button>

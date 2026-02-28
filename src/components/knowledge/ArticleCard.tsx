@@ -106,7 +106,7 @@ export function ArticleCard({
 
     return (
         <>
-            <Card className="flex flex-col h-full hover:shadow-xl hover:shadow-stone-200/50 transition-all duration-300 bg-white border-stone-100 overflow-hidden group rounded-[24px]">
+            <Card className="flex flex-col h-full hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] shadow-[0_4px_20px_rgb(0,0,0,0.03)] transition-all duration-300 bg-white border-transparent overflow-hidden group rounded-[32px]">
                 {/* Cover Image Area */}
                 <div className={cn("h-32 w-full bg-gradient-to-br flex items-center justify-center relative overflow-hidden transition-transform duration-500 group-hover:scale-105", categoryStyle.gradient)}>
                     <div className="absolute inset-0 bg-black/10 mix-blend-overlay" />

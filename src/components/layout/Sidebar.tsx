@@ -67,18 +67,18 @@ export function Sidebar() {
     };
 
     return (
-        <div className="hidden md:flex h-full w-[260px] flex-col bg-white border-r border-stone-100">
+        <div className="hidden md:flex h-full w-[280px] flex-col bg-white border-r border-[#F3F4F6] shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10 relative">
             {/* Logo Area */}
             <div className="p-6 pb-2">
                 <Link href="/dashboard" className="flex items-center gap-2.5 group">
-                    <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center shadow-md shadow-teal-200/50 group-hover:shadow-teal-300/50 transition-shadow">
-                        <Sparkles className="h-4.5 w-4.5 text-white" />
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#0D9488] to-[#10B981] flex items-center justify-center shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/40 transition-shadow">
+                        <Sparkles className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                        <span className="text-lg font-bold text-stone-800 tracking-tight">
+                        <span className="text-xl font-black text-gray-900 tracking-tight">
                             Ruhefza
                         </span>
-                        <span className="text-[10px] block -mt-0.5 text-stone-400 font-medium">Eğitim Topluluğu</span>
+                        <span className="text-[11px] block -mt-1 text-gray-500 font-medium">Eğitim Topluluğu</span>
                     </div>
                 </Link>
             </div>
@@ -92,17 +92,17 @@ export function Sidebar() {
                             key={item.name}
                             href={item.href}
                             className={cn(
-                                "group flex items-center gap-3 px-3.5 py-3 text-sm font-medium rounded-xl transition-all duration-200",
+                                "group flex items-center gap-3.5 px-4 py-3.5 text-[15px] font-semibold rounded-2xl transition-all duration-300",
                                 isActive
-                                    ? "bg-teal-50 text-teal-700 shadow-sm"
-                                    : "text-stone-600 hover:bg-stone-50 hover:text-stone-800 active:scale-[0.98]"
+                                    ? "bg-[#0D9488] text-white shadow-lg shadow-teal-500/25"
+                                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900 active:scale-[0.98]"
                             )}
                         >
                             <div className="relative">
                                 <item.icon
                                     className={cn(
-                                        "h-5 w-5 flex-shrink-0 transition-colors duration-200",
-                                        isActive ? "text-teal-600" : "text-stone-400 group-hover:text-stone-500"
+                                        "h-5 w-5 flex-shrink-0 transition-colors duration-300",
+                                        isActive ? "text-white" : "text-gray-400 group-hover:text-gray-600"
                                     )}
                                 />
                                 {item.name === "Mesajlar" && unreadCount > 0 && (
@@ -113,7 +113,7 @@ export function Sidebar() {
                             </div>
                             <span>{item.name}</span>
                             {isActive && (
-                                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-teal-500" />
+                                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white/60" />
                             )}
                         </Link>
                     );
