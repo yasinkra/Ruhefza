@@ -17,6 +17,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Ruhefza — Özel Eğitim Topluluğu",
   description: "Özel eğitim için aileler ve uzmanları buluşturan platform.",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export const viewport: Viewport = {

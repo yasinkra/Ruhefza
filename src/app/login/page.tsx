@@ -52,7 +52,7 @@ export default function LoginPage() {
             <div className="w-full max-w-md space-y-8">
                 <div className="flex flex-col items-center">
                     <Link href="/" className="flex items-center gap-2 mb-6">
-                        <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-sm">
+                        <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-md">
                             <Image
                                 src="/logo.png"
                                 alt="Ruhefza Logo"

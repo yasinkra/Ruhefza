@@ -44,7 +44,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/60 backdrop-blur-md transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="relative w-8 h-8 rounded-lg overflow-hidden shadow-md shadow-teal-200">
+            <div className="relative w-10 h-10 rounded-lg overflow-hidden shadow-md shadow-teal-200">
               <Image
                 src="/logo.png"
                 alt="Ruhefza Logo"
@@ -282,7 +282,7 @@ export default function Home() {
       <footer className="bg-white border-t border-stone-200 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="relative w-6 h-6 rounded-md overflow-hidden">
+            <div className="relative w-8 h-8 rounded-md overflow-hidden">
               <Image
                 src="/logo.png"
                 alt="Ruhefza Logo"

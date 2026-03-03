@@ -73,7 +73,7 @@ export function Sidebar() {
             {/* Logo Area */}
             <div className="p-6 pb-2">
                 <Link href="/dashboard" className="flex items-center gap-2.5 group">
-                    <div className="relative w-10 h-10 rounded-2xl overflow-hidden shadow-lg shadow-[#7b9e89]/30 group-hover:shadow-[#7b9e89]/40 transition-shadow">
+                    <div className="relative w-12 h-12 rounded-2xl overflow-hidden shadow-lg shadow-[#7b9e89]/30 group-hover:shadow-[#7b9e89]/40 transition-shadow">
                         <Image
                             src="/logo.png"
                             alt="Ruhefza Logo"
