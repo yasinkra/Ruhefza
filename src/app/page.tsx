@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Heart, Users, MessageCircle, BookOpen, ArrowRight, Shield, Star, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -43,8 +44,13 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/60 backdrop-blur-md transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="bg-teal-500 rounded-lg p-1.5 shadow-lg shadow-teal-200">
-              <Heart className="h-5 w-5 text-white fill-white" />
+            <div className="relative w-8 h-8 rounded-lg overflow-hidden shadow-md shadow-teal-200">
+              <Image
+                src="/logo.png"
+                alt="Ruhefza Logo"
+                fill
+                className="object-cover"
+              />
             </div>
             <span className="text-xl font-bold text-stone-800 tracking-tight">
               Ruhefza<span className="text-teal-600">App</span>
@@ -276,7 +282,14 @@ export default function Home() {
       <footer className="bg-white border-t border-stone-200 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-teal-500" />
+            <div className="relative w-6 h-6 rounded-md overflow-hidden">
+              <Image
+                src="/logo.png"
+                alt="Ruhefza Logo"
+                fill
+                className="object-cover"
+              />
+            </div>
             <span className="font-bold text-stone-900">Ruhefza App</span>
           </div>
           <div className="flex gap-8 text-sm text-stone-500">

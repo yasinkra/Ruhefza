@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Home, MessageCircle, User, BookOpen, LogOut, Sparkles, LayoutDashboard, Bell } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -72,8 +73,13 @@ export function Sidebar() {
             {/* Logo Area */}
             <div className="p-6 pb-2">
                 <Link href="/dashboard" className="flex items-center gap-2.5 group">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#7b9e89] to-[#9abfa7] flex items-center justify-center shadow-lg shadow-[#7b9e89]/30 group-hover:shadow-[#7b9e89]/40 transition-shadow">
-                        <Sparkles className="h-5 w-5 text-white" />
+                    <div className="relative w-10 h-10 rounded-2xl overflow-hidden shadow-lg shadow-[#7b9e89]/30 group-hover:shadow-[#7b9e89]/40 transition-shadow">
+                        <Image
+                            src="/logo.png"
+                            alt="Ruhefza Logo"
+                            fill
+                            className="object-cover"
+                        />
                     </div>
                     <div>
                         <span className="text-xl font-black text-gray-900 tracking-tight">

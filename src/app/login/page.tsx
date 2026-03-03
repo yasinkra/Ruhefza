@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -51,7 +52,14 @@ export default function LoginPage() {
             <div className="w-full max-w-md space-y-8">
                 <div className="flex flex-col items-center">
                     <Link href="/" className="flex items-center gap-2 mb-6">
-                        <Heart className="h-8 w-8 text-teal-500 fill-teal-100" />
+                        <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-sm">
+                            <Image
+                                src="/logo.png"
+                                alt="Ruhefza Logo"
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
                         <span className="text-2xl font-bold text-stone-800 tracking-tight">
                             Ruhefza<span className="text-teal-600">App</span>
                         </span>
