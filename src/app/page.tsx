@@ -46,26 +46,26 @@ export default function Home() {
       {/* NAVBAR */}
       {/* ═══════════════════════════════════════════════════════ */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-stone-100 bg-white/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-teal-200/50 ring-1 ring-teal-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md shadow-teal-200/50 ring-1 ring-teal-100">
               <Image src="/logo.png" alt="Ruhefza Logo" fill className="object-cover" />
             </div>
-            <span className="text-xl font-bold text-stone-900 tracking-tight">
+            <span className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight">
               Ruhefza
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-8">
             <a href="#features" onClick={(e) => handleScroll(e, 'features')} className="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors cursor-pointer">Özellikler</a>
             <a href="#how-it-works" onClick={(e) => handleScroll(e, 'how-it-works')} className="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors cursor-pointer">Nasıl Çalışır</a>
             <a href="#community" onClick={(e) => handleScroll(e, 'community')} className="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors cursor-pointer">Topluluk</a>
             <Link href="/knowledge" className="text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors">Kütüphane</Link>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {user ? (
               <Link
                 href="/feed"
-                className="px-5 py-2.5 text-sm font-semibold bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20"
+                className="px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20"
               >
                 Uygulamaya Git
               </Link>
@@ -73,13 +73,13 @@ export default function Home() {
               <>
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors hidden sm:block"
+                  className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors hidden sm:block"
                 >
                   Giriş Yap
                 </Link>
                 <Link
                   href="/signup"
-                  className="px-5 py-2.5 text-sm font-semibold bg-stone-900 text-white rounded-xl hover:bg-stone-800 transition-all shadow-lg shadow-stone-900/20"
+                  className="px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold bg-stone-900 text-white rounded-xl hover:bg-stone-800 transition-all shadow-lg shadow-stone-900/20"
                 >
                   Kayıt Ol
                 </Link>
@@ -92,7 +92,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* HERO SECTION */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <main className="pt-24 lg:pt-32 pb-12 relative overflow-hidden">
+      <main className="pt-20 sm:pt-24 lg:pt-32 pb-8 sm:pb-12 relative overflow-hidden">
         {/* Background decorations */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[900px] bg-gradient-to-b from-teal-50/60 via-white to-white -z-10"></div>
         <div className="absolute top-20 right-[-10%] w-[500px] h-[500px] bg-teal-100/30 rounded-full blur-3xl -z-10"></div>
@@ -101,18 +101,18 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Hero Text */}
-          <div className="text-center max-w-4xl mx-auto mb-16">
+          <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-16">
             <div className="inline-flex items-center rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide text-teal-700 ring-1 ring-teal-200 bg-teal-50 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 gap-2">
               <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
               Türkiye&apos;nin Özel Eğitim Topluluğu
             </div>
-            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight text-stone-900 mb-8 leading-[1.08] animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-stone-900 mb-6 sm:mb-8 leading-[1.08] animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
               Özel Eğitimde{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 via-emerald-500 to-teal-600">
                 Köprüler Kuruyoruz
               </span>
             </h1>
-            <p className="text-lg lg:text-xl text-stone-500 mb-10 leading-relaxed max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+            <p className="text-base sm:text-lg lg:text-xl text-stone-500 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto px-2 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
               Aileler, öğretmenler ve uzmanlar tek bir platformda buluşuyor. Deneyimlerinizi paylaşın, doğrulanmış uzmanlardan rehberlik alın ve eğitim yolculuğunuzda yalnız kalmayın.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
@@ -132,6 +132,7 @@ export default function Home() {
             </div>
 
             {/* Social Proof */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-6 text-stone-500 animate-in fade-in duration-1000 delay-500">
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4].map(i => (
@@ -151,7 +152,7 @@ export default function Home() {
           </div>
 
           {/* ═══════════════ SHOWCASE CARDS (Korunan Alan) ═══════════════ */}
-          <div className="relative mt-8 h-[420px] lg:h-[520px] w-full max-w-5xl mx-auto">
+          <div className="relative mt-8 h-[320px] sm:h-[420px] lg:h-[520px] w-full max-w-5xl mx-auto">
             {/* Card 1: Article - Left */}
             <div className="absolute left-0 lg:-left-8 top-24 w-72 bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-xl shadow-stone-200/50 border border-stone-100 animate-float-delayed transform rotate-[-5deg] hidden md:block z-10 hover:rotate-[-2deg] transition-transform duration-500">
               <div className="flex items-center gap-3 mb-3">
@@ -197,7 +198,7 @@ export default function Home() {
             </div>
 
             {/* Card 3: Feed - Center (Main) */}
-            <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[92%] md:w-[520px] bg-white rounded-2xl shadow-2xl shadow-stone-300/30 border border-stone-200/80 overflow-hidden z-20">
+            <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[95%] sm:w-[92%] md:w-[520px] bg-white rounded-2xl shadow-2xl shadow-stone-300/30 border border-stone-200/80 overflow-hidden z-20">
               <div className="p-4 border-b border-stone-100 flex items-center justify-between bg-stone-50/50">
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 rounded-full border-2 border-white shadow-sm overflow-hidden bg-white">
@@ -212,12 +213,12 @@ export default function Home() {
                   <CheckCircle className="h-3 w-3" /> Doğrulanmış
                 </div>
               </div>
-              <div className="p-6">
-                <h3 className="font-semibold text-lg mb-2 text-stone-900">Bugün harika bir gelişme oldu! ✨</h3>
+              <div className="p-4 sm:p-6">
+                <h3 className="font-semibold text-base sm:text-lg mb-2 text-stone-900">Bugün harika bir gelişme oldu! ✨</h3>
                 <p className="text-stone-600 leading-relaxed text-sm">
                   Oğlum ilk kez göz teması kurarak &quot;anne&quot; dedi. Bu anı o kadar uzun zamandır bekliyorduk ki... Sabrın ve eğitimin gücüne inanın. Asla pes etmeyin dostlar! ❤️
                 </p>
-                <div className="mt-4 h-28 w-full bg-gradient-to-br from-stone-50 to-stone-100 rounded-xl flex items-center justify-center text-stone-300 border border-stone-100">
+                <div className="mt-3 sm:mt-4 h-20 sm:h-28 w-full bg-gradient-to-br from-stone-50 to-stone-100 rounded-xl flex items-center justify-center text-stone-300 border border-stone-100">
                   <span className="text-xs text-stone-400">(Görsel Alanı)</span>
                 </div>
               </div>
@@ -242,21 +243,21 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* FEATURES GRID — 6 Özellik */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <section id="features" className="py-24 bg-white relative">
+      <section id="features" className="py-16 sm:py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 mb-4">
               <Sparkles className="h-4 w-4" /> Platform Özellikleri
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 mb-5 tracking-tight">
-              İhtiyacınız Olan Her Şey<br />Tek Bir Platformda
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-stone-900 mb-5 tracking-tight">
+              İhtiyacınız Olan Her Şey<br className="hidden sm:block" />{" "}Tek Bir Platformda
             </h2>
-            <p className="text-lg text-stone-500 leading-relaxed">
+            <p className="text-base sm:text-lg text-stone-500 leading-relaxed px-2">
               Ruhefza, özel eğitim yolculuğunu kolaylaştırmak ve desteklemek için tasarlanmış kapsamlı bir topluluk platformudur.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <FeatureCard
               icon={<Users className="h-6 w-6" />}
               title="Topluluk Forumu"
@@ -306,22 +307,22 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* NASIL ÇALIŞIR? */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <section id="how-it-works" className="py-24 bg-stone-50 relative overflow-hidden">
+      <section id="how-it-works" className="py-16 sm:py-24 bg-stone-50 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-teal-100/20 rounded-full blur-3xl -z-0"></div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <div className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 mb-4">
               <CheckCircle className="h-4 w-4" /> Kolay Başlangıç
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 mb-5 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-stone-900 mb-5 tracking-tight">
               3 Adımda Başlayın
             </h2>
-            <p className="text-lg text-stone-500 max-w-xl mx-auto">
+            <p className="text-base sm:text-lg text-stone-500 max-w-xl mx-auto px-2">
               Birkaç dakika içinde topluluğa katılın ve paylaşıma başlayın.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-12">
             <StepCard
               step={1}
               title="Hesabınızı Oluşturun"
@@ -347,13 +348,13 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* İSTATİSTİKLER */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-stone-900 relative overflow-hidden">
+      <section className="py-12 sm:py-20 bg-stone-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-teal-900/10 to-transparent"></div>
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-indigo-500/10 rounded-full blur-3xl"></div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="max-w-6xl mx-auto px-6 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 lg:gap-12">
             <StatItem number="1000+" label="Kayıtlı Aile" />
             <StatItem number="50+" label="Doğrulanmış Uzman" />
             <StatItem number="500+" label="Bilgi Makalesi" />
@@ -365,21 +366,21 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* TESTİMONİALS — Aileler Ne Diyor? */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <section id="community" className="py-24 bg-white">
+      <section id="community" className="py-16 sm:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 mb-4">
               <Heart className="h-4 w-4" /> Topluluk Hikayeleri
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 mb-5 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-stone-900 mb-5 tracking-tight">
               Aileler Ne Diyor?
             </h2>
-            <p className="text-lg text-stone-500 max-w-xl mx-auto">
+            <p className="text-base sm:text-lg text-stone-500 max-w-xl mx-auto px-2">
               Ruhefza topluluğundaki ailelerin deneyimleri ve geri bildirimleri.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <TestimonialCard
               quote="Oğlumun otizm teşhisi konduğunda çok yalnız hissediyorduk. Ruhefza sayesinde aynı yollardan geçen ailelerle tanıştık ve umudumuz arttı."
               name="Fatma Y."
@@ -412,10 +413,10 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium text-white/90 mb-8">
             <Shield className="h-4 w-4" /> Ücretsiz ve Güvenli
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
             Bu Yolculukta<br />Yanınızdayız
           </h2>
-          <p className="text-lg text-teal-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-teal-100 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-2">
             Çocuğunuzun geleceği için atacağınız her adımda size destek olmak için buradayız. Hemen topluluğumuza katılın ve farkı yaşayın.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -439,11 +440,11 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* FOOTER */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <footer className="bg-stone-900 text-stone-400 pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <footer className="bg-stone-900 text-stone-400 pt-12 sm:pt-16 pb-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12">
             {/* Brand */}
-            <div className="md:col-span-1">
+            <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="relative w-10 h-10 rounded-xl overflow-hidden ring-1 ring-stone-700">
                   <Image src="/logo.png" alt="Ruhefza Logo" fill className="object-cover" />
@@ -529,12 +530,12 @@ function FeatureCard({ icon, title, description, gradient, iconBg }: {
   iconBg: string;
 }) {
   return (
-    <div className={`bg-gradient-to-br ${gradient} p-7 rounded-2xl border border-stone-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
-      <div className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
+    <div className={`bg-gradient-to-br ${gradient} p-5 sm:p-7 rounded-2xl border border-stone-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group`}>
+      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${iconBg} flex items-center justify-center mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
         {icon}
       </div>
-      <h3 className="text-lg font-bold text-stone-900 mb-2">{title}</h3>
-      <p className="text-sm text-stone-600 leading-relaxed">{description}</p>
+      <h3 className="text-base sm:text-lg font-bold text-stone-900 mb-2">{title}</h3>
+      <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">{description}</p>
     </div>
   );
 }
@@ -564,8 +565,8 @@ function StepCard({ step, title, description, icon }: {
 function StatItem({ number, label }: { number: string; label: string }) {
   return (
     <div className="text-center">
-      <div className="text-4xl lg:text-5xl font-extrabold text-white mb-2 tracking-tight">{number}</div>
-      <div className="text-sm text-stone-400 font-medium">{label}</div>
+      <div className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-1 sm:mb-2 tracking-tight">{number}</div>
+      <div className="text-xs sm:text-sm text-stone-400 font-medium">{label}</div>
     </div>
   );
 }
@@ -577,7 +578,7 @@ function TestimonialCard({ quote, name, role, seed }: {
   seed: string;
 }) {
   return (
-    <div className="bg-stone-50 p-8 rounded-2xl border border-stone-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group">
+    <div className="bg-stone-50 p-6 sm:p-8 rounded-2xl border border-stone-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group">
       <Quote className="h-8 w-8 text-teal-200 mb-4" />
       <p className="text-stone-600 leading-relaxed mb-6 text-[15px]">
         &quot;{quote}&quot;
