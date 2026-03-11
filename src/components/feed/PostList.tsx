@@ -59,6 +59,7 @@ export function PostList({
                     content,
                     is_anonymous,
                     likes_count,
+                    comments_count,
                     created_at,
                     category,
                     image_url,

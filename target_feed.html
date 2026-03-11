@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ruhefza Community Feed Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0D9488",
+                        "primary-light": "#F0FDFA",
+                        "primary-hover": "#0F766E",
+                        "background-light": "#F9FAFB",
+                        "background-dark": "#111827",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1F2937",
+                        "text-main": "#111827",
+                        "text-muted": "#6B7280",
+                        "border-color": "#E5E7EB"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 font-display min-h-screen">
+<div class="mx-auto max-w-[1440px] flex h-screen overflow-hidden relative">
+<aside class="hidden md:flex w-[260px] flex-shrink-0 bg-surface-light dark:bg-surface-dark border-r border-border-color dark:border-gray-700 flex-col justify-between h-full sticky top-0 z-20">
+<div class="flex flex-col h-full p-4 overflow-y-auto">
+<div class="flex items-center gap-3 px-3 py-4 mb-4">
+<div class="text-primary material-symbols-outlined text-3xl">diversity_1</div>
+<h1 class="text-xl font-bold text-text-main dark:text-white tracking-tight">Ruhefza</h1>
+</div>
+<nav class="flex flex-col gap-1 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-light dark:bg-primary/20 text-primary dark:text-teal-400 font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">home</span>
+<span class="text-sm">Ana Sayfa</span>
+</a>
+<a class="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-text-muted dark:text-gray-300 hover:text-text-main dark:hover:text-white font-medium transition-colors group" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">mail</span>
+<span class="text-sm">Mesajlar</span>
+</div>
+<span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-text-muted dark:text-gray-300 hover:text-text-main dark:hover:text-white font-medium transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">menu_book</span>
+<span class="text-sm">Bilgi Bankası</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-text-muted dark:text-gray-300 hover:text-text-main dark:hover:text-white font-medium transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">groups</span>
+<span class="text-sm">Uzmanlar</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-text-muted dark:text-gray-300 hover:text-text-main dark:hover:text-white font-medium transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">notifications</span>
+<span class="text-sm">Bildirimler</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-text-muted dark:text-gray-300 hover:text-text-main dark:hover:text-white font-medium transition-colors group mt-auto" href="#">
+<span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">person</span>
+<span class="text-sm">Profilim</span>
+</a>
+</nav>
+<div class="mt-4 pt-4 border-t border-border-color dark:border-gray-700">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" href="#">
+<div class="w-10 h-10 rounded-full bg-cover bg-center flex-shrink-0 border border-border-color dark:border-gray-600" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBAdRe87kcT1xcAcZxAJXMftMflEVKRfKL9XYOjJvUXIlhxfd9og8lkU77mVhy60DJsxU9OHYwdPUuryNItxEdEAEtOonxSp061V3cH_pZ5xKFxFVb9LsL26b5SKLH59gfSWcgTKLWvCycQ822Zqoc81lY7Iy7FZG88vIeg7K1kj-PA6Q0jhN5MDS7sHs8zk4aNPBYA3yOcmriKHqnV2Qqd7iZX-60Mycy4_xApemYGKz59QUQ4fatu1udw0LRFuwZTlOng2XV7bpM");'></div>
+<div class="flex flex-col min-w-0">
+<p class="text-sm font-semibold text-text-main dark:text-white truncate">Yasin K.</p>
+<p class="text-xs text-text-muted dark:text-gray-400 truncate">Ebeveyn</p>
+</div>
+<span class="material-symbols-outlined text-text-muted dark:text-gray-400 ml-auto">more_horiz</span>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 min-w-0 overflow-y-auto relative h-full flex justify-center pb-20 md:pb-6">
+<div class="w-full max-w-[680px] px-4 md:px-6 lg:px-8 py-4 md:py-6 flex flex-col gap-4 md:gap-6">
+<header class="flex flex-col gap-4 bg-surface-light dark:bg-surface-dark p-4 rounded-2xl shadow-sm border border-border-color dark:border-gray-700 sticky top-0 z-10 backdrop-blur-sm bg-opacity-90 dark:bg-opacity-90">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="text-primary material-symbols-outlined text-2xl md:hidden">diversity_1</div>
+<h2 class="text-base md:text-xl font-bold text-text-main dark:text-white">Hoş geldin, Yasin 👋</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-muted dark:text-gray-300 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-gray-900"></span>
+</button>
+</div>
+</div>
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted dark:text-gray-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-background-light dark:bg-gray-800 border border-border-color dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Ara..." type="text"/>
+</div>
+</header>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 md:p-5 shadow-sm border border-border-color dark:border-gray-700 flex flex-col gap-4">
+<div class="flex gap-3 md:gap-4">
+<div class="w-10 h-10 rounded-full bg-cover bg-center flex-shrink-0 border border-border-color dark:border-gray-600" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB85kcOepiujt2TNql30cUwPDzmgcHkbVQBaWrROcKactRKnxLjLMQr9FPzIUKRrrwoZEaSeqMr5iVSYU0YNYrpygi8nNA1izx1trUtMfTxbxgsfv0sVDzblrVk6CxD7-6VNImglu-yM4nlFAueCJ1FXWY-RHgqgtBjtXUD7fXSDXMkEA6mAoEiT1q-gYfwjl1ELBke8CgFB7I738uECJFuv7OCBehkRq-3Z9d64DTAouT12j7IZhyBLkIOTuVVGr69kz2Qdi1RTxI");'></div>
+<div class="flex-1">
+<textarea class="w-full bg-background-light dark:bg-gray-800 border border-border-color dark:border-gray-600 rounded-xl px-4 py-2 md:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none h-16 md:h-20 placeholder:text-text-muted dark:placeholder:text-gray-400 text-text-main dark:text-white" placeholder="Bir şeyler paylaş..."></textarea>
+</div>
+</div>
+<div class="flex items-center justify-between md:pl-14">
+<div class="flex items-center gap-1 md:gap-2">
+<button class="p-2 rounded-full hover:bg-primary-light dark:hover:bg-primary/20 text-primary transition-colors flex items-center justify-center" title="Fotoğraf Ekle">
+<span class="material-symbols-outlined text-[20px]">image</span>
+</button>
+<button class="p-2 rounded-full hover:bg-primary-light dark:hover:bg-primary/20 text-primary transition-colors flex items-center justify-center" title="Video Ekle">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+</button>
+<button class="p-2 rounded-full hover:bg-primary-light dark:hover:bg-primary/20 text-primary transition-colors flex items-center justify-center" title="Dosya Ekle">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+</div>
+<button class="bg-primary hover:bg-primary-hover text-white px-5 md:px-6 py-1.5 md:py-2 rounded-full text-sm font-medium transition-colors shadow-sm">
+                        Paylaş
+                    </button>
+</div>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+<button class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full bg-primary text-white text-xs md:text-sm font-medium shadow-sm flex-shrink-0">Tümü</button>
+<button class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full bg-surface-light dark:bg-surface-dark border border-border-color dark:border-gray-700 text-text-muted dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-xs md:text-sm font-medium flex-shrink-0 transition-colors">Deneyimler</button>
+<button class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full bg-surface-light dark:bg-surface-dark border border-border-color dark:border-gray-700 text-text-muted dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-xs md:text-sm font-medium flex-shrink-0 transition-colors">Sorular</button>
+<button class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full bg-surface-light dark:bg-surface-dark border border-border-color dark:border-gray-700 text-text-muted dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-xs md:text-sm font-medium flex-shrink-0 transition-colors">Tavsiyeler</button>
+</div>
+<div class="flex flex-col gap-4 md:gap-6">
+<article class="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 md:p-5 shadow-sm border border-border-color dark:border-gray-700">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover bg-center border border-border-color dark:border-gray-600" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFJFaUkAl0lyoBFVEKUO0baBWuNz6DyWeboFMOw33xmlH-NzgHxnpLskk2V8_xrIkRIK2fdzB5yts5R6QrglqUTUmcpL3xTC5NaYJdob49QdK3Yz3oH18FAhRQ3xyTgW0c8fIgRWWSiYQM94s9GJtOLCE-BOLuHfNv6vwK8ftpaI-ZVwgrAbZtjJF3YRD0XiDBB0sh7C4YnU_4Q26s-eiRKokA8sWJPorStxsl5h73QNAPOdZSpalyuKf1E33PUM8Xj55jzuERUsc");'></div>
+<div>
+<h3 class="font-semibold text-text-main dark:text-white text-xs md:text-sm flex items-center gap-1">
+                                    Zeynep Kara 
+                                    <span class="text-[10px] md:text-xs font-normal text-text-muted dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">Ebeveyn</span>
+</h3>
+<p class="text-[10px] md:text-xs text-text-muted dark:text-gray-400">2 saat önce</p>
+</div>
+</div>
+<button class="text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+<div class="mb-4">
+<p class="text-text-main dark:text-gray-200 text-xs md:text-sm leading-relaxed mb-3">
+                            Oğlumun bugünkü gelişimi beni çok mutlu etti. İlk defa kendi başına ayakkabılarını bağladı! Küçük adımlar ama bizim için kocaman zaferler. Herkese sabır ve sevgi diliyorum! 💙
+                        </p>
+<div class="rounded-xl overflow-hidden border border-border-color dark:border-gray-700 w-full aspect-video bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCeoX_scb64EKnXN3UpPqSgfYoufVh4UrGrOx5wHRBCDMBd7LGndPONqTQLoNvxPKtz15QshVr-wJ0OI8DILHpYEPNx_7Fqnlgs7KGxHte8vA1-ITEarIfl1PJmC0skeCsveSqjzxL1Nv3aBoSfCeHJaVlF1AQAFXbGPfozRWOKoC4Z9ykfyqyPNJ8IT0y5gyHLMG1im0XdI8No0WA19H7i44PNGRk6dkotcAJVpQoFuioJTwv-PcHrSMfIz2_bXbW7_vUDo1dE9WM");'></div>
+</div>
+<div class="flex items-center gap-4 md:gap-6 pt-3 border-t border-border-color dark:border-gray-700">
+<button class="flex items-center gap-1 md:gap-2 text-text-muted dark:text-gray-400 hover:text-red-500 transition-colors group">
+<span class="material-symbols-outlined text-[18px] md:text-[20px] group-hover:fill-current">favorite</span>
+<span class="text-xs md:text-sm font-medium">24</span>
+</button>
+<button class="flex items-center gap-1 md:gap-2 text-text-muted dark:text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">chat_bubble</span>
+<span class="text-xs md:text-sm font-medium">5 Yorum</span>
+</button>
+<button class="flex items-center gap-2 text-text-muted dark:text-gray-400 hover:text-primary transition-colors ml-auto">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">share</span>
+</button>
+</div>
+</article>
+<article class="bg-surface-light dark:bg-surface-dark rounded-2xl p-4 md:p-5 shadow-sm border border-border-color dark:border-gray-700">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover bg-center border border-primary dark:border-teal-500" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDCHY8JQk6hZcd080SC3t7BCJgUwDg_-9ZlIUv4x2l4l1vIOYIRBwgzryJebFYuiLxd_F87dmsIZb7eE7bY4R3AmFm8b6H_hORx9saBtgTcDTdMj17TozQQAWafaHyJR3WZTP8-zUtNT85Toz4S08QmfPNroPLXy2Oj2aWwuWkBuDH_lLTWjDL3QKzE6-BvdlBPtRdHP_dWn1Wc49wOpBDGzq6HEfypEiZSk-67UzmkEzVca3t2cliMNZIwn3x6HbE6S7xiIkOjNC8");'></div>
+<div>
+<h3 class="font-semibold text-text-main dark:text-white text-xs md:text-sm flex items-center gap-1">
+                                    Dr. Ayşe Yılmaz
+                                    <span class="material-symbols-outlined text-[16px] text-primary" title="Onaylı Uzman">verified</span>
+<span class="hidden sm:inline text-[10px] md:text-xs font-normal text-primary-hover dark:text-teal-300 bg-primary-light dark:bg-primary/20 px-2 py-0.5 rounded-full ml-1">Özel Eğitim Uzmanı</span>
+</h3>
+<p class="text-[10px] md:text-xs text-text-muted dark:text-gray-400">5 saat önce</p>
+</div>
+</div>
+<button class="text-text-muted dark:text-gray-400 hover:text-text-main dark:hover:text-white p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+<div class="mb-4">
+<p class="text-text-main dark:text-gray-200 text-xs md:text-sm leading-relaxed mb-3">
+                            Duyusal hassasiyeti olan çocuklar için ev ortamını nasıl düzenleyebiliriz? Yeni yazdığım makalede pratik önerilere yer verdim.
+                        </p>
+<a class="block border border-border-color dark:border-gray-700 rounded-xl overflow-hidden hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="#">
+<div class="flex flex-col sm:flex-row">
+<div class="w-full sm:w-1/3 aspect-video sm:aspect-square bg-cover bg-center border-b sm:border-b-0 sm:border-r border-border-color dark:border-gray-700" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBiqmEZlt7DhYgOoRoE_PNweOrRnQXa7Ev32RTFhRbZfuETwqOMeFFKr1VtlMNj-1C8mD8XBRCYVAGuMfBYyD2uy6h1UeEOoaSIsWMXVhrqV9Yxa0h8InaKrbMlxDuU_cZd4e-uQuR_b9RdYDBPan1mZZ1aflI5jy5njxS2QaKi1B-k1X4SxPVQxmJ-8-9F8_jrRQ4PGyZTTm_lHEej4xGPt9qy3mNBPKD7lb373_d7NZzBOF2qoiMCSV0pbg0aePTFz8fYRa3tVNo");'></div>
+<div class="p-3 md:p-4 flex flex-col justify-center sm:w-2/3">
+<h4 class="font-semibold text-text-main dark:text-white text-xs md:text-sm mb-1 group-hover:text-primary transition-colors line-clamp-2">Duyusal Dostu Ev Ortamı Tasarımı: Ebeveynler İçin Rehber</h4>
+<p class="text-[10px] md:text-xs text-text-muted dark:text-gray-400 mb-2 line-clamp-1 md:line-clamp-2">Otizm spektrumundaki çocuklar için rahatlatıcı ve güvenli bir yaşam alanı oluşturmanın ipuçları.</p>
+<span class="text-[10px] md:text-xs text-text-muted dark:text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">link</span> ruhefza.com</span>
+</div>
+</div>
+</a>
+</div>
+<div class="flex items-center gap-4 md:gap-6 pt-3 border-t border-border-color dark:border-gray-700">
+<button class="flex items-center gap-1 md:gap-2 text-text-muted dark:text-gray-400 hover:text-red-500 transition-colors group">
+<span class="material-symbols-outlined text-[18px] md:text-[20px] group-hover:fill-current">favorite</span>
+<span class="text-xs md:text-sm font-medium">156</span>
+</button>
+<button class="flex items-center gap-1 md:gap-2 text-text-muted dark:text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">chat_bubble</span>
+<span class="text-xs md:text-sm font-medium">18 Yorum</span>
+</button>
+<button class="flex items-center gap-2 text-text-muted dark:text-gray-400 hover:text-primary transition-colors ml-auto">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">bookmark</span>
+</button>
+<button class="flex items-center gap-2 text-text-muted dark:text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] md:text-[20px]">share</span>
+</button>
+</div>
+</article>
+</div>
+</div>
+</main>
+<aside class="hidden xl:flex w-[320px] flex-shrink-0 bg-background-light dark:bg-background-dark border-l border-transparent overflow-y-auto pl-8 py-6 pr-4">
+<div class="flex flex-col gap-6 w-full">
+<div class="rounded-2xl bg-gradient-to-br from-primary to-[#0F766E] p-5 text-white shadow-md relative overflow-hidden">
+<div class="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-white">campaign</span>
+<h3 class="font-bold text-sm tracking-wide uppercase">Duyuru</h3>
+</div>
+<p class="text-sm font-medium leading-relaxed mb-4 text-white/90">
+                    Bu hafta sonu "Alternatif İletişim Yöntemleri" konulu ücretsiz online seminerimize davetlisiniz.
+                </p>
+<button class="bg-white text-primary hover:bg-gray-50 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm w-full">
+                    Kayıt Ol
+                </button>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl p-5 shadow-sm border border-border-color dark:border-gray-700">
+<h3 class="font-bold text-text-main dark:text-white mb-4">Gündemdeki Konular</h3>
+<div class="flex flex-col gap-4">
+<a class="group" href="#">
+<p class="text-xs text-text-muted dark:text-gray-400 mb-0.5">Topluluk • Trend</p>
+<p class="text-sm font-semibold text-text-main dark:text-white group-hover:text-primary transition-colors">#OtizmFarkındalığı</p>
+<p class="text-xs text-text-muted dark:text-gray-400 mt-0.5">1.2B paylaşım</p>
+</a>
+<a class="group" href="#">
+<p class="text-xs text-text-muted dark:text-gray-400 mb-0.5">Eğitim • Trend</p>
+<p class="text-sm font-semibold text-text-main dark:text-white group-hover:text-primary transition-colors">Görsel Çizelgeler</p>
+<p class="text-xs text-text-muted dark:text-gray-400 mt-0.5">856 paylaşım</p>
+</a>
+</div>
+<button class="w-full text-center text-sm text-primary hover:text-primary-hover font-medium mt-4 pt-4 border-t border-border-color dark:border-gray-700 transition-colors">
+                    Daha Fazla Göster
+                </button>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl p-5 shadow-sm border border-border-color dark:border-gray-700">
+<h3 class="font-bold text-text-main dark:text-white mb-4">Önerilen Uzmanlar</h3>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-cover bg-center flex-shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAk545sEroO0JH6MwqVA2rurcvHscgNOUXAE9xvQd678tOPC-i7JvhCzqG0_MScWpXHPYLkOpA5o-kKBVzI1mEliceyS3WXbikO7F49RdkzEryqd4BJZy7TuZiGuALpz8kXhk-1O0_6Xoewz0wj9E_66Bv9IwIhj4zbj2umuG5-g0HNLHXfMH8Z-8KtEEiw6fXoGLGzQPkvg2DuLGT2fLYAAqZElHMjNeWJKd6gR-vUHg3pLdCu_cM9GudprN11Bv8AZQEOpsjGwT8");'></div>
+<div class="min-w-0 flex-1">
+<p class="text-sm font-semibold text-text-main dark:text-white truncate flex items-center gap-1">Psk. Emre Can <span class="material-symbols-outlined text-[14px] text-primary">verified</span></p>
+<p class="text-xs text-text-muted dark:text-gray-400 truncate">Çocuk Psikoloğu</p>
+</div>
+</div>
+<button class="flex-shrink-0 px-3 py-1.5 bg-primary-light dark:bg-primary/10 text-primary dark:text-teal-400 hover:bg-primary hover:text-white rounded-lg text-xs font-semibold transition-colors border border-transparent hover:border-primary">
+                            Takip Et
+                        </button>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-x-3 gap-y-1 px-2 text-[10px] text-text-muted dark:text-gray-500">
+<a class="hover:underline" href="#">Hakkımızda</a>
+<a class="hover:underline" href="#">Yardım</a>
+<a class="hover:underline" href="#">Gizlilik</a>
+<span>© 2024 Ruhefza</span>
+</div>
+</div>
+</aside>
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-light dark:bg-surface-dark border-t border-border-color dark:border-gray-700 h-16 flex items-center justify-around px-2 z-50">
+<a class="flex flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Ana Sayfa</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-text-muted dark:text-gray-400 relative" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="text-[10px] font-medium">Mesajlar</span>
+<span class="absolute top-0 right-1 bg-red-500 text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full">3</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-text-muted dark:text-gray-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-medium">Bilgi Bankası</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-text-muted dark:text-gray-400" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-[10px] font-medium">Bildirimler</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-text-muted dark:text-gray-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profil</span>
+</a>
+</nav>
+</div>
+
+</body></html>

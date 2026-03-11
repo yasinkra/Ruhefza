@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { ArticleCard, Article } from "@/components/knowledge/ArticleCard";
 import { Input } from "@/components/ui/input";
-import { Search, Megaphone, BookOpen, Clock, User, Puzzle, Brain, Activity, MessageCircle, Scale, ChevronRight, Bookmark } from "lucide-react";
+import { Search, Megaphone, BookOpen, Clock, User, Puzzle, Brain, Activity, MessageCircle, Scale, ChevronRight, Bookmark, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppShell } from "@/components/layout/AppShell";
 import { useRouter } from "next/navigation";
 import { cn } from "@/utils/cn";
+import Head from "next/head";
 
 export default function KnowledgeBasePage() {
     const router = useRouter();
@@ -22,13 +23,30 @@ export default function KnowledgeBasePage() {
     const [loadingUser, setLoadingUser] = useState(true);
     const [announcement, setAnnouncement] = useState<{ message: string, active: boolean } | null>(null);
     const [bookmarkedArticleIds, setBookmarkedArticleIds] = useState<Set<string>>(new Set());
+    const [likedArticleIds, setLikedArticleIds] = useState<Set<string>>(new Set());
+    const [isOtherOpen, setIsOtherOpen] = useState(false);
+
+    const otherCategories = [
+        "Özgül Öğrenme Güçlüğü",
+        "Zihinsel Yetersizlik",
+        "İşitme Yetersizliği",
+        "Görme Yetersizliği",
+        "Üstün Zekalılar ve Yetenekliler",
+        "Erken Çocuklukta Özel Eğitim",
+        "Davranış Bozuklukları",
+        "Kaynaştırma ve Bütünleştirme",
+        "Aile Eğitimi ve Danışmanlığı",
+        "BEP Hazırlama Süreçleri",
+        "Duyu Bütünleme",
+        "Genel"
+    ];
 
     // Rich categories with soothing pastel colors
     const categories = [
         { id: "Otizm", name: "Otizm", icon: <Puzzle className="h-6 w-6" />, color: "from-[#71a5d6] to-[#a0c5e8]", lightBg: "bg-[#e3eff8]", text: "text-[#71a5d6]" },
-        { id: "DEHB", name: "DEHB", icon: <Brain className="h-6 w-6" />, color: "from-[#b388c6] to-[#d4bbee]", lightBg: "bg-[#f4ebf8]", text: "text-[#b388c6]" },
-        { id: "Fiziksel Gelişim", name: "Fiziksel Gelişim", icon: <Activity className="h-6 w-6" />, color: "from-[#7b9e89] to-[#a2c1b1]", lightBg: "bg-[#eaf2ed]", text: "text-[#7b9e89]" },
-        { id: "Dil ve Konuşma", name: "Dil ve Konuşma", icon: <MessageCircle className="h-6 w-6" />, color: "from-[#f2a68d] to-[#f8c9b9]", lightBg: "bg-[#fef3ea]", text: "text-[#f2a68d]" },
+        { id: "DEHB", name: "DEHB", icon: <Brain className="h-6 w-6" />, color: "from-[#0c9789] to-[#14b8a6]", lightBg: "bg-[#f0fdfa]", text: "text-[#0c9789]" },
+        { id: "Fiziksel Gelişim", name: "Fiziksel Gelişim", icon: <Activity className="h-6 w-6" />, color: "from-[#0c9789] to-[#14b8a6]", lightBg: "bg-[#f0fdfa]", text: "text-[#0c9789]" },
+        { id: "Dil ve Konuşma", name: "Dil ve Konuşma", icon: <MessageCircle className="h-6 w-6" />, color: "from-[#0c9789] to-[#14b8a6]", lightBg: "bg-[#f0fdfa]", text: "text-[#0c9789]" },
         { id: "Yasal Haklar", name: "Yasal Haklar", icon: <Scale className="h-6 w-6" />, color: "from-[#e27d73] to-[#efaaa5]", lightBg: "bg-[#faeaea]", text: "text-[#e27d73]" },
     ];
 
@@ -87,6 +105,13 @@ export default function KnowledgeBasePage() {
                     .eq("user_id", user.id)
                     .eq("item_type", "article");
                 if (bData) setBookmarkedArticleIds(new Set(bData.map((b: { item_id: string }) => b.item_id)));
+
+                // Fetch liked article IDs
+                const { data: lData } = await createClient()
+                    .from("article_likes")
+                    .select("article_id")
+                    .eq("user_id", user.id);
+                if (lData) setLikedArticleIds(new Set(lData.map((l: { article_id: string }) => l.article_id)));
             }
             setLoadingUser(false);
         };
@@ -120,10 +145,10 @@ export default function KnowledgeBasePage() {
 
     return (
         <AppShell fullWidth={true}>
-            <div className="h-full overflow-y-auto bg-stone-50 pb-20">
+            <div className="h-full overflow-y-auto bg-[#fdfcfaf5] pb-24">
                 {/* Announcement Section */}
                 {announcement?.active && (
-                    <div className="bg-gradient-to-r from-[#7b9e89] to-[#a2c1b1] p-3 text-white">
+                    <div className="bg-gradient-to-r from-[#0c9789] to-[#14b8a6] p-3 text-white">
                         <div className="max-w-7xl mx-auto px-4 flex items-center justify-center gap-3">
                             <Megaphone className="h-4 w-4 shrink-0" />
                             <p className="text-sm font-medium">{announcement.message}</p>
@@ -131,182 +156,181 @@ export default function KnowledgeBasePage() {
                     </div>
                 )}
 
-                {/* Header */}
-                <div className="bg-white border-b border-stone-200 pt-8 pb-10 md:pt-12 md:pb-16 px-4 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-[#7b9e89]/10 rounded-full blur-3xl opacity-70"></div>
-                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-[#f2a68d]/10 rounded-full blur-3xl opacity-70"></div>
+                {/* Header Navbar-like section per design */}
+                <div className="pt-8 pb-6 px-4 sm:px-6 lg:px-8 max-w-[1340px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-[28px] font-bold text-gray-900 tracking-tight leading-none">Eğitim Kütüphanesi</h1>
+                        <p className="text-[15px] text-gray-500 font-medium mt-2">Ebeveynlik yolculuğunuz için özenle seçilmiş kaynaklar</p>
+                    </div>
+                    {/* Placeholder for top right widgets like Notifications / Profile in design */}
+                    <div className="hidden md:flex items-center gap-3">
+                        {!loadingUser && canCreate && (
+                            <Button
+                                onClick={() => router.push('/knowledge/create')}
+                                className="bg-[#4ade80] hover:bg-[#22c55e] text-white shadow-sm rounded-full h-10 px-6 font-bold transition-all border-none"
+                            >
+                                + Paylaşımda Bulun
+                            </Button>
+                        )}
+                    </div>
+                </div>
 
-                    <div className="max-w-7xl mx-auto text-center relative z-10">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fef3ea] text-[#f2a68d] text-xs font-bold uppercase tracking-wider mb-4 md:mb-6 ring-1 ring-[#f2a68d]/20">
-                            <BookOpen className="h-3.5 w-3.5" />
-                            Bilgi Bankası
-                        </div>
-                        <h1 className="text-2xl sm:text-4xl font-bold text-stone-900 md:text-5xl mb-4 md:mb-6 tracking-tight">Eğitim Kütüphanesi</h1>
-                        <p className="text-sm md:text-lg text-stone-600 max-w-2xl mx-auto mb-6 md:mb-10 font-medium leading-relaxed">
-                            Özel eğitim alanında uzmanlar ve aileler tarafından hazırlanan profesyonel rehberler, güncel makaleler ve materyaller.
-                        </p>
+                {/* Hero Banner Area */}
+                <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                    <div className="relative w-full rounded-[36px] overflow-hidden bg-[#d3bca8] min-h-[340px] shadow-sm flex flex-col items-center justify-center p-8 text-center text-gray-900 border border-transparent">
+                        {/* Background Image Graphic */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img 
+                            src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                            alt="Leaves background" 
+                            className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-[0.35]"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
 
-                        {!loadingUser && canCreate ? (
-                            <div className="mb-10">
-                                <Button
-                                    onClick={() => router.push('/knowledge/create')}
-                                    className="bg-gradient-to-br from-[#7b9e89] to-[#8ba898] hover:to-[#7b9e89] text-white shadow-lg shadow-[#7b9e89]/20 rounded-2xl h-12 px-8 font-bold transition-all hover:-translate-y-0.5 border-none"
-                                >
-                                    + Paylaşımda Bulun
+                        <div className="relative z-10 max-w-4xl px-4 w-full">
+                            <h2 className="text-4xl md:text-5xl font-black mb-5 tracking-tight text-[#1a1a1a]">Bilgiyle Huzur Bulun</h2>
+                            <p className="text-[15px] md:text-[17px] font-medium text-gray-800/80 mb-10 max-w-xl mx-auto leading-relaxed">
+                                Aileniz için tasarlanmış, uzman onaylı kaynaklar ve şefkatli rehberler.
+                            </p>
+
+                            <div className="flex bg-white/95 backdrop-blur-md rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-1.5 max-w-2xl mx-auto focus-within:ring-2 focus-within:ring-[#4ade80]/50 transition-all border border-white">
+                                <div className="flex-1 flex items-center pl-5 pr-2">
+                                    <Search className="h-5 w-5 text-[#4ade80]" />
+                                    <Input
+                                        type="text"
+                                        placeholder="Makaleler, terapiler ve rehberler arasında arama yapın..."
+                                        className="h-12 border-0 bg-transparent text-[15px] focus-visible:ring-0 shadow-none text-gray-700 placeholder:text-gray-400 font-medium w-full"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
+                                <Button className="rounded-full bg-[#4ade80] hover:bg-[#22c55e] text-white px-8 h-12 font-bold shadow-md shadow-[#4ade80]/20 transition-all text-[15px]">
+                                    Ara
                                 </Button>
                             </div>
-                        ) : !loadingUser && (
-                            <div className="mb-10 inline-flex items-center gap-3 bg-[#fef3ea] border border-[#f8c9b9] p-4 py-3 rounded-2xl shadow-sm max-w-xl mx-auto">
-                                <span className="flex h-2 w-2 rounded-full bg-[#f2a68d]"></span>
-                                <p className="text-sm font-semibold text-[#f2a68d]">
-                                    Sadece doğrulanmış uzmanlar yeni bilgi paylaşabilir.
-                                </p>
-                            </div>
-                        )}
-
-                        <div className="max-w-2xl mx-auto relative group">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-[#7b9e89] transition-colors" />
-                            <Input
-                                type="text"
-                                placeholder="Makale, konu veya yazar ara..."
-                                className="pl-16 h-14 text-[15px] bg-white border-white focus:bg-white focus:ring-[#7b9e89]/20 focus:border-[#7b9e89]/30 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-full"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
                         </div>
+                    </div>
+                </div>
 
-                        {/* Rich Category Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mt-12 max-w-5xl mx-auto">
+                {/* Pills Categories */}
+                <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+                    <div className="flex flex-wrap items-center gap-3">
+                        <button
+                            onClick={() => setSelectedCategory(null)}
+                            className={cn(
+                                "px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm whitespace-nowrap",
+                                selectedCategory === null
+                                    ? "bg-[#4ade80] text-white border-2 border-[#4ade80]"
+                                    : "bg-white text-gray-600 border border-gray-100 hover:bg-gray-50 hover:border-gray-200"
+                            )}
+                        >
+                            Tüm Konular
+                        </button>
+                        {categories.map((cat) => (
                             <button
-                                onClick={() => setSelectedCategory(null)}
+                                key={cat.id}
+                                onClick={() => setSelectedCategory(cat.id)}
                                 className={cn(
-                                    "flex flex-col items-center justify-center p-5 sm:p-6 rounded-[32px] border transition-all duration-300 group selection-bg-white relative overflow-hidden",
-                                    selectedCategory === null
-                                        ? "bg-gradient-to-br from-[#7b9e89] to-[#8ba898] border-transparent text-white shadow-xl shadow-[#7b9e89]/20 scale-105"
-                                        : "bg-white border-transparent shadow-[0_4px_20px_rgb(0,0,0,0.03)] text-gray-600 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5"
+                                    "px-6 py-2.5 rounded-full text-[13px] font-bold transition-all shadow-sm whitespace-nowrap",
+                                    selectedCategory === cat.id
+                                        ? "bg-orange-50/50 text-orange-400 border-2 border-orange-200 shadow-md"
+                                        : "bg-white text-gray-600 border border-gray-100 hover:bg-gray-50 hover:border-gray-200"
                                 )}
                             >
-                                <div className={cn(
-                                    "w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-colors",
-                                    selectedCategory === null ? "bg-white/20 text-white" : "bg-[#eaf2ed] text-[#7b9e89] group-hover:bg-[#d8e5de]"
-                                )}>
-                                    <BookOpen className="h-6 w-6" />
-                                </div>
-                                <span className={cn("font-bold text-sm", selectedCategory === null ? "text-white" : "text-stone-700")}>Tümü</span>
+                                {cat.name}
                             </button>
+                        ))}
 
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setSelectedCategory(cat.id)}
-                                    className={cn(
-                                        "flex flex-col items-center justify-center p-5 sm:p-6 rounded-[32px] border transition-all duration-300 group relative overflow-hidden",
-                                        selectedCategory === cat.id
-                                            ? `border-transparent text-white shadow-xl scale-105`
-                                            : "bg-white border-transparent shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5"
-                                    )}
-                                >
-                                    {selectedCategory === cat.id && (
-                                        <div className={cn("absolute inset-0 bg-gradient-to-br opacity-90", cat.color)} />
-                                    )}
-
-                                    <div className={cn(
-                                        "w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-all relative z-10",
-                                        selectedCategory === cat.id
-                                            ? "bg-white/20 text-white shadow-inner"
-                                            : cn(cat.lightBg, cat.text, "group-hover:scale-110 group-hover:rotate-3")
-                                    )}>
-                                        {cat.icon}
-                                    </div>
-                                    <span className={cn(
-                                        "font-bold text-sm relative z-10 text-center leading-tight",
-                                        selectedCategory === cat.id ? "text-white" : "text-stone-700 group-hover:text-stone-900"
-                                    )}>
-                                        {cat.name}
-                                    </span>
-                                </button>
-                            ))}
+                        {/* Dropdown for Other Categories */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsOtherOpen(!isOtherOpen)}
+                                onBlur={() => setTimeout(() => setIsOtherOpen(false), 200)}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-6 py-2.5 rounded-full text-[13px] font-bold transition-all shadow-sm whitespace-nowrap",
+                                    otherCategories.includes(selectedCategory || "")
+                                        ? "bg-purple-50/50 text-purple-600 border-2 border-purple-200 shadow-md"
+                                        : "bg-white text-gray-600 border border-gray-100 hover:bg-gray-50 hover:border-gray-200"
+                                )}
+                            >
+                                {otherCategories.includes(selectedCategory || "") ? selectedCategory : "Diğer"}
+                                <ChevronDown className={cn("h-4 w-4 transition-transform", isOtherOpen && "rotate-180")} />
+                            </button>
+                            {isOtherOpen && (
+                                <div className="absolute top-full left-0 mt-2 w-64 max-h-[300px] overflow-y-auto bg-white rounded-2xl shadow-xl border border-gray-100 z-50 py-2">
+                                    {otherCategories.map(cat => (
+                                        <button
+                                            key={cat}
+                                            onClick={() => {
+                                                setSelectedCategory(cat);
+                                                setIsOtherOpen(false);
+                                            }}
+                                            className={cn(
+                                                "w-full text-left px-4 py-2.5 text-[13px] font-medium transition-colors",
+                                                selectedCategory === cat
+                                                    ? "bg-purple-50 text-purple-700 font-bold"
+                                                    : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                                            )}
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
 
                 {/* Content Area */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
                     {loading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
                             {[1, 2, 3, 4, 5, 6].map((i) => (
-                                <div key={i} className="flex flex-col bg-white rounded-[32px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] animate-pulse h-[340px] overflow-hidden">
-                                    <div className="h-2 bg-stone-100 w-full mb-6"></div>
-                                    <div className="px-7 pt-2">
-                                        <div className="h-4 w-24 bg-stone-100 rounded-full mb-5"></div>
-                                        <div className="h-8 w-5/6 bg-stone-100 rounded-xl mb-4"></div>
-                                        <div className="space-y-3 mt-6">
-                                            <div className="h-3.5 w-full bg-stone-50 rounded-lg"></div>
-                                            <div className="h-3.5 w-full bg-stone-50 rounded-lg"></div>
-                                            <div className="h-3.5 w-4/6 bg-stone-50 rounded-lg"></div>
+                                <div key={i} className="flex flex-col bg-white rounded-[32px] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] animate-pulse h-[400px] overflow-hidden">
+                                    <div className="h-44 bg-gray-100 w-full shrink-0"></div>
+                                    <div className="px-6 pt-5">
+                                        <div className="h-4 w-24 bg-gray-100 rounded-full mb-5"></div>
+                                        <div className="h-8 w-5/6 bg-gray-100 rounded-xl mb-4"></div>
+                                        <div className="space-y-3 mt-4">
+                                            <div className="h-3.5 w-full bg-gray-50 rounded-lg"></div>
+                                            <div className="h-3.5 w-4/6 bg-gray-50 rounded-lg"></div>
                                         </div>
                                     </div>
-                                    <div className="mt-auto p-7 pt-6 border-t border-stone-50 flex items-center justify-between bg-stone-50/30">
+                                    <div className="mt-auto p-6 pt-6 bg-white flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="h-10 w-10 bg-stone-100 rounded-2xl"></div>
+                                            <div className="h-9 w-9 bg-gray-100 rounded-full"></div>
                                             <div className="space-y-2">
-                                                <div className="h-2.5 w-20 bg-stone-100 rounded-full"></div>
-                                                <div className="h-2 w-12 bg-stone-100 rounded-full"></div>
+                                                <div className="h-2.5 w-20 bg-gray-100 rounded-full"></div>
+                                                <div className="h-2 w-12 bg-gray-100 rounded-full"></div>
                                             </div>
                                         </div>
-                                        <div className="h-10 w-10 bg-white border border-stone-100 rounded-full"></div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : articles.length === 0 ? (
-                        <div className="text-center py-24 bg-white rounded-[40px] border border-dashed border-stone-200 max-w-3xl mx-auto px-8 shadow-sm">
-                            <div className="inline-flex h-24 w-24 items-center justify-center rounded-[32px] bg-stone-50 mb-8 border border-stone-100 group transition-all duration-500 hover:scale-110">
-                                <Search className="h-10 w-10 text-stone-300" />
+                        <div className="text-center py-24 bg-white rounded-[40px] border border-dashed border-gray-200 max-w-3xl mx-auto px-8 shadow-sm">
+                            <div className="inline-flex h-24 w-24 items-center justify-center rounded-[32px] bg-gray-50 mb-8 border border-gray-100 group transition-all duration-500 hover:scale-110">
+                                <Search className="h-10 w-10 text-gray-300" />
                             </div>
-                            <h3 className="text-2xl font-black text-stone-800 mb-3 tracking-tight">Kayıt Bulunamadı</h3>
-                            <p className="text-stone-500 font-medium max-w-md mx-auto leading-relaxed">Aradığınız kriterlere uygun herhangi bir makale veya rehber şu an için mevcut değil.</p>
+                            <h3 className="text-2xl font-black text-gray-800 mb-3 tracking-tight">Makale bulunamadı</h3>
+                            <p className="text-gray-500 font-medium max-w-md mx-auto leading-relaxed">Aramanıza uygun herhangi bir rehber veya kaynak bulamadık.</p>
                             {searchTerm && (
                                 <Button
                                     variant="outline"
                                     onClick={() => setSearchTerm("")}
-                                    className="mt-8 rounded-2xl border-stone-200 text-stone-900 font-bold px-8 hover:bg-stone-50"
+                                    className="mt-8 rounded-full border-gray-200 text-gray-900 font-bold px-8 hover:bg-gray-50"
                                 >
-                                    Aramayı Sıfırla
+                                    Aramayı Temizle
                                 </Button>
                             )}
                         </div>
                     ) : (
                         <div className="space-y-12">
-                            {/* Featured Article */}
-                            {!searchTerm && !selectedCategory && articles.length > 0 && (
-                                <div className="mb-12">
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-100 text-amber-600">
-                                            <Bookmark className="h-5 w-5 fill-amber-600" />
-                                        </div>
-                                        <h2 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight">Editörün Seçimi</h2>
-                                    </div>
-                                    <div className="md:h-[300px]">
-                                        {/* Render the first article as featured */}
-                                        <ArticleCard
-                                            article={articles[0]}
-                                            currentUserId={currentUserId}
-                                            isAdmin={isAdmin}
-                                            onDelete={handleArticleDeleted}
-                                            isBookmarked={bookmarkedArticleIds.has(articles[0].id)}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
                             {/* Regular Article Grid */}
                             <div>
-                                {(!searchTerm && !selectedCategory && articles.length > 0) && (
-                                    <h2 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight mb-6 mt-4">Tüm Makaleler</h2>
-                                )}
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {(!searchTerm && !selectedCategory ? articles.slice(1) : articles).map((article) => (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
+                                    {articles.map((article) => (
                                         <div key={article.id} className="h-full">
                                             <ArticleCard
                                                 article={article}
@@ -314,11 +338,24 @@ export default function KnowledgeBasePage() {
                                                 isAdmin={isAdmin}
                                                 onDelete={handleArticleDeleted}
                                                 isBookmarked={bookmarkedArticleIds.has(article.id)}
+                                                isLiked={likedArticleIds.has(article.id)}
                                             />
                                         </div>
                                     ))}
                                 </div>
                             </div>
+                            
+                            {/* Load More Button matching the design */}
+                            {articles.length >= 6 && (
+                                <div className="flex w-full justify-center pt-8 pb-4">
+                                    <Button 
+                                        variant="outline" 
+                                        className="rounded-full border-[#4ade80] text-[#4ade80] hover:bg-[#4ade80]/5 font-bold px-10 h-12 text-[15px] shadow-sm tracking-wide"
+                                    >
+                                        Daha Fazla Makale Yükle
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

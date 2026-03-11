@@ -176,24 +176,24 @@ export default function DashboardPage() {
         return (
             <AppShell>
                 <div className="flex h-full items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#7b9e89]" />
+                    <Loader2 className="h-8 w-8 animate-spin text-[#0c9789]" />
                 </div>
             </AppShell>
         );
     }
 
     const statCards = [
-        { label: "Gönderi", value: stats.postCount, icon: FileText, color: "text-[#7b9e89]", bg: "bg-[#7b9e89]/10", ring: "ring-[#7b9e89]/20" },
+        { label: "Gönderi", value: stats.postCount, icon: FileText, color: "text-[#0c9789]", bg: "bg-[#0c9789]/10", ring: "ring-[#0c9789]/20" },
         { label: "Okunmamış", value: stats.unreadMessages, icon: MessageCircle, color: "text-[#818CF8]", bg: "bg-[#818CF8]/10", ring: "ring-[#818CF8]/20" },
-        { label: "Makale", value: stats.articleCount, icon: BookOpen, color: "text-[#6ba88f]", bg: "bg-[#6ba88f]/10", ring: "ring-[#6ba88f]/20" },
-        { label: "Topluluk", value: stats.memberCount, icon: Users, color: "text-[#f2a68d]", bg: "bg-[#f2a68d]/10", ring: "ring-[#f2a68d]/20" },
+        { label: "Makale", value: stats.articleCount, icon: BookOpen, color: "text-[#0a7c70]", bg: "bg-[#0a7c70]/10", ring: "ring-[#0a7c70]/20" },
+        { label: "Topluluk", value: stats.memberCount, icon: Users, color: "text-[#0c9789]", bg: "bg-[#0c9789]/10", ring: "ring-[#0c9789]/20" },
     ];
 
     const activityIcons: Record<string, React.ReactNode> = {
-        like: <Heart className="h-3.5 w-3.5 text-[#f2a68d] fill-[#f2a68d]" />,
+        like: <Heart className="h-3.5 w-3.5 text-[#0c9789] fill-[#0c9789]" />,
         comment: <MessageSquare className="h-3.5 w-3.5 text-[#818CF8]" />,
-        article: <BookOpen className="h-3.5 w-3.5 text-[#6ba88f]" />,
-        message: <MessageCircle className="h-3.5 w-3.5 text-[#7b9e89]" />,
+        article: <BookOpen className="h-3.5 w-3.5 text-[#0a7c70]" />,
+        message: <MessageCircle className="h-3.5 w-3.5 text-[#0c9789]" />,
     };
 
     return (
@@ -201,10 +201,10 @@ export default function DashboardPage() {
             <div className="max-w-4xl mx-auto py-6 sm:py-10 px-4 space-y-8 animate-fade-up">
 
                 {/* Welcome Card - Soothing Gradient */}
-                <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#7b9e89] via-[#8ba898] to-[#9abfa7] p-6 sm:p-10 text-white shadow-[0_8px_30px_rgb(123,158,137,0.25)]">
+                <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0c9789] via-[#0a7c70] to-[#9abfa7] p-6 sm:p-10 text-white shadow-[0_8px_30px_rgb(123,158,137,0.25)]">
                     {/* Decorative blurred background shapes */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#f2a68d]/20 rounded-full -mr-20 -mt-20 blur-3xl mix-blend-overlay" />
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#a2c1b1]/30 rounded-full -ml-16 -mb-16 blur-3xl mix-blend-overlay" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#0c9789]/20 rounded-full -mr-20 -mt-20 blur-3xl mix-blend-overlay" />
+                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#14b8a6]/30 rounded-full -ml-16 -mb-16 blur-3xl mix-blend-overlay" />
 
                     {/* Atmospheric pattern */}
                     <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
@@ -221,7 +221,7 @@ export default function DashboardPage() {
                                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-sm">
                                     Hoş geldin, {profile?.full_name?.split(" ")[0]}! ✨
                                 </h1>
-                                <p className="text-[#eaf2ed] text-[15px] font-medium mt-1 tracking-wide">{quote}</p>
+                                <p className="text-[#f0fdfa] text-[15px] font-medium mt-1 tracking-wide">{quote}</p>
                             </div>
                         </div>
                     </div>
@@ -230,12 +230,12 @@ export default function DashboardPage() {
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
                     {statCards.map((stat) => (
-                        <Card key={stat.label} className="p-5 rounded-[28px] border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-xl hover:shadow-stone-200/50 transition-all duration-300 hover:-translate-y-1 cursor-default group bg-white">
+                        <Card key={stat.label} className="p-5 rounded-[28px] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 hover:-translate-y-1 cursor-default group bg-white">
                             <div className={`w-12 h-12 ${stat.bg} ${stat.ring} ring-1 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                                 <stat.icon className={`h-5 w-5 ${stat.color}`} />
                             </div>
-                            <p className="text-2xl font-bold text-stone-900 tabular-nums">{stat.value}</p>
-                            <p className="text-xs font-medium text-stone-500 mt-0.5">{stat.label}</p>
+                            <p className="text-2xl font-bold text-gray-900 tabular-nums">{stat.value}</p>
+                            <p className="text-xs font-medium text-gray-500 mt-0.5">{stat.label}</p>
                         </Card>
                     ))}
                 </div>
@@ -245,68 +245,68 @@ export default function DashboardPage() {
                     {/* Trending */}
                     <Card className="p-6 sm:p-8 rounded-[32px] border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.03)] bg-white h-full flex flex-col">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 bg-[#f2a68d]/10 rounded-2xl flex items-center justify-center">
-                                <TrendingUp className="h-5 w-5 text-[#f2a68d]" />
+                            <div className="w-10 h-10 bg-[#0c9789]/10 rounded-2xl flex items-center justify-center">
+                                <TrendingUp className="h-5 w-5 text-[#0c9789]" />
                             </div>
-                            <h2 className="font-bold text-stone-800 text-base">Gündem Konuları</h2>
+                            <h2 className="font-bold text-gray-800 text-base">Gündem Konuları</h2>
                         </div>
                         {trending.length > 0 ? (
                             <div className="space-y-3 flex-1">
                                 {trending.map((t, i) => (
                                     <Link key={t.category} href={`/feed?category=${t.category}`}
-                                        className="flex items-center justify-between p-3 rounded-2xl hover:bg-stone-50 transition-colors group">
+                                        className="flex items-center justify-between p-3 rounded-2xl hover:bg-gray-50 transition-colors group">
                                         <div className="flex items-center gap-3">
-                                            <span className="text-xs font-bold text-stone-300 w-5">#{i + 1}</span>
-                                            <span className="text-sm font-bold text-stone-600 group-hover:text-[#7b9e89] transition-colors">{t.category}</span>
+                                            <span className="text-xs font-bold text-gray-300 w-5">#{i + 1}</span>
+                                            <span className="text-sm font-bold text-gray-600 group-hover:text-[#0c9789] transition-colors">{t.category}</span>
                                         </div>
-                                        <span className="text-xs font-semibold text-[#8ba898] bg-[#7b9e89]/10 px-3 py-1.5 rounded-full">{t.count} gönderi</span>
+                                        <span className="text-xs font-semibold text-[#0a7c70] bg-[#0c9789]/10 px-3 py-1.5 rounded-full">{t.count} gönderi</span>
                                     </Link>
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm text-stone-400 italic">Henüz gündem konusu yok.</p>
+                            <p className="text-sm text-gray-400 italic">Henüz gündem konusu yok.</p>
                         )}
                     </Card>
 
                     {/* Featured Article */}
                     <Card className="p-6 sm:p-8 rounded-[32px] border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.03)] bg-white relative overflow-hidden group/card h-full flex flex-col">
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#f8c9b9]/20 to-transparent opacity-50 pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#14b8a6]/20 to-transparent opacity-50 pointer-events-none" />
 
                         <div className="flex items-center gap-3 mb-6 relative z-10">
                             <div className="w-10 h-10 bg-[#818CF8]/10 rounded-2xl flex items-center justify-center">
                                 <Sparkles className="h-5 w-5 text-[#818CF8]" />
                             </div>
-                            <h2 className="font-bold text-stone-800 text-base">Önerilen Makale</h2>
+                            <h2 className="font-bold text-gray-800 text-base">Önerilen Makale</h2>
                         </div>
 
                         {featuredArticle ? (
                             <Link href={`/knowledge/${featuredArticle.id}`} className="flex flex-col flex-1 relative z-10 group">
                                 <div className="mb-4">
-                                    <span className="text-xs font-bold tracking-wide text-[#6ba88f] bg-[#6ba88f]/10 px-3 py-1.5 rounded-full">
+                                    <span className="text-xs font-bold tracking-wide text-[#0a7c70] bg-[#0a7c70]/10 px-3 py-1.5 rounded-full">
                                         {featuredArticle.category}
                                     </span>
                                 </div>
-                                <h3 className="text-lg font-bold text-stone-800 mb-3 group-hover:text-[#7b9e89] transition-colors leading-snug">
+                                <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-[#0c9789] transition-colors leading-snug">
                                     {featuredArticle.title}
                                 </h3>
-                                <p className="text-sm text-stone-500 leading-relaxed line-clamp-2 mb-6 flex-1">
+                                <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-6 flex-1">
                                     {featuredArticle.summary}
                                 </p>
                                 <div className="flex items-center justify-between mt-auto">
                                     <div className="flex items-center gap-3">
                                         <Avatar className="h-8 w-8 ring-2 ring-white shadow-sm">
                                             <AvatarImage src={featuredArticle.author_avatar || undefined} />
-                                            <AvatarFallback className="text-xs bg-[#fef3ea] text-[#f2a68d] font-bold">{featuredArticle.author_name[0]}</AvatarFallback>
+                                            <AvatarFallback className="text-xs bg-[#f0fdfa] text-[#0c9789] font-bold">{featuredArticle.author_name[0]}</AvatarFallback>
                                         </Avatar>
-                                        <span className="text-sm font-bold text-stone-600">{featuredArticle.author_name}</span>
+                                        <span className="text-sm font-bold text-gray-600">{featuredArticle.author_name}</span>
                                     </div>
-                                    <div className="flex items-center gap-1.5 text-sm font-bold text-[#7b9e89] group-hover:gap-2.5 transition-all bg-[#7b9e89]/5 p-2 px-4 rounded-xl group-hover:bg-[#7b9e89]/10">
+                                    <div className="flex items-center gap-1.5 text-sm font-bold text-[#0c9789] group-hover:gap-2.5 transition-all bg-[#0c9789]/5 p-2 px-4 rounded-xl group-hover:bg-[#0c9789]/10">
                                         Oku <ArrowRight className="h-4 w-4" />
                                     </div>
                                 </div>
                             </Link>
                         ) : (
-                            <p className="text-sm text-stone-400 italic">Henüz makale yok.</p>
+                            <p className="text-sm text-gray-400 italic">Henüz makale yok.</p>
                         )}
                     </Card>
                 </div>
@@ -315,35 +315,35 @@ export default function DashboardPage() {
                 <Card className="p-6 sm:p-8 rounded-[32px] border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.03)] bg-white">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-[#f8c9b9]/20 rounded-2xl flex items-center justify-center">
-                                <Clock className="h-5 w-5 text-[#f2a68d]" />
+                            <div className="w-10 h-10 bg-[#14b8a6]/20 rounded-2xl flex items-center justify-center">
+                                <Clock className="h-5 w-5 text-[#0c9789]" />
                             </div>
-                            <h2 className="font-bold text-stone-800 text-base">Son Aktiviteler</h2>
+                            <h2 className="font-bold text-gray-800 text-base">Son Aktiviteler</h2>
                         </div>
-                        <Link href="/feed" className="text-sm font-bold text-[#7b9e89] hover:text-[#6ba88f] transition-colors flex items-center gap-1.5 bg-[#7b9e89]/5 p-2 px-4 rounded-xl hover:bg-[#7b9e89]/10">
+                        <Link href="/feed" className="text-sm font-bold text-[#0c9789] hover:text-[#0a7c70] transition-colors flex items-center gap-1.5 bg-[#0c9789]/5 p-2 px-4 rounded-xl hover:bg-[#0c9789]/10">
                             Tümünü Gör <ArrowRight className="h-4 w-4" />
                         </Link>
                     </div>
                     {activities.length > 0 ? (
                         <div className="space-y-2">
                             {activities.map((act, i) => (
-                                <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-stone-50/80 transition-colors">
-                                    <Avatar className="h-10 w-10 shrink-0 border border-stone-100 shadow-sm">
+                                <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50/80 transition-colors">
+                                    <Avatar className="h-10 w-10 shrink-0 border border-gray-100 shadow-sm">
                                         <AvatarImage src={act.actor_avatar || undefined} className="object-cover" />
-                                        <AvatarFallback className="text-xs bg-[#eaf2ed] text-[#7b9e89] font-bold">{act.actor_name[0]}</AvatarFallback>
+                                        <AvatarFallback className="text-xs bg-[#f0fdfa] text-[#0c9789] font-bold">{act.actor_name[0]}</AvatarFallback>
                                     </Avatar>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-[15px] text-stone-700">
-                                            <span className="font-bold text-stone-900">{act.actor_name}</span>
+                                        <p className="text-[15px] text-gray-700">
+                                            <span className="font-bold text-gray-900">{act.actor_name}</span>
                                             {" "}
                                             {act.type === "like" && "gönderinizi beğendi"}
                                             {act.type === "comment" && "yorum yazdı"}
                                         </p>
-                                        <p className="text-sm text-stone-500 truncate mt-0.5">{act.content}</p>
+                                        <p className="text-sm text-gray-500 truncate mt-0.5">{act.content}</p>
                                     </div>
-                                    <div className="flex items-center gap-2.5 shrink-0 bg-stone-50 px-3 py-1.5 rounded-full">
+                                    <div className="flex items-center gap-2.5 shrink-0 bg-gray-50 px-3 py-1.5 rounded-full">
                                         {activityIcons[act.type]}
-                                        <span className="text-xs text-stone-500 font-semibold">
+                                        <span className="text-xs text-gray-500 font-semibold">
                                             {formatDistanceToNow(new Date(act.created_at), { locale: tr, addSuffix: false })}
                                         </span>
                                     </div>
@@ -351,12 +351,12 @@ export default function DashboardPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-10 bg-stone-50/50 rounded-2xl border border-dashed border-stone-200">
+                        <div className="text-center py-10 bg-gray-50/50 rounded-2xl border border-dashed border-gray-200">
                             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm mx-auto mb-4">
-                                <Star className="h-8 w-8 text-[#f2a68d]/50" />
+                                <Star className="h-8 w-8 text-[#0c9789]/50" />
                             </div>
-                            <p className="text-sm font-bold text-stone-600">Henüz aktivite yok.</p>
-                            <p className="text-sm text-stone-400 mt-1">Toplulukla etkileşime girerek başlayın!</p>
+                            <p className="text-sm font-bold text-gray-600">Henüz aktivite yok.</p>
+                            <p className="text-sm text-gray-400 mt-1">Toplulukla etkileşime girerek başlayın!</p>
                         </div>
                     )}
                 </Card>

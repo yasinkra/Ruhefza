@@ -23,13 +23,13 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
 
     if (status === 'approved') {
         return (
-            <div className="bg-[#eaf2ed] border border-[#cce0d5] p-4 rounded-xl flex items-center gap-3 mb-6">
-                <div className="bg-[#cce0d5] p-2 rounded-full text-[#557b66]">
+            <div className="bg-[#f0fdfa] border border-[#cce0d5] p-4 rounded-xl flex items-center gap-3 mb-6">
+                <div className="bg-[#cce0d5] p-2 rounded-full text-[#0c9789]">
                     <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
                     <h4 className="text-[#2d4d3a] font-semibold text-sm">Doğrulanmış Uzman</h4>
-                    <p className="text-[#557b66] inline-flex items-center gap-2 text-xs">
+                    <p className="text-[#0c9789] inline-flex items-center gap-2 text-xs">
                         Hesabınız onaylanmıştır. Topluluk akışına içerik ekleyebilirsiniz.
                     </p>
                 </div>
@@ -99,27 +99,27 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
     };
 
     return (
-        <Card className="mb-6 border-[#cce0d5] bg-[#eaf2ed]/30 overflow-hidden shadow-sm">
+        <Card className="mb-6 border-[#cce0d5] bg-[#f0fdfa]/30 overflow-hidden shadow-sm">
             <CardHeader className="pb-3 border-b border-[#cce0d5]/50 bg-white">
                 <div className="flex items-center gap-2">
-                    <ShieldAlert className="h-5 w-5 text-[#7b9e89]" />
-                    <CardTitle className="text-base text-stone-800 tracking-tight">Uzman Doğrulaması Gerekli</CardTitle>
+                    <ShieldAlert className="h-5 w-5 text-[#0c9789]" />
+                    <CardTitle className="text-base text-gray-800 tracking-tight">Uzman Doğrulaması Gerekli</CardTitle>
                 </div>
-                <CardDescription className="text-xs text-stone-500 mt-1">
+                <CardDescription className="text-xs text-gray-500 mt-1">
                     Topluluk akışına gönderi ekleyebilmek için lütfen diploması veya mesleki kimlik belgenizi yükleyiniz.
                 </CardDescription>
             </CardHeader>
             <CardContent className="pt-4">
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                     <div className="flex-1 w-full">
-                        <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${file ? 'border-[#a2c1b1] bg-[#eaf2ed]' : 'border-stone-300 hover:bg-stone-50 bg-white'}`}>
+                        <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${file ? 'border-[#14b8a6] bg-[#f0fdfa]' : 'border-gray-300 hover:bg-gray-50 bg-white'}`}>
                             <div className="flex flex-col items-center justify-center pt-5 text-center px-4">
-                                <UploadCloud className={`w-6 h-6 mb-2 ${file ? 'text-[#7b9e89]' : 'text-stone-400'}`} />
-                                <p className="mb-1 text-xs text-stone-500">
+                                <UploadCloud className={`w-6 h-6 mb-2 ${file ? 'text-[#0c9789]' : 'text-gray-400'}`} />
+                                <p className="mb-1 text-xs text-gray-500">
                                     {file ? (
-                                        <span className="font-semibold text-[#557b66]">{file.name}</span>
+                                        <span className="font-semibold text-[#0c9789]">{file.name}</span>
                                     ) : (
-                                        <>Belge seçmek için <span className="font-semibold text-[#557b66]">tıklayın</span> veya sürükleyin</>
+                                        <>Belge seçmek için <span className="font-semibold text-[#0c9789]">tıklayın</span> veya sürükleyin</>
                                     )}
                                 </p>
                             </div>
@@ -138,7 +138,7 @@ export function VerificationStatus({ userId, role, status, onStatusChange }: Ver
                     <Button
                         onClick={handleUpload}
                         disabled={!file || uploading}
-                        className="w-full sm:w-auto bg-[#7b9e89] hover:bg-[#6ba88f] text-white shrink-0"
+                        className="w-full sm:w-auto bg-[#0c9789] hover:bg-[#0a7c70] text-white shrink-0"
                     >
                         {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Gönder"}
                     </Button>

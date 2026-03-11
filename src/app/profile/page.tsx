@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ShieldCheck, Loader2, LogOut, Save, Copy, Check, Edit2, Instagram, Twitter, Facebook, Globe, Music, ExternalLink, Bookmark, FileText, Clock } from "lucide-react";
+import { ShieldCheck, Loader2, LogOut, Save, Copy, Check, X, Edit2, Instagram, Twitter, Facebook, Globe, Music, ExternalLink, Bookmark, FileText, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { toast } from "sonner";
@@ -39,6 +39,7 @@ interface Profile {
         spotify?: string;
         website?: string;
     } | null;
+    email?: string | null;
 }
 
 export default function ProfilePage() {
@@ -52,6 +53,13 @@ export default function ProfilePage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [bookmarkedArticles, setBookmarkedArticles] = useState<any[]>([]);
     const [loadingBookmarks, setLoadingBookmarks] = useState(false);
+
+    // Stats state
+    const [stats, setStats] = useState({
+        posts: 0,
+        articles: 0,
+        connections: 0
+    });
 
     // Username specific state
     const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -130,7 +138,7 @@ export default function ProfilePage() {
                 const { data: postsData } = await createClient()
                     .from("posts")
                     .select(`
-                        id, content, is_anonymous, likes_count, created_at,
+                        id, content, is_anonymous, likes_count, comments_count, created_at,
                         category, image_url, author_id,
                         profiles!posts_author_id_fkey (
                             id, full_name, avatar_url, is_verified_expert
@@ -200,8 +208,39 @@ export default function ProfilePage() {
             setLoadingBookmarks(false);
         };
 
+        const fetchStats = async () => {
+            const { data: { user } } = await createClient().auth.getUser();
+            if (!user) return;
+
+            // Fetch post count
+            const { count: postsCount } = await createClient()
+                .from("posts")
+                .select("*", { count: 'exact', head: true })
+                .eq("author_id", user.id);
+
+            // Fetch article count
+            const { count: articlesCount } = await createClient()
+                .from("articles")
+                .select("*", { count: 'exact', head: true })
+                .eq("author_id", user.id);
+
+            // Fetch connection count
+            const { count: connectionsCount } = await createClient()
+                .from("connection_requests")
+                .select("*", { count: 'exact', head: true })
+                .eq("status", "accepted")
+                .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`);
+
+            setStats({
+                posts: postsCount || 0,
+                articles: articlesCount || 0,
+                connections: connectionsCount || 0
+            });
+        };
+
         fetchProfile();
         fetchBookmarks();
+        fetchStats();
     }, [router]);
 
     const handleSave = async () => {
@@ -258,11 +297,7 @@ export default function ProfilePage() {
 
             if (data.success) {
                 toast.success(data.message);
-                setProfile({
-                    ...profile,
-                    username: usernameInput,
-                    username_last_changed: new Date().toISOString()
-                });
+                setProfile({ ...profile, username: usernameInput } as Profile);
                 setIsEditingUsername(false);
             } else {
                 toast.error(data.message);
@@ -274,6 +309,7 @@ export default function ProfilePage() {
             setUsernameLoading(false);
         }
     };
+
 
     const handleLogout = async () => {
         await createClient().auth.signOut();
@@ -300,9 +336,9 @@ export default function ProfilePage() {
 
     if (loading) {
         return (
-            <AppShell>
+            <AppShell fullWidth={true}>
                 <div className="flex h-full items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#7b9e89]" />
+                    <Loader2 className="h-8 w-8 animate-spin text-[#0c9789]" />
                 </div>
             </AppShell>
         );
@@ -311,118 +347,139 @@ export default function ProfilePage() {
     if (!profile) return null;
 
     return (
-        <AppShell>
-            <div className="max-w-4xl mx-auto px-4 py-8 pb-32">
+        <AppShell fullWidth={true}>
+            <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-20 py-8 pb-32">
                 {/* Header Title */}
                 <div className="flex justify-between items-center mb-10">
-                    <h1 className="text-3xl font-black text-stone-800 tracking-tight">Profilim</h1>
-                    {!isEditing && (
-                        <Button
-                            onClick={() => setIsEditing(true)}
-                            className="bg-white hover:bg-stone-50 text-stone-600 rounded-2xl px-6 h-12 font-bold border border-stone-200 shadow-sm transition-all hover:-translate-y-1"
-                        >
-                            <Edit2 className="h-4 w-4 mr-2 text-[#7b9e89]" /> Profili Düzenle
-                        </Button>
-                    )}
+                    <h1 className="text-3xl font-black text-gray-800 tracking-tight">Profilim</h1>
                 </div>
 
                 {/* Profile Header Card */}
-                <div className="bg-white rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-stone-100 overflow-hidden mb-12 group transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)]">
-                    {/* Cover Area */}
-                    <div className={cn(
-                        "h-48 relative overflow-hidden transition-all duration-700",
-                        profile.role === 'teacher' ? "bg-gradient-to-br from-[#7b9e89] via-[#a2c1b1] to-[#6ba88f]" :
-                            profile.role === 'student' ? "bg-gradient-to-br from-[#b388c6] via-[#d4a5db] to-[#9a6cb4]" :
-                                profile.role === 'parent' ? "bg-gradient-to-br from-[#e89b7b] via-[#f7c5ae] to-[#d47d55]" :
-                                    "bg-gradient-to-br from-stone-400 to-stone-600"
-                    )}>
-                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
-                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full blur-2xl -ml-10 -mb-10"></div>
-
-                        {/* Avatar */}
-                        <div className="absolute -bottom-16 left-10">
-                            <div className="relative group/avatar">
-                                <div className="absolute inset-0 bg-white rounded-[35%] blur-xl opacity-40"></div>
-                                <Avatar className="h-32 w-32 border-[6px] border-white shadow-2xl rounded-[32px] bg-white transition-transform duration-500 hover:scale-105">
+                <div className="bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden mb-8">
+                    {/* Banner/Cover area */}
+                    <div className="h-48 bg-[#F0FDFA] relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#14B8A6]/5 to-transparent"></div>
+                        
+                        {/* Avatar (Overlapping) */}
+                        <div className="absolute -bottom-16 left-8">
+                            <div className="relative">
+                                <Avatar className="h-32 w-32 border-[4px] border-white shadow-lg bg-white">
                                     <AvatarImage src={profile.avatar_url || undefined} className="object-cover" />
-                                    <AvatarFallback className="text-4xl font-black text-stone-200 bg-stone-50">{profile.full_name[0]?.toUpperCase()}</AvatarFallback>
+                                    <AvatarFallback className="text-3xl font-bold bg-gray-50 text-gray-300">
+                                        {profile.full_name?.[0]}
+                                    </AvatarFallback>
                                 </Avatar>
-                                {profile.role === 'teacher' && profile.verification_status === 'approved' && (
-                                    <div className="absolute -bottom-1 -right-1 bg-white p-1.5 rounded-2xl shadow-lg border border-stone-50">
-                                        <div className="bg-[#7b9e89] p-1.5 rounded-xl">
-                                            <ShieldCheck className="h-4 w-4 text-white" />
-                                        </div>
+                                {profile.verification_status === 'approved' && (
+                                    <div className="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+                                        <ShieldCheck className="w-5 h-5 text-[#14B8A6]" fill="currentColor" />
                                     </div>
                                 )}
                             </div>
                         </div>
+
+                        {/* Top Actions */}
+                        <div className="absolute top-6 right-8 flex gap-3">
+                            <Button
+                                onClick={() => setIsEditing(true)}
+                                className="bg-white hover:bg-gray-50 text-gray-600 rounded-2xl px-6 h-12 font-bold border border-gray-200 shadow-sm transition-all hover:-translate-y-1"
+                            >
+                                <Edit2 className="h-4 w-4 mr-2 text-[#0c9789]" /> Profili Düzenle
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="bg-white hover:bg-gray-50 text-gray-400 h-10 w-10 p-0 rounded-xl border border-gray-100 shadow-sm"
+                            >
+                                <Globe className="w-4 h-4" />
+                            </Button>
+                        </div>
                     </div>
 
-                    {/* Info Section */}
-                    <div className="pt-20 pb-10 px-10">
-                        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <h2 className="text-4xl font-black text-stone-800 tracking-tight">{profile.full_name}</h2>
-                                    {isEditingUsername ? (
-                                        <div className="flex items-center gap-2 animate-in slide-in-from-left-2">
+                    {/* Profile Basic Info */}
+                    <div className="pt-20 pb-8 px-8 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+                        <div className="flex-1 space-y-4">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">{profile.full_name}</h2>
+                                <div className="px-3 py-1 rounded-full bg-[#F0FDFA] text-[#14B8A6] text-xs font-bold uppercase tracking-wider">
+                                    {profile.role === 'teacher' ? 'Eğitmen' : profile.role === 'parent' ? 'Ebeveyn' : 'Öğrenci'}
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                {isEditingUsername ? (
+                                    <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-300">
+                                        <div className="relative group">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">@</span>
                                             <Input
                                                 value={usernameInput}
                                                 onChange={(e) => setUsernameInput(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
-                                                className="h-8 w-40 rounded-lg text-sm font-bold border-[#7b9e89]"
-                                                placeholder="kullanicıadi"
+                                                className="h-10 pl-8 pr-4 bg-gray-50 border-gray-200 focus:bg-white focus:border-[#14B8A6] rounded-xl font-bold text-gray-700 w-48 sm:w-64"
+                                                placeholder="kullanici_adi"
+                                                disabled={usernameLoading}
+                                                autoFocus
                                             />
-                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-[#7b9e89]" onClick={handleUsernameUpdate} disabled={usernameLoading}>
+                                        </div>
+                                        <div className="flex gap-1">
+                                            <Button 
+                                                size="icon" 
+                                                variant="ghost" 
+                                                onClick={handleUsernameUpdate}
+                                                disabled={usernameLoading}
+                                                className="h-10 w-10 rounded-xl bg-[#F0FDFA] text-[#14B8A6] hover:bg-[#14B8A6] hover:text-white transition-all shadow-sm"
+                                            >
                                                 {usernameLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                                             </Button>
-                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-stone-400" onClick={() => setIsEditingUsername(false)}>
-                                                <Edit2 className="h-4 w-4" />
+                                            <Button 
+                                                size="icon" 
+                                                variant="ghost" 
+                                                onClick={() => setIsEditingUsername(false)}
+                                                disabled={usernameLoading}
+                                                className="h-10 w-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all"
+                                            >
+                                                <X className="h-4 w-4" />
                                             </Button>
                                         </div>
-                                    ) : (
-                                        <div className="flex items-center gap-2 group/user cursor-pointer" onClick={() => canChangeUsername() && setIsEditingUsername(true)}>
-                                            <span className="text-[#7b9e89] font-bold text-lg">@{profile.username || 'kullanici_adi'}</span>
-                                            {canChangeUsername() && <Edit2 className="h-3.5 w-3.5 text-stone-300 opacity-0 group-hover/user:opacity-100 transition-opacity" />}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex flex-wrap items-center gap-4">
-                                    <div className={cn(
-                                        "flex items-center gap-2 px-4 py-2 rounded-2xl font-bold text-sm shadow-sm border",
-                                        profile.role === 'teacher' ? "bg-[#eaf2ed] text-[#557b66] border-[#7b9e89]/20" :
-                                            profile.role === 'student' ? "bg-[#f4eefa] text-[#8a5ea5] border-[#b388c6]/20" :
-                                                "bg-[#fcece6] text-[#c27658] border-[#e89b7b]/20"
-                                    )}>
-                                        <span className="text-lg">
-                                            {profile.role === 'teacher' ? '👩‍🏫' : profile.role === 'student' ? '🎓' : '👨‍👩‍👧'}
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-2 group cursor-pointer" onClick={() => {
+                                        setUsernameInput(profile.username || "");
+                                        setIsEditingUsername(true);
+                                    }}>
+                                        <span className={cn(
+                                            "font-bold text-lg transition-colors",
+                                            profile.username ? "text-gray-400 group-hover:text-gray-600" : "text-[#14B8A6] animate-pulse"
+                                        )}>
+                                            @{profile.username || 'kullanici_adi_olustur'}
                                         </span>
-                                        {profile.role === 'teacher' ? 'Uzman Öğretmen' : profile.role === 'student' ? 'Öğrenci' : 'Ebeveyn'}
+                                        <button className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg bg-gray-50 text-gray-400 hover:text-[#14B8A6] transition-all">
+                                            <Edit2 className="w-3.5 h-3.5" />
+                                        </button>
                                     </div>
-                                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 border border-stone-100 rounded-2xl text-stone-400 font-mono text-xs font-bold leading-none cursor-pointer hover:bg-stone-100 transition-colors shadow-sm"
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(profile.custom_id.toString());
-                                            toast.success("ID kopyalandı!");
-                                        }}>
-                                        <span className="opacity-50 text-base">#</span>
-                                        {profile.custom_id}
-                                        <Copy className="h-3 w-3 ml-1 opacity-20" />
-                                    </div>
-                                    <div className="flex items-center gap-2 text-stone-400 font-bold text-xs uppercase tracking-widest bg-stone-50/50 px-3 py-1.5 rounded-2xl border border-stone-100/50">
-                                        <Clock className="h-3.5 w-3.5 text-[#7b9e89]" />
-                                        {format(new Date(profile.created_at), "MMMM yyyy", { locale: tr })}'den beri üye
-                                    </div>
+                                )}
+                                <div className="flex items-center gap-2 text-gray-400 text-sm font-medium">
+                                    <Clock className="w-4 h-4 text-[#14B8A6]" />
+                                    {format(new Date(profile.created_at), "MMMM yyyy", { locale: tr })}'den beri üye
                                 </div>
                             </div>
+                            <p className="text-gray-600 font-medium max-w-2xl pt-2 leading-relaxed text-lg">
+                                {profile.bio || "Henüz bir biyografi eklenmemiş."}
+                            </p>
+                        </div>
 
-                            {!isEditing && (
-                                <div className="flex items-center gap-3">
-                                    <Button variant="ghost" onClick={handleLogout} className="text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-2xl font-bold transition-colors">
-                                        <LogOut className="h-4 w-4 mr-2" /> Çıkış Yap
-                                    </Button>
-                                </div>
-                            )}
+                        {/* Stats Row */}
+                        <div className="flex items-center justify-around sm:justify-center gap-2 sm:gap-12 bg-gray-50/50 p-4 sm:p-8 rounded-[32px] border border-gray-100/50 w-full lg:w-auto">
+                            <div className="text-center px-1 sm:px-2 min-w-[60px]">
+                                <div className="text-2xl sm:text-3xl font-black text-gray-900">{stats.posts}</div>
+                                <div className="text-[9px] sm:text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Gönderi</div>
+                            </div>
+                            <div className="w-px h-8 sm:h-10 bg-gray-200"></div>
+                            <div className="text-center px-1 sm:px-2 min-w-[60px]">
+                                <div className="text-2xl sm:text-3xl font-black text-gray-900">{stats.articles}</div>
+                                <div className="text-[9px] sm:text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Makale</div>
+                            </div>
+                            <div className="w-px h-8 sm:h-10 bg-gray-200"></div>
+                            <div className="text-center px-1 sm:px-2 min-w-[60px]">
+                                <div className="text-2xl sm:text-3xl font-black text-gray-900">{stats.connections}</div>
+                                <div className="text-[9px] sm:text-xs font-black text-gray-400 uppercase tracking-widest mt-1">Bağlantı</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -430,22 +487,22 @@ export default function ProfilePage() {
                 {/* Content Section */}
                 <div className="space-y-12">
                     {isEditing ? (
-                        <div className="bg-white rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-stone-100 p-10 space-y-10 animate-in fade-in zoom-in-95 duration-300">
+                        <div className="bg-white rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100 p-10 space-y-10 animate-in fade-in zoom-in-95 duration-300">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <Label htmlFor="fullname" className="text-sm font-black text-stone-800 uppercase tracking-widest flex items-center gap-2">
-                                        <div className="w-1 h-3 bg-[#7b9e89] rounded-full" /> Tam Ad Soyad
+                                    <Label htmlFor="fullname" className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
+                                        <div className="w-1 h-3 bg-[#0c9789] rounded-full" /> Tam Ad Soyad
                                     </Label>
                                     <Input
                                         id="fullname"
-                                        className="h-14 bg-stone-50 border-stone-200 focus:bg-white focus:ring-0 focus:border-[#a2c1b1] transition-all rounded-[20px] font-bold text-stone-700"
+                                        className="h-14 bg-gray-50 border-gray-200 focus:bg-white focus:ring-0 focus:border-[#14b8a6] transition-all rounded-[20px] font-bold text-gray-700"
                                         value={formData.full_name || ""}
                                         onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-4">
-                                    <Label className="text-sm font-black text-stone-800 uppercase tracking-widest flex items-center gap-2">
-                                        <div className="w-1 h-3 bg-[#b388c6] rounded-full" /> Avatar Seçimi
+                                    <Label className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
+                                        <div className="w-1 h-3 bg-[#0c9789] rounded-full" /> Avatar Seçimi
                                     </Label>
                                     <div className="flex flex-wrap gap-3">
                                         {NEUTRAL_AVATARS.map((url, idx) => (
@@ -455,7 +512,7 @@ export default function ProfilePage() {
                                                 onClick={() => setFormData({ ...formData, avatar_url: url })}
                                                 className={cn(
                                                     "w-12 h-12 rounded-2xl border-2 transition-all hover:scale-110 p-0.5 overflow-hidden",
-                                                    formData.avatar_url === url ? "border-[#7b9e89] bg-[#eaf2ed] shadow-lg shadow-[#7b9e89]/20 font-bold" : "border-stone-100 bg-stone-50"
+                                                    formData.avatar_url === url ? "border-[#0c9789] bg-[#f0fdfa] shadow-lg shadow-[#0c9789]/20 font-bold" : "border-gray-100 bg-gray-50"
                                                 )}
                                             >
                                                 <img src={url} alt={`Avatar ${idx}`} className="w-full h-full object-cover" />
@@ -466,12 +523,12 @@ export default function ProfilePage() {
                             </div>
 
                             <div className="space-y-4">
-                                <Label htmlFor="bio" className="text-sm font-black text-stone-800 uppercase tracking-widest flex items-center gap-2">
-                                    <div className="w-1 h-3 bg-[#7b9e89] rounded-full" /> Biyografi
+                                <Label htmlFor="bio" className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="w-1 h-3 bg-[#0c9789] rounded-full" /> Biyografi
                                 </Label>
                                 <Textarea
                                     id="bio"
-                                    className="h-32 bg-stone-50 border-stone-200 focus:bg-white focus:ring-0 focus:border-[#a2c1b1] transition-all rounded-[20px] font-medium text-stone-700 p-6"
+                                    className="h-32 bg-gray-50 border-gray-200 focus:bg-white focus:ring-0 focus:border-[#14b8a6] transition-all rounded-[20px] font-medium text-gray-700 p-6"
                                     value={formData.bio || ""}
                                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                                     placeholder="Kendinizden bahsedin..."
@@ -479,74 +536,74 @@ export default function ProfilePage() {
                             </div>
 
                             <div className="space-y-4">
-                                <Label htmlFor="special_note" className="text-sm font-black text-stone-800 uppercase tracking-widest flex items-center gap-2">
-                                    <div className="w-1 h-3 bg-[#b388c6] rounded-full" /> {profile.role === 'teacher' ? 'Uzmanlık Alanı / Detaylar' : 'Özel Notlar'}
+                                <Label htmlFor="special_note" className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="w-1 h-3 bg-[#0c9789] rounded-full" /> {profile.role === 'teacher' ? 'Uzmanlık Alanı / Detaylar' : 'Özel Notlar'}
                                 </Label>
                                 <Textarea
                                     id="special_note"
-                                    className="h-40 bg-stone-50 border-stone-200 focus:bg-white focus:ring-0 focus:border-[#d4bbee] transition-all rounded-[20px] font-medium text-stone-700 p-6"
+                                    className="h-40 bg-gray-50 border-gray-200 focus:bg-white focus:ring-0 focus:border-[#14b8a6] transition-all rounded-[20px] font-medium text-gray-700 p-6"
                                     value={formData.special_note || ""}
                                     onChange={(e) => setFormData({ ...formData, special_note: e.target.value })}
                                     placeholder="Projelerinize veya belirtmek istediğiniz detaylara yer verin..."
                                 />
                             </div>
 
-                            <div className="pt-6 border-t border-stone-100/80">
-                                <Label className="text-sm font-black text-stone-800 uppercase tracking-widest flex items-center gap-2 mb-6">
-                                    <div className="w-1 h-3 bg-[#7b9e89] rounded-full" /> Sosyal Medya & Bağlantılar
+                            <div className="pt-6 border-t border-gray-100/80">
+                                <Label className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2 mb-6">
+                                    <div className="w-1 h-3 bg-[#0c9789] rounded-full" /> Sosyal Medya & Bağlantılar
                                 </Label>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <Label className="flex items-center gap-2 text-xs font-bold text-stone-400 uppercase tracking-widest">
+                                        <Label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
                                             <Instagram className="h-4 w-4" /> Instagram
                                         </Label>
                                         <Input
                                             placeholder="@kullanici_adi"
-                                            className="h-12 bg-stone-50 border-stone-200 rounded-2xl"
+                                            className="h-12 bg-gray-50 border-gray-200 rounded-2xl"
                                             value={getSocialLinks(formData).instagram}
                                             onChange={(e) => updateSocialLink('instagram', e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="flex items-center gap-2 text-xs font-bold text-stone-400 uppercase tracking-widest">
+                                        <Label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
                                             <Twitter className="h-4 w-4" /> Twitter (X)
                                         </Label>
                                         <Input
                                             placeholder="@kullanici_adi"
-                                            className="h-12 bg-stone-50 border-stone-200 rounded-2xl"
+                                            className="h-12 bg-gray-50 border-gray-200 rounded-2xl"
                                             value={getSocialLinks(formData).twitter}
                                             onChange={(e) => updateSocialLink('twitter', e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="flex items-center gap-2 text-xs font-bold text-stone-400 uppercase tracking-widest">
+                                        <Label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
                                             <Facebook className="h-4 w-4" /> Facebook
                                         </Label>
                                         <Input
                                             placeholder="Profil linki veya ad"
-                                            className="h-12 bg-stone-50 border-stone-200 rounded-2xl"
+                                            className="h-12 bg-gray-50 border-gray-200 rounded-2xl"
                                             value={getSocialLinks(formData).facebook}
                                             onChange={(e) => updateSocialLink('facebook', e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="flex items-center gap-2 text-xs font-bold text-stone-400 uppercase tracking-widest">
+                                        <Label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
                                             <Music className="h-4 w-4" /> Spotify
                                         </Label>
                                         <Input
                                             placeholder="Spotify profil linki"
-                                            className="h-12 bg-stone-50 border-stone-200 rounded-2xl"
+                                            className="h-12 bg-gray-50 border-gray-200 rounded-2xl"
                                             value={getSocialLinks(formData).spotify}
                                             onChange={(e) => updateSocialLink('spotify', e.target.value)}
                                         />
                                     </div>
                                     <div className="md:col-span-2 space-y-2">
-                                        <Label className="flex items-center gap-2 text-xs font-bold text-stone-400 uppercase tracking-widest">
+                                        <Label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
                                             <Globe className="h-4 w-4" /> Web Sitesi / Diğer
                                         </Label>
                                         <Input
                                             placeholder="https://yourwebsite.com"
-                                            className="h-12 bg-stone-50 border-stone-200 rounded-2xl"
+                                            className="h-12 bg-gray-50 border-gray-200 rounded-2xl"
                                             value={getSocialLinks(formData).website}
                                             onChange={(e) => updateSocialLink('website', e.target.value)}
                                         />
@@ -559,7 +616,7 @@ export default function ProfilePage() {
                                 <Button
                                     onClick={handleSave}
                                     disabled={saving}
-                                    className="bg-stone-900 hover:bg-stone-800 text-white rounded-2xl px-10 h-12 font-bold shadow-xl transition-all hover:-translate-y-1"
+                                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-2xl px-10 h-12 font-bold shadow-xl transition-all hover:-translate-y-1"
                                 >
                                     {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
                                     Profilini Güncelle
@@ -578,101 +635,187 @@ export default function ProfilePage() {
                             )}
 
                             <Tabs defaultValue="about" className="w-full">
-                                <TabsList className="flex items-center bg-stone-100/50 p-2 rounded-[24px] mb-10 w-fit mx-auto lg:mx-0">
-                                    <TabsTrigger value="about" className="rounded-2xl px-8 py-3 data-[state=active]:bg-white data-[state=active]:text-[#7b9e89] data-[state=active]:shadow-sm font-black text-sm uppercase tracking-widest transition-all">Hakkında</TabsTrigger>
-                                    <TabsTrigger value="bookmarks" className="rounded-2xl px-8 py-3 data-[state=active]:bg-white data-[state=active]:text-[#7b9e89] data-[state=active]:shadow-sm font-black text-sm uppercase tracking-widest transition-all">Kaydedilenler</TabsTrigger>
-                                    <TabsTrigger value="portfolio" className="rounded-2xl px-8 py-3 data-[state=active]:bg-white data-[state=active]:text-[#7b9e89] data-[state=active]:shadow-sm font-black text-sm uppercase tracking-widest transition-all">Portföyüm</TabsTrigger>
+                                <TabsList className="bg-transparent border-b border-gray-100 w-full justify-start h-auto p-0 rounded-none mb-8 overflow-x-auto overflow-y-hidden whitespace-nowrap scrollbar-hide flex-nowrap hide-scrollbar">
+                                    <TabsTrigger
+                                        value="about"
+                                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#14B8A6] data-[state=active]:bg-transparent data-[state=active]:text-[#14B8A6] px-8 py-4 font-black text-xs uppercase tracking-widest transition-all"
+                                    >
+                                        Hakkında
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="posts"
+                                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#14B8A6] data-[state=active]:bg-transparent data-[state=active]:text-[#14B8A6] px-8 py-4 font-black text-xs uppercase tracking-widest transition-all"
+                                    >
+                                        Gönderiler
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="bookmarks"
+                                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#14B8A6] data-[state=active]:bg-transparent data-[state=active]:text-[#14B8A6] px-8 py-4 font-black text-xs uppercase tracking-widest transition-all"
+                                    >
+                                        Kaydedilenler
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="portfolio"
+                                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#14B8A6] data-[state=active]:bg-transparent data-[state=active]:text-[#14B8A6] px-8 py-4 font-black text-xs uppercase tracking-widest transition-all"
+                                    >
+                                        Portfolyo
+                                    </TabsTrigger>
                                 </TabsList>
 
-                                <TabsContent value="about" className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                        <div className="bg-white p-10 rounded-[40px] shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-stone-100 flex flex-col h-full">
-                                            <div className="flex items-center gap-3 mb-6">
-                                                <div className="w-1.5 h-6 bg-[#7b9e89] rounded-full" />
-                                                <h3 className="text-sm font-black text-stone-800 uppercase tracking-widest">Biyografi</h3>
+                                <TabsContent value="about" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16">
+                                        {/* Left Column: Personal Info & Bio */}
+                                        <div className="lg:col-span-7 xl:col-span-8 space-y-8 lg:space-y-12">
+                                            <div className="bg-white p-8 lg:p-12 rounded-[40px] border border-gray-100 shadow-sm space-y-10 relative overflow-hidden group">
+                                                <div className="absolute top-0 right-0 w-48 h-48 bg-gray-50 rounded-bl-[120px] -z-0 transition-all group-hover:scale-110"></div>
+                                                <div className="relative z-10">
+                                                    <div className="flex items-center gap-3 mb-10">
+                                                        <div className="w-1.5 h-6 bg-[#14B8A6] rounded-full"></div>
+                                                        <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest">Kişisel Bilgiler</h3>
+                                                    </div>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-10">
+                                                        <div className="space-y-2">
+                                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tam Ad Soyad</div>
+                                                            <div className="text-xl font-bold text-gray-800">{profile.full_name}</div>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Kullanıcı Rolü</div>
+                                                            <div className="text-xl font-bold text-gray-800">
+                                                                {profile.role === 'teacher' ? 'Eğitim Uzmanı' : profile.role === 'parent' ? 'Ebeveyn' : 'Öğrenci'}
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Bağlantı Kimliği</div>
+                                                            <div className="text-xl font-bold text-[#14B8A6] flex items-center gap-1.5">
+                                                                #{profile.custom_id}
+                                                                <Copy className="w-4 h-4 opacity-50 cursor-pointer hover:opacity-100" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-2 lg:col-span-2">
+                                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">E-posta Adresi</div>
+                                                            <div className="text-xl font-bold text-gray-800">{profile.email || '—'}</div>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Konum</div>
+                                                            <div className="text-xl font-bold text-gray-800">Türkiye</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="flex-1 text-stone-600 leading-relaxed font-medium">
-                                                {profile.bio || <span className="text-stone-300 italic">Biyografi eklenmemiş.</span>}
+
+                                            <div className="bg-white p-8 lg:p-12 rounded-[40px] border border-gray-100 shadow-sm space-y-8">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-1.5 h-6 bg-[#14B8A6] rounded-full"></div>
+                                                    <h3 className="text-lg font-black text-gray-900 uppercase tracking-widest">Biyografi</h3>
+                                                </div>
+                                                <p className="text-gray-600 font-medium leading-[2] text-xl italic bg-gray-50/50 p-8 sm:p-10 rounded-[40px] border border-dashed border-gray-200">
+                                                    "{profile.bio || "Biyografi henüz doldurulmamış."}"
+                                                </p>
                                             </div>
                                         </div>
 
-                                        <div className="bg-stone-50/50 p-10 rounded-[40px] border border-stone-100/80 flex flex-col h-full">
-                                            <div className="flex items-center gap-3 mb-6">
-                                                <div className="w-1.5 h-6 bg-[#b388c6] rounded-full" />
-                                                <h3 className="text-sm font-black text-stone-800 uppercase tracking-widest">
-                                                    {profile.role === 'teacher' ? 'Uzmanlık Alanı' : 'Özel Notlar'}
-                                                </h3>
+                                        {/* Right Column: Social & Badges */}
+                                        <div className="lg:col-span-5 xl:col-span-4 space-y-8 lg:space-y-12">
+                                            <div className="bg-white p-8 lg:p-10 rounded-[40px] border border-gray-100 shadow-sm space-y-8 relative overflow-hidden group">
+                                                <div className="absolute top-0 left-0 w-24 h-24 bg-gray-50 rounded-br-[80px] -z-0"></div>
+                                                <div className="relative z-10">
+                                                    <div className="flex items-center gap-3 mb-8">
+                                                        <div className="w-1 h-5 bg-[#14B8A6] rounded-full"></div>
+                                                        <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">Sosyal Bağlantılar</h3>
+                                                    </div>
+                                                    <div className="flex flex-wrap items-center gap-5">
+                                                        {getSocialLinks(formData).website && (
+                                                            <a href={getSocialLinks(formData).website} target="_blank" rel="noopener" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#14B8A6] hover:bg-[#F0FDFA] transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
+                                                                <Globe className="w-7 h-7" />
+                                                            </a>
+                                                        )}
+                                                        {getSocialLinks(formData).instagram && (
+                                                            <a href="#" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:bg-pink-50 transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
+                                                                <Instagram className="w-7 h-7" />
+                                                            </a>
+                                                        )}
+                                                        {getSocialLinks(formData).twitter && (
+                                                            <a href="#" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#1DA1F2] hover:bg-blue-50 transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
+                                                                <Twitter className="w-7 h-7" />
+                                                            </a>
+                                                        )}
+                                                        <button className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#14B8A6] hover:bg-[#F0FDFA] transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
+                                                            <ExternalLink className="w-7 h-7" />
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="flex-1 text-stone-600 leading-relaxed font-medium">
-                                                {profile.special_note || <span className="text-stone-300 italic">Not bulunmuyor.</span>}
+
+                                            <div className="bg-white p-8 lg:p-10 rounded-[40px] border border-gray-100 shadow-sm space-y-8">
+                                                <div className="flex items-center justify-between mb-6">
+                                                    <h3 className="text-xl font-bold text-gray-900">Rozetler</h3>
+                                                </div>
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="p-5 rounded-[32px] bg-gray-50/50 border border-gray-50 flex items-center gap-5 transition-all hover:bg-white hover:shadow-lg">
+                                                        <div className="w-14 h-14 rounded-full bg-[#E0E7FF] flex items-center justify-center text-[#4F46E5] flex-shrink-0">
+                                                            <ShieldCheck className="w-7 h-7" />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="text-base font-bold text-gray-900 leading-tight">Doğrulanmış Üye</div>
+                                                            <div className="text-[12px] font-medium text-gray-500 mt-0.5">Kimlik doğrulaması tamamlandı.</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="p-5 rounded-[32px] bg-gray-50/50 border border-gray-50 flex items-center gap-5 transition-all hover:bg-white hover:shadow-lg">
+                                                        <div className="w-14 h-14 rounded-full bg-[#FFF7ED] flex items-center justify-center text-[#EA580C] flex-shrink-0">
+                                                            <Edit2 className="w-7 h-7" />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="text-base font-bold text-gray-900 leading-tight">İlk Gönderi</div>
+                                                            <div className="text-[12px] font-medium text-gray-500 mt-0.5">Topluluğa ilk katkı yapıldı.</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </TabsContent>
 
-                                    {/* Social Links */}
-                                    {profile.social_links && Object.values(profile.social_links).some(v => v) && (
-                                        <div className="p-8 bg-white rounded-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-stone-50">
-                                            <div className="flex flex-wrap justify-center gap-6">
-                                                {profile.social_links.instagram && (
-                                                    <a href={profile.social_links.instagram.startsWith('http') ? profile.social_links.instagram : `https://instagram.com/${profile.social_links.instagram}`} target="_blank" rel="noopener" className="flex items-center gap-3 text-stone-400 hover:text-pink-500 transition-colors font-black text-xs uppercase tracking-widest">
-                                                        <Instagram className="h-5 w-5" /> Instagram
-                                                    </a>
-                                                )}
-                                                {profile.social_links.twitter && (
-                                                    <a href={profile.social_links.twitter.startsWith('http') ? profile.social_links.twitter : `https://twitter.com/${profile.social_links.twitter}`} target="_blank" rel="noopener" className="flex items-center gap-3 text-stone-400 hover:text-[#7b9e89] transition-colors font-black text-xs uppercase tracking-widest">
-                                                        <Twitter className="h-4 w-4" /> X / Twitter
-                                                    </a>
-                                                )}
-                                                {profile.social_links.facebook && (
-                                                    <a href={profile.social_links.facebook} target="_blank" rel="noopener" className="flex items-center gap-3 text-stone-400 hover:text-blue-600 transition-colors font-black text-xs uppercase tracking-widest">
-                                                        <Facebook className="h-5 w-5" /> Facebook
-                                                    </a>
-                                                )}
-                                                {profile.social_links.website && (
-                                                    <a href={profile.social_links.website} target="_blank" rel="noopener" className="flex items-center gap-3 text-stone-400 hover:text-[#7b9e89] transition-colors font-black text-xs uppercase tracking-widest">
-                                                        <Globe className="h-5 w-5" /> Web Sitesi
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
+                                <TabsContent value="posts" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    <div className="max-w-2xl mx-auto space-y-6 mt-4">
+                                        <p className="text-center text-gray-400 font-medium py-12">Gönderileriniz burada listelenecek.</p>
+                                    </div>
                                 </TabsContent>
 
                                 <TabsContent value="bookmarks" className="animate-in fade-in slide-in-from-bottom-5 duration-700">
                                     {loadingBookmarks ? (
                                         <div className="py-24 flex flex-col items-center gap-6">
-                                            <div className="w-12 h-12 border-4 border-[#7b9e89] border-t-transparent rounded-full animate-spin"></div>
-                                            <p className="text-stone-300 font-black text-xs uppercase tracking-widest">Kayıtlar Hazırlanıyor...</p>
+                                            <div className="w-12 h-12 border-4 border-[#0c9789] border-t-transparent rounded-full animate-spin"></div>
+                                            <p className="text-gray-300 font-black text-xs uppercase tracking-widest">Kayıtlar Hazırlanıyor...</p>
                                         </div>
                                     ) : (bookmarkedPosts.length === 0 && bookmarkedArticles.length === 0) ? (
-                                        <div className="bg-white rounded-[40px] border border-stone-100 p-20 text-center">
-                                            <div className="mx-auto w-24 h-24 bg-stone-50 rounded-[30px] flex items-center justify-center mb-6">
-                                                <Bookmark className="h-10 w-10 text-stone-200" />
+                                        <div className="bg-white rounded-[40px] border border-gray-100 p-20 text-center">
+                                            <div className="mx-auto w-24 h-24 bg-gray-50 rounded-[30px] flex items-center justify-center mb-6">
+                                                <Bookmark className="h-10 w-10 text-gray-200" />
                                             </div>
-                                            <h3 className="text-xl font-black text-stone-800 mb-2">Henüz bir şey kaydetmediniz</h3>
-                                            <p className="text-stone-400 font-medium text-sm">Beğendiğiniz içerikleri buraya ekleyerek daha sonra kolayca ulaşabilirsiniz.</p>
+                                            <h3 className="text-xl font-black text-gray-800 mb-2">Henüz bir şey kaydetmediniz</h3>
+                                            <p className="text-gray-400 font-medium text-sm">Beğendiğiniz içerikleri buraya ekleyerek daha sonra kolayca ulaşabilirsiniz.</p>
                                         </div>
                                     ) : (
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                                             <div className="space-y-6">
                                                 <div className="flex items-center gap-3 mb-6">
-                                                    <div className="w-1 h-5 bg-[#7b9e89] rounded-full" />
-                                                    <h3 className="text-xs font-black text-stone-700 uppercase tracking-[0.2em]">Makaleler</h3>
+                                                    <div className="w-1 h-5 bg-[#0c9789] rounded-full" />
+                                                    <h3 className="text-xs font-black text-gray-700 uppercase tracking-[0.2em]">Makaleler</h3>
                                                 </div>
                                                 {bookmarkedArticles.map(art => (
-                                                    <div key={art.id} className="p-6 bg-white rounded-[32px] border border-stone-100 shadow-sm flex items-center justify-between group hover:shadow-md transition-all">
+                                                    <div key={art.id} className="p-6 bg-white rounded-[32px] border border-gray-100 shadow-sm flex items-center justify-between group hover:shadow-md transition-all">
                                                         <a href={`/knowledge/${art.id}`} className="flex-1 min-w-0">
-                                                            <h4 className="font-bold text-stone-800 group-hover:text-[#7b9e89] transition-colors truncate">{art.title}</h4>
-                                                            <p className="text-xs text-stone-400 mt-1">{art.author?.full_name}</p>
+                                                            <h4 className="font-bold text-gray-800 group-hover:text-[#0c9789] transition-colors truncate">{art.title}</h4>
+                                                            <p className="text-xs text-gray-400 mt-1">{art.author?.full_name}</p>
                                                         </a>
-                                                        <ExternalLink className="h-4 w-4 text-stone-200 group-hover:text-[#7b9e89] transition-all" />
+                                                        <ExternalLink className="h-4 w-4 text-gray-200 group-hover:text-[#0c9789] transition-all" />
                                                     </div>
                                                 ))}
                                             </div>
                                             <div className="space-y-6">
                                                 <div className="flex items-center gap-3 mb-6">
-                                                    <div className="w-1 h-5 bg-[#b388c6] rounded-full" />
-                                                    <h3 className="text-xs font-black text-stone-700 uppercase tracking-[0.2em]">Gönderiler</h3>
+                                                    <div className="w-1 h-5 bg-[#0c9789] rounded-full" />
+                                                    <h3 className="text-xs font-black text-gray-700 uppercase tracking-[0.2em]">Gönderiler</h3>
                                                 </div>
                                                 {bookmarkedPosts.map(post => (
                                                     <PostItem key={post.id} post={post} currentUserId={profile.id} />
@@ -691,7 +834,7 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Account Actions */}
-                <div className="mt-24 pt-10 border-t border-stone-100 flex justify-center">
+                <div className="mt-24 pt-10 border-t border-gray-100 flex justify-center">
                     <Button
                         variant="ghost"
                         onClick={handleLogout}
@@ -704,3 +847,4 @@ export default function ProfilePage() {
         </AppShell>
     );
 }
+

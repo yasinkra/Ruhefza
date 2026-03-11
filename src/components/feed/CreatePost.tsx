@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Send, Tag, Image as ImageIcon, X } from "lucide-react";
+import { Loader2, Send, Tag, Image as ImageIcon, X, Video, Paperclip, User } from "lucide-react";
 
 
 export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
@@ -101,19 +101,24 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
     };
 
     return (
-        <div className="mb-6 bg-white/80 backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-[#a2c1b1]/30 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-            <form onSubmit={handleSubmit}>
-                <div className="flex gap-4">
-                    <div className="flex-1">
+        <div className="mb-6 bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <div className="flex gap-3 sm:gap-4 items-start">
+                    {/* User Avatar */}
+                    <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-orange-100/50 flex items-center justify-center text-[#ff8e3c]">
+                        <User className="w-5 h-5" />
+                    </div>
+
+                    <div className="flex-1 w-full">
                         <textarea
-                            className="w-full bg-transparent border-none resize-none text-stone-700 placeholder:text-stone-400 focus:ring-0 p-0 text-base sm:text-lg min-h-[60px]"
-                            placeholder="Ruha iyi gelecek bir düşünce paylaşın veya fikir sorun..."
+                            className="w-full bg-white border border-gray-200 rounded-[14px] resize-none text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#0c9789] focus:border-[#0c9789] p-3 sm:p-4 text-sm sm:text-base min-h-[60px] sm:min-h-[80px]"
+                            placeholder="Bir şeyler paylaş..."
                             rows={2}
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                         />
                         {imagePreview && (
-                            <div className="relative mt-3 mb-2 max-w-sm rounded-xl overflow-hidden border border-stone-200 shadow-sm">
+                            <div className="relative mt-3 mb-2 max-w-sm rounded-xl overflow-hidden border border-gray-200 shadow-sm">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={imagePreview} alt="Preview" className="w-full h-auto object-cover max-h-48" />
                                 <button
@@ -125,61 +130,43 @@ export function CreatePost({ onPostCreated }: { onPostCreated: () => void }) {
                                 </button>
                             </div>
                         )}
-
-                        <div className="mt-4 pt-4 border-t border-[#7b9e89]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
-                                {categories.map(c => (
-                                    <Badge
-                                        key={c}
-                                        variant={category === c ? "default" : "outline"}
-                                        className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${category === c ? 'bg-stone-800 text-white hover:bg-stone-700 border-0 shadow-sm' : 'text-stone-600 bg-stone-50 hover:bg-[#eaf2ed] hover:text-[#7b9e89] border border-[#a2c1b1]/20'}`}
-                                        onClick={() => setCategory(c)}
-                                    >
-                                        {c}
-                                    </Badge>
-                                ))}
-                            </div>
-
-                            <div className="flex items-center gap-2 sm:ml-auto shrink-0 w-full sm:w-auto justify-between sm:justify-end">
-                                <div className="flex items-center gap-1">
-                                    <div>
-                                        <input
-                                            type="file"
-                                            id="image-upload"
-                                            accept="image/jpeg,image/png,image/webp"
-                                            className="hidden"
-                                            onChange={handleImageChange}
-                                            disabled={loading}
-                                        />
-                                        <label
-                                            htmlFor="image-upload"
-                                            className="p-2 sm:p-2.5 flex items-center justify-center text-[#7b9e89] hover:bg-[#7b9e89]/10 rounded-xl transition-colors cursor-pointer"
-                                            title="Görsel Ekle"
-                                        >
-                                            <ImageIcon className="h-5 w-5" />
-                                        </label>
-                                    </div>
-
-                                    <div className="flex items-center gap-2 mx-1 px-2.5 py-1.5 rounded-xl border border-stone-100 bg-stone-50 hover:bg-stone-100 transition-colors">
-                                        <input
-                                            type="checkbox"
-                                            id="anonymous"
-                                            checked={isAnonymous}
-                                            onChange={(e) => setIsAnonymous(e.target.checked)}
-                                            className="w-4 h-4 rounded border-stone-300 text-[#7b9e89] focus:ring-[#7b9e89] accent-[#7b9e89]"
-                                        />
-                                        <label htmlFor="anonymous" className="text-xs font-medium text-stone-600 cursor-pointer select-none">
-                                            Anonim
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <Button type="submit" disabled={!content.trim() || loading} className="gap-2 bg-[#7b9e89] hover:bg-[#6ba88f] text-white rounded-xl px-6 h-10 shadow-md shadow-[#7b9e89]/20 font-bold transition-all hover:scale-[1.02] active:scale-[0.98]">
-                                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Paylaş"}
-                                </Button>
-                            </div>
-                        </div>
                     </div>
+                </div>
+
+                <div className="flex items-center justify-between pl-0 sm:pl-[56px] mt-1 sm:mt-0">
+                    <div className="flex items-center gap-1 sm:gap-3 text-[#0c9789]">
+                        <div>
+                            <input
+                                type="file"
+                                id="image-upload"
+                                accept="image/jpeg,image/png,image/webp"
+                                className="hidden"
+                                onChange={handleImageChange}
+                                disabled={loading}
+                            />
+                            <label
+                                htmlFor="image-upload"
+                                className="p-2 flex items-center justify-center hover:bg-[#0c9789]/10 rounded-lg transition-colors cursor-pointer"
+                                title="Görsel Ekle"
+                            >
+                                <ImageIcon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.5} />
+                            </label>
+                        </div>
+                        <button type="button" className="p-2 flex items-center justify-center hover:bg-[#0c9789]/10 rounded-lg transition-colors" title="Video Ekle">
+                            <Video className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.5} />
+                        </button>
+                        <button type="button" className="p-2 flex items-center justify-center hover:bg-[#0c9789]/10 rounded-lg transition-colors" title="Dosya Ekle">
+                            <Paperclip className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.5} />
+                        </button>
+                    </div>
+
+                    <Button
+                        type="submit"
+                        disabled={!content.trim() || loading}
+                        className="rounded-full px-5 sm:px-7 bg-[#0c9789] hover:bg-[#0a7c70] text-white font-medium h-9 sm:h-10 text-sm transition-all"
+                    >
+                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Paylaş"}
+                    </Button>
                 </div>
             </form>
         </div>

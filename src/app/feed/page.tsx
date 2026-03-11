@@ -1,53 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import Link from "next/link";
 import { CreatePost } from "@/components/feed/CreatePost";
 import { PostList } from "@/components/feed/PostList";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
-import { Filter, Info, Search, Flame, Clock, Megaphone, Plus, Sparkles, TrendingUp, Presentation, ChevronRight } from "lucide-react";
+import { Info, Search, Megaphone, Sparkles, TrendingUp, ChevronRight, CheckCircle, BookOpen, Clock } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { createClient } from "@/utils/supabase/client";
-import { useEffect } from "react";
 
 export default function FeedPage() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [sortOption, setSortOption] = useState("recent");
+    const [sortOption] = useState("recent");
     const [isExpert, setIsExpert] = useState<boolean>(false);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [announcement, setAnnouncement] = useState<{ message: string, active: boolean } | null>(null);
+    const [userName, setUserName] = useState("");
+    const [recommendedExperts, setRecommendedExperts] = useState<{ id: string, full_name: string, role: string | null, avatar_url: string | null, seed?: string }[]>([]);
 
-    const categories = ["Genel", "Soru", "Tavsiye", "Materyal", "Etkinlik", "Başarı Hikayesi"];
+    const categories = ["Sizin İçin", "Otizm Bakımı", "Nöroçeşitlilik", "Günlük Başarılar", "Terapi Sohbeti"];
 
     useEffect(() => {
-        const checkExpertStatus = async () => {
+        const init = async () => {
             const { data: { user } } = await createClient().auth.getUser();
             if (user) {
                 const { data } = await createClient()
                     .from("profiles")
-                    .select("role, is_verified_expert, verification_status")
+                    .select("full_name, role, is_verified_expert, verification_status")
                     .eq("id", user.id)
                     .single();
 
                 if (data) {
+                    setUserName(data.full_name?.split(' ')[0] || 'Kullanıcı');
                     const isVerifiedTeacher = data.role === 'teacher' && (data.is_verified_expert || data.verification_status === 'approved');
                     const isStudent = data.role === 'student';
                     if (isVerifiedTeacher || isStudent) setIsExpert(true);
                 }
             }
+            // Fetch Recommended Experts
+            let expertsQuery = createClient()
+                .from("profiles")
+                .select("id, full_name, role, avatar_url")
+                .eq("is_verified_expert", true)
+                .limit(4);
+
+            if (user?.id) {
+                expertsQuery = expertsQuery.neq("id", user.id);
+            }
+
+            const { data: expertsData } = await expertsQuery;
+
+            if (expertsData) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                setRecommendedExperts(expertsData as any);
+            }
+            
             setLoadingProfile(false);
         };
+
         const fetchAnnouncement = async () => {
             const { data } = await createClient()
                 .from("system_settings")
@@ -59,7 +72,7 @@ export default function FeedPage() {
             }
         };
 
-        checkExpertStatus();
+        init();
         fetchAnnouncement();
     }, []);
 
@@ -69,117 +82,69 @@ export default function FeedPage() {
 
     return (
         <AppShell fullWidth>
-            <div className="w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-6 xl:gap-10 px-4 md:px-8 py-6 md:py-10 pb-24 md:pb-10 min-h-screen">
+            <div className="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-6 xl:gap-8 px-4 md:px-6 py-6 md:py-8 pb-24 md:pb-8 min-h-screen">
                 {/* Main Feed Column */}
-                <div className="flex-1 flex flex-col gap-8 w-full min-w-0">
-                    {/* Announcement Banner */}
-                    {announcement?.active && (
-                        <div className="mb-5 p-3.5 rounded-2xl gradient-brand text-white shadow-lg shadow-[#7b9e89]/30 flex items-center gap-3 animate-fade-up">
-                            <div className="bg-white/20 p-2 rounded-xl shrink-0">
-                                <Megaphone className="h-4 w-4" />
+                <div className="flex-1 min-w-0 overflow-y-auto relative h-full flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
+                    {/* Welcome Sticky Header */}
+                    <header className="flex flex-col gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-200 sticky top-0 z-10 backdrop-blur-sm bg-opacity-90">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <h2 className="text-base md:text-xl font-bold text-gray-900">Hoş geldin, {userName} 👋</h2>
                             </div>
-                            <p className="font-medium text-sm leading-snug">{announcement.message}</p>
-                        </div>
-                    )}
-
-                    {/* Highlights / Stories */}
-                    <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
-                        <div className="shrink-0 w-[140px] sm:w-[160px] h-24 rounded-2xl p-3 bg-gradient-to-br from-[#f2a68d] to-[#f8c9b9] text-white flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform shadow-md shadow-[#f2a68d]/50">
-                            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                                <Sparkles className="h-4 w-4" />
+                            <div className="flex items-center gap-4">
+                                <Link href="/notifications" className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition-colors relative">
+                                    <span className="material-symbols-outlined absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
+                                </Link>
                             </div>
-                            <span className="font-bold text-sm leading-tight mt-2">Haftanın En İyileri</span>
                         </div>
-                        <div className="shrink-0 w-[140px] sm:w-[160px] h-24 rounded-2xl p-3 bg-gradient-to-br from-[#b388c6] to-[#d4bbee] text-white flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform shadow-md shadow-[#b388c6]/50">
-                            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                                <TrendingUp className="h-4 w-4" />
-                            </div>
-                            <span className="font-bold text-sm leading-tight mt-2">Otizm Gündemi</span>
-                        </div>
-                        <div className="shrink-0 w-[140px] sm:w-[160px] h-24 rounded-2xl p-3 bg-gradient-to-br from-[#7b9e89] to-[#a2c1b1] text-white flex flex-col justify-between cursor-pointer hover:scale-[1.02] transition-transform shadow-md shadow-[#7b9e89]/50">
-                            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                                <Presentation className="h-4 w-4" />
-                            </div>
-                            <span className="font-bold text-sm leading-tight mt-2">Uzmanlara Sorduk</span>
-                        </div>
-                    </div>
-
-                    {/* Page Header & Search (Soothing Style) */}
-                    <div className="flex flex-col gap-6 mb-8">
                         <div className="relative w-full">
-                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                             <Input
-                                placeholder="Huzur, destek ve bilgi arayın..."
-                                className="pl-14 bg-white border-stone-100 rounded-full h-14 text-base shadow-sm focus-visible:ring-[#7b9e89]/20 focus-visible:border-[#7b9e89]/30 transition-all placeholder:text-stone-400"
+                                placeholder="Ara..."
+                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#0c9789] focus:border-transparent transition-all shadow-none"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>
-
-                        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide -mx-1 px-1">
-                            <button
-                                onClick={() => setSelectedCategory(null)}
-                                className={cn(
-                                    "px-6 py-2.5 rounded-full text-sm font-bold transition-all whitespace-nowrap",
-                                    selectedCategory === null
-                                        ? "bg-[#5c8a70] text-white shadow-md shadow-[#5c8a70]/20"
-                                        : "bg-white text-stone-500 hover:text-[#5c8a70] border border-stone-100"
-                                )}
-                            >
-                                Sizin İçin
-                            </button>
-                            {["Otizm Bakımı", "Nöroçeşitlilik", "Günlük Başarılar", "Terapi Sohbeti"].map((cat) => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setSelectedCategory(cat)}
-                                    className={cn(
-                                        "px-6 py-2.5 rounded-full text-sm font-bold transition-all whitespace-nowrap border",
-                                        selectedCategory === cat
-                                            ? "bg-[#5c8a70] text-white border-[#5c8a70] shadow-md shadow-[#5c8a70]/20"
-                                            : "bg-white text-stone-500 hover:text-[#5c8a70] border-stone-100"
-                                    )}
-                                >
-                                    {cat}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Featured Article (Soothing Style) */}
-                    <div className="group relative rounded-[2.5rem] overflow-hidden bg-white border border-stone-100 shadow-sm hover:shadow-md transition-all mb-8 aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/7]">
-                        <div
-                            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1544365558-35aa4afcf11f?auto=format&fit=crop&q=80&w=1600')" }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                        <div className="absolute bottom-0 left-0 p-8 w-full">
-                            <div className="flex items-center gap-2 mb-3">
-                                <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase tracking-wider border border-white/20">EDİTÖRÜN SEÇİMİ</span>
-                                <span className="text-white/80 text-[10px] font-bold uppercase tracking-wider">12 dk okuma</span>
-                            </div>
-                            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">Sakinliğin Mimarisi: Evde Duyusal Alanlar</h2>
-                            <p className="text-white/80 text-sm max-w-xl line-clamp-2">Çocuğunuzun sinir sistemini besleyen bir sığınak oluşturun. Dr. Sarah Chen, daha derin bir güvenlik duygusu uyandıran ışık, ses ve doku ayarlamalarını paylaşıyor.</p>
-                        </div>
-                    </div>
+                    </header>
 
                     {/* Create Post or Info Banner */}
                     {!loadingProfile && isExpert ? (
                         <CreatePost onPostCreated={handlePostCreated} />
                     ) : !loadingProfile ? (
-                        <div className="mb-6 p-4 rounded-2xl border border-[#a2c1b1] bg-[#eaf2ed]/50 flex items-start gap-3 animate-fade-up">
-                            <div className="bg-white p-2 rounded-xl shadow-sm shrink-0">
-                                <Info className="h-4 w-4 text-[#7b9e89]" />
+                        <div className="p-4 rounded-xl border border-[#0c9789]/20 bg-[#f0fdfa]/80 flex items-start gap-3">
+                            <div className="bg-white p-2 rounded-lg shadow-sm shrink-0 border border-[#0c9789]/10">
+                                <Info className="h-4 w-4 text-[#0c9789]" />
                             </div>
                             <div>
-                                <h3 className="text-sm font-semibold text-stone-800 mb-0.5">Bilgi Kirliliğini Önlemek İçin</h3>
-                                <p className="text-xs text-stone-600 leading-relaxed">
+                                <h3 className="text-sm font-semibold text-gray-800 mb-0.5">Bilgi Kirliliğini Önlemek İçin</h3>
+                                <p className="text-xs text-gray-600 leading-relaxed">
                                     Bu platformda yalnızca onaylı uzmanlar paylaşım yapabilir. Ebeveynler uzmanların deneyimlerinden güvenle faydalanabilir.
                                 </p>
                             </div>
                         </div>
                     ) : (
-                        <div className="mb-6 h-[100px] rounded-2xl border border-stone-100 bg-stone-50 animate-pulse" />
+                        <div className="h-[100px] rounded-2xl border border-gray-100 bg-gray-50 animate-pulse" />
                     )}
+
+                    {/* Category Tabs */}
+                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                        {categories.map((cat, i) => (
+                            <button
+                                key={cat}
+                                onClick={() => setSelectedCategory(i === 0 ? null : cat)}
+                                className={cn(
+                                    "whitespace-nowrap px-4 md:px-5 py-2 rounded-full text-xs md:text-sm font-medium flex-shrink-0 transition-colors shadow-sm",
+                                    (i === 0 && selectedCategory === null) || selectedCategory === cat
+                                        ? "bg-[#0c9789] text-white"
+                                        : "bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                )}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
 
                     <PostList
                         refreshTrigger={refreshTrigger}
@@ -187,79 +152,99 @@ export default function FeedPage() {
                         searchQuery={searchQuery}
                         sortOption={sortOption}
                     />
-
                 </div>
 
-                {/* Right Sidebar (Soothing Style) */}
-                <aside className="w-full lg:w-[320px] xl:w-[380px] shrink-0 space-y-8 lg:sticky lg:top-6 h-fit">
-                    {/* Seeking Guidance CTA */}
-                    <div className="bg-[#f2a68d] rounded-[2.5rem] p-8 text-center text-white shadow-lg shadow-[#f2a68d]/20 relative overflow-hidden group">
-                        <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all" />
-                        <div className="relative z-10">
-                            <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-md">
-                                <Megaphone className="w-7 h-7" />
-                            </div>
-                            <h4 className="text-2xl font-bold mb-3">Rehberlik mi Arıyorsunuz?</h4>
-                            <p className="text-white/90 text-sm leading-relaxed mb-8">Sertifikalı çocuk gelişim uzmanlarımızla nazik bir 1-on-1 görüşme planlayın.</p>
-                            <Link href="/experts" className="w-full py-4 bg-white text-[#f2a68d] font-bold rounded-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2 shadow-md">
-                                <Clock className="w-4 h-4" /> Destek Randevusu Al
-                            </Link>
+                {/* Right Sidebar — Widgets */}
+                <aside className="hidden xl:flex w-[330px] flex-shrink-0 bg-gray-50/50 border-l border-transparent overflow-y-auto pl-8 py-6 pr-4 flex-col gap-6">
+                    
+                    {/* Announcement Widget */}
+                    <div className="rounded-[24px] bg-[#11988a] p-6 shadow-sm">
+                        <div className="flex items-center gap-3 mb-4">
+                            <Megaphone className="text-white w-5 h-5" strokeWidth={2.5} />
+                            <h3 className="font-bold text-sm tracking-widest uppercase text-white">Duyuru</h3>
                         </div>
+                        <p className="text-[15px] leading-relaxed mb-6 text-white font-medium">
+                            {announcement?.active && announcement.message ? announcement.message : 'Bu hafta sonu "Alternatif İletişim Yöntemleri" konulu ücretsiz online seminerimize davetlisiniz.'}
+                        </p>
+                        <button className="w-full bg-white text-[#11988a] hover:bg-gray-50 py-3 rounded-2xl text-[15px] font-bold transition-all shadow-sm">
+                            Kayıt Ol
+                        </button>
+                    </div>
+
+                    {/* Guidance / Support Widget */}
+                    <div className="rounded-[28px] bg-[#f3a88f] p-6 shadow-sm flex flex-col items-center text-center">
+                        <div className="bg-white/20 w-12 h-12 rounded-2xl flex items-center justify-center mb-4">
+                            <Megaphone className="text-white w-6 h-6" strokeWidth={2} />
+                        </div>
+                        <h3 className="font-bold text-xl text-white tracking-tight mb-2">
+                            Rehberlik mi Arıyorsunuz?
+                        </h3>
+                        <p className="text-white text-[13px] leading-relaxed mb-6 px-2 opacity-95">
+                            Sertifikalı çocuk gelişim uzmanlarımızla nazik bir 1-on-1 görüşme planlayın.
+                        </p>
+                        <button className="w-full bg-white text-[#f3a88f] hover:bg-gray-50 py-3.5 rounded-[20px] text-[14px] font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+                            <Clock className="w-4 h-4" />
+                            Destek Randevusu Al
+                        </button>
                     </div>
 
                     {/* Trending Themes */}
-                    <div className="bg-white rounded-[2rem] p-8 border border-stone-100 shadow-sm">
-                        <h4 className="text-stone-800 font-bold text-lg mb-6 flex items-center gap-2">
-                            <Sparkles className="w-5 h-5 text-[#5c8a70]" /> Gündem Temaları
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                            {["#BEP-Desteği", "#DuyusalOkullar", "#NazikEbeveynlik", "#SözelOlmayanİletişim", "#KonuşmaYolculuğu"].map((theme) => (
-                                <button key={theme} className="px-4 py-2 bg-[#f1f7f4] text-[#5c8a70] text-xs font-bold rounded-full border border-[#dbe5e0] hover:bg-[#5c8a70] hover:text-white transition-all">
-                                    {theme}
-                                </button>
-                            ))}
+                    <div className="bg-white rounded-[28px] p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.02)]">
+                        <div className="flex items-center gap-2.5 mb-5">
+                            <Sparkles className="w-5 h-5 text-[#518875]" strokeWidth={2.5} />
+                            <h3 className="font-bold text-[17px] text-gray-900 tracking-tight">Gündem Temaları</h3>
                         </div>
-                    </div>
-
-                    {/* Top Experts */}
-                    <div className="bg-white rounded-[2rem] p-8 border border-stone-100 shadow-sm">
-                        <h4 className="text-stone-800 font-bold text-lg mb-6 flex items-center gap-2">
-                            <TrendingUp className="w-5 h-5 text-[#b388c6]" /> Öne Çıkan Uzmanlar
-                        </h4>
-                        <div className="space-y-6">
+                        <div className="flex flex-wrap gap-2.5">
                             {[
-                                { name: "Dr. Leyla Çelik", role: "Çocuk Psikoloğu", seed: "Liam" },
-                                { name: "Elif Yılmaz", role: "Ergoterapist", seed: "Elena" },
-                                { name: "Murat Tekin", role: "Dil Terapisti", seed: "Marcus" }
-                            ].map((expert) => (
-                                <Link href={`/profile/${expert.name}`} key={expert.name} className="flex items-center justify-between group">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-full border-2 border-[#f1f7f4] overflow-hidden group-hover:border-[#5c8a70]/30 transition-all">
-                                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${expert.seed}`} alt={expert.name} className="w-full h-full object-cover" />
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-bold text-stone-800 leading-none mb-1 group-hover:text-[#5c8a70] transition-colors">{expert.name}</p>
-                                            <p className="text-[10px] text-stone-400 uppercase font-bold tracking-widest">{expert.role}</p>
-                                        </div>
-                                    </div>
-                                    <div className="p-2 text-[#5c8a70] bg-[#f1f7f4] rounded-xl group-hover:bg-[#5c8a70] group-hover:text-white transition-all">
-                                        <ChevronRight className="w-4 h-4" />
-                                    </div>
-                                </Link>
+                                "#BEP-Desteği", "#DuyusalOkullar", "#NazikEbeveynlik", "#SözelOlmayanİletişim", "#KonuşmaYolculuğu"
+                            ].map((tag) => (
+                                <div key={tag} className="px-4 py-2 bg-[#f1faf5] border border-[#d2efe2] text-[#3e7e61] text-[13.5px] font-semibold rounded-full cursor-pointer hover:bg-[#e2f5ec] transition-colors">
+                                    {tag}
+                                </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* Community Stats */}
-                    <div className="bg-[#f1f7f4] rounded-[2rem] p-8 border border-[#dbe5e0] text-center relative overflow-hidden">
-                        <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-[#5c8a70]/5 rounded-full blur-xl" />
-                        <div className="relative z-10">
-                            <div className="inline-flex p-4 bg-white rounded-2xl mb-4 shadow-sm">
-                                <Presentation className="w-6 h-6 text-[#5c8a70]" />
+                    {/* Suggested Experts */}
+                    {recommendedExperts.length > 0 && (
+                        <div className="bg-white rounded-[28px] p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.02)]">
+                            <div className="flex items-center gap-2.5 mb-6">
+                                <TrendingUp className="w-5 h-5 text-[#8e8cd8]" strokeWidth={2.5} />
+                                <h3 className="font-bold text-[17px] text-gray-900 tracking-tight">Öne Çıkan Uzmanlar</h3>
                             </div>
-                            <p className="text-[#5c8a70] text-2xl font-black tracking-tight">12,480 Üye</p>
-                            <p className="text-stone-500 text-sm mt-1 font-medium italic">Birlikte büyüyoruz</p>
+                            <div className="flex flex-col gap-5">
+                                {recommendedExperts.map((expert) => (
+                                    <div key={expert.id} className="flex items-center justify-between gap-3">
+                                        <div className="flex items-center gap-3.5 min-w-0">
+                                            <Link href={`/profile/${expert.id}`} className="w-[46px] h-[46px] rounded-full bg-[#f0f9f4] flex items-center justify-center shrink-0 overflow-hidden ring-4 ring-white shadow-sm border border-gray-100">
+                                                {expert.avatar_url ? (
+                                                    <img src={expert.avatar_url} alt={expert.full_name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${expert.id}&backgroundColor=f1faf5`} alt={expert.full_name} className="w-full h-full object-cover" />
+                                                )}
+                                            </Link>
+                                            <div className="min-w-0 flex-1">
+                                                <Link href={`/profile/${expert.id}`} className="text-[15px] font-bold text-gray-900 truncate flex items-center gap-1 hover:text-[#0c9789] transition-colors">
+                                                    {expert.full_name}
+                                                </Link>
+                                                <p className="text-[10px] tracking-widest font-bold uppercase text-gray-400 truncate mt-0.5">{expert.role === 'teacher' ? 'Uzman Eğitimci' : (expert.role === 'institution' ? 'Kurum' : 'Özel Eğitim Uzmanı')}</p>
+                                            </div>
+                                        </div>
+                                        <Link href={`/profile/${expert.id}`} className="flex-shrink-0 w-8 h-8 rounded-full bg-[#f4fcf9] border border-[#e5f5f0] flex items-center justify-center text-[#9ca3af] hover:bg-[#11988a] hover:text-white hover:border-[#11988a] transition-all shadow-sm">
+                                            <ChevronRight className="w-4 h-4 ml-0.5" strokeWidth={2.5} />
+                                        </Link>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
+                    )}
+
+                    {/* Footer Links */}
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 px-2 text-[10px] text-gray-400">
+                        <span className="hover:underline cursor-pointer">Hakkımızda</span>
+                        <span className="hover:underline cursor-pointer">Yardım</span>
+                        <span className="hover:underline cursor-pointer">Gizlilik</span>
+                        <span>© 2026 Ruhefza</span>
                     </div>
                 </aside>
             </div>

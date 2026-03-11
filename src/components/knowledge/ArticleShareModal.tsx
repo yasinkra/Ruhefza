@@ -58,8 +58,16 @@ export function ArticleShareModal({ article, currentUserId, onClose }: ArticleSh
 
     const handleShare = async (partnerId: string) => {
         setSending(partnerId);
-        const articleUrl = `${window.location.origin}/knowledge/${article.id}`;
-        const shareText = `📚 Sana bir makale paylaştım:\n\n*${article.title}*\n\n${articleUrl}`;
+        
+        // Construct structured share data
+        const shareData = {
+            id: article.id,
+            title: article.title,
+            summary: article.summary,
+            image_url: article.image_url,
+            author_name: article.author?.full_name
+        };
+        const shareMessage = `[ARTICLE_SHARE]:${JSON.stringify(shareData)}`;
 
         // Get or create conversation
         const { data: convId, error: convErr } = await createClient().rpc("get_or_create_conversation", {
@@ -76,7 +84,7 @@ export function ArticleShareModal({ article, currentUserId, onClose }: ArticleSh
         const { error } = await createClient().from("messages").insert({
             conversation_id: convId,
             sender_id: currentUserId,
-            content: shareText,
+            content: shareMessage,
             type: "text",
         });
 

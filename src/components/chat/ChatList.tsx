@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
 import { cn } from "@/utils/cn";
-import { Search, Bell, Check, X, Clock } from "lucide-react";
+import { Search, Bell, Check, X, Clock, SquarePen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -41,9 +41,10 @@ interface SearchUser {
 interface ChatListProps {
     onSelectConversation: (conversationId: string, partnerId: string) => void;
     selectedConversationId: string | null;
+    isOnline?: (userId: string) => boolean;
 }
 
-export function ChatList({ onSelectConversation, selectedConversationId }: ChatListProps) {
+export function ChatList({ onSelectConversation, selectedConversationId, isOnline }: ChatListProps) {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -53,6 +54,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
     const [showRequests, setShowRequests] = useState(false);
     const [sendingRequest, setSendingRequest] = useState<string | null>(null);
     const [connectionStatuses, setConnectionStatuses] = useState<Record<string, string>>({});
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         createClient().auth.getUser().then(({ data }) => {
@@ -243,16 +245,16 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
     if (loading) return (
         <div className="flex flex-col h-full bg-white animate-pulse">
-            <div className="p-4 border-b border-stone-100">
-                <div className="h-6 w-24 bg-stone-200 rounded mb-4"></div>
-                <div className="h-10 w-full bg-stone-100 rounded-xl"></div>
+            <div className="p-4 border-b border-gray-100">
+                <div className="h-6 w-24 bg-gray-200 rounded mb-4"></div>
+                <div className="h-10 w-full bg-gray-100 rounded-xl"></div>
             </div>
             {[1, 2, 3, 4].map(i => (
                 <div key={i} className="flex items-center gap-3 p-4">
-                    <div className="h-11 w-11 bg-stone-200 rounded-full shrink-0"></div>
+                    <div className="h-11 w-11 bg-gray-200 rounded-full shrink-0"></div>
                     <div className="flex-1">
-                        <div className="h-4 w-28 bg-stone-200 rounded mb-2"></div>
-                        <div className="h-3 w-40 bg-stone-100 rounded"></div>
+                        <div className="h-4 w-28 bg-gray-200 rounded mb-2"></div>
+                        <div className="h-3 w-40 bg-gray-100 rounded"></div>
                     </div>
                 </div>
             ))}
@@ -262,25 +264,35 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
     return (
         <div className="flex flex-col h-full bg-white">
             {/* Header */}
-            <div className="p-4 border-b border-stone-100 shrink-0">
+            <div className="p-4 border-b border-gray-100 shrink-0">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="font-bold text-lg text-stone-800">Mesajlar</h2>
-                    {pendingRequests.length > 0 && (
+                    <h2 className="font-bold text-lg text-gray-800">Mesajlar</h2>
+                    <div className="flex items-center gap-2">
+                        {pendingRequests.length > 0 && (
+                            <button
+                                onClick={() => setShowRequests(!showRequests)}
+                                className="relative flex items-center gap-1.5 text-xs font-semibold text-[#0c9789] bg-[#f0fdfa] hover:bg-[#ccfbf1] px-3 py-1.5 rounded-full transition-colors"
+                            >
+                                <Bell className="h-3.5 w-3.5" />
+                                {pendingRequests.length} İstek
+                                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full animate-pulse"></span>
+                            </button>
+                        )}
                         <button
-                            onClick={() => setShowRequests(!showRequests)}
-                            className="relative flex items-center gap-1.5 text-xs font-semibold text-[#7b9e89] bg-[#eaf2ed] hover:bg-[#d8e5de] px-3 py-1.5 rounded-full transition-colors"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
+                            title="Yeni Mesaj"
+                            onClick={() => searchInputRef.current?.focus()}
                         >
-                            <Bell className="h-3.5 w-3.5" />
-                            {pendingRequests.length} İstek
-                            <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full animate-pulse"></span>
+                            <SquarePen className="h-4.5 w-4.5" />
                         </button>
-                    )}
+                    </div>
                 </div>
                 <div className="relative">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
-                        placeholder="İsim, @kullanıcı veya #ID ile ara..."
-                        className="pl-10 bg-gray-50/80 border-gray-200/50 rounded-full text-[14px] shadow-inner focus-visible:ring-[#7b9e89]/20 focus-visible:border-[#7b9e89]/40"
+                        ref={searchInputRef}
+                        placeholder="Ara..."
+                        className="pl-10 bg-gray-50/80 border-gray-200/50 rounded-full text-[14px] shadow-inner focus-visible:ring-[#0c9789]/20 focus-visible:border-[#0c9789]/40"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -290,17 +302,17 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
             <div className="flex-1 overflow-y-auto">
                 {/* Pending Requests Panel */}
                 {showRequests && pendingRequests.length > 0 && (
-                    <div className="border-b border-stone-100 bg-[#eaf2ed]/50 p-3 space-y-2">
-                        <p className="text-[11px] font-bold text-stone-500 uppercase tracking-wider px-1 mb-2">Bekleyen İstekler</p>
+                    <div className="border-b border-gray-100 bg-[#f0fdfa]/50 p-3 space-y-2">
+                        <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider px-1 mb-2">Bekleyen İstekler</p>
                         {pendingRequests.map(req => (
-                            <div key={req.id} className="flex items-center gap-3 bg-white rounded-xl p-3 border border-stone-100 shadow-sm">
+                            <div key={req.id} className="flex items-center gap-3 bg-white rounded-xl p-3 border border-gray-100 shadow-sm">
                                 <Avatar className="h-9 w-9">
                                     <AvatarImage src={req.sender_avatar || undefined} />
                                     <AvatarFallback>{req.sender_name[0]?.toUpperCase()}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-semibold text-sm text-stone-800 truncate">{req.sender_name}</p>
-                                    <p className="text-[11px] text-stone-400">
+                                    <p className="font-semibold text-sm text-gray-800 truncate">{req.sender_name}</p>
+                                    <p className="text-[11px] text-gray-400">
                                         {formatDistanceToNow(new Date(req.created_at), { addSuffix: true, locale: tr })}
                                     </p>
                                 </div>
@@ -325,21 +337,21 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
                 {/* Search Results */}
                 {searchTerm && foundUsers.length > 0 && (
-                    <div className="border-b border-stone-100">
-                        <p className="px-4 pt-3 pb-1 text-[11px] font-bold text-stone-400 uppercase tracking-wider">Kullanıcılar</p>
+                    <div className="border-b border-gray-100">
+                        <p className="px-4 pt-3 pb-1 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Kullanıcılar</p>
                         {foundUsers.map(user => {
                             const status = connectionStatuses[user.id];
                             const existingConv = conversations.find(c => c.partner_id === user.id);
                             return (
-                                <div key={user.id} className="flex items-center gap-3 px-4 py-3 hover:bg-stone-50 transition-colors">
+                                <div key={user.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors">
                                     <Avatar className="h-10 w-10">
                                         <AvatarImage src={user.avatar_url || undefined} />
                                         <AvatarFallback>{user.full_name[0]?.toUpperCase()}</AvatarFallback>
                                     </Avatar>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-sm text-stone-800 truncate">{user.full_name}</p>
-                                        <div className="flex items-center gap-1.5 text-xs text-stone-400">
-                                            {user.username && <span className="text-[#7b9e89]">@{user.username}</span>}
+                                        <p className="font-semibold text-sm text-gray-800 truncate">{user.full_name}</p>
+                                        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                                            {user.username && <span className="text-[#0c9789]">@{user.username}</span>}
                                             {user.username && <span>·</span>}
                                             <span>{user.role === 'teacher' ? 'Öğretmen' : user.role === 'student' ? 'Öğrenci' : 'Ebeveyn'}</span>
                                         </div>
@@ -356,7 +368,7 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                                             <Clock className="h-3 w-3" /> Bekliyor
                                         </span>
                                     ) : (
-                                        <Button size="sm" className="text-xs h-8 rounded-full bg-[#7b9e89] hover:bg-[#6ba88f]"
+                                        <Button size="sm" className="text-xs h-8 rounded-full bg-[#0c9789] hover:bg-[#0a7c70]"
                                             onClick={() => handleSendRequest(user.id)}
                                             disabled={sendingRequest === user.id}>
                                             {sendingRequest === user.id ? "..." : "Bağlan"}
@@ -370,9 +382,9 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
 
                 {/* Conversations List */}
                 {!searchTerm && filteredConversations.length === 0 && (
-                    <div className="p-8 text-center text-stone-400">
-                        <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                            <Search className="h-7 w-7 text-stone-300" />
+                    <div className="p-8 text-center text-gray-400">
+                        <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <Search className="h-7 w-7 text-gray-300" />
                         </div>
                         <p className="text-sm font-medium">Henüz mesajlaşmanız yok.</p>
                         <p className="text-xs mt-1">Yukarıdan kişi arayarak bağlanın.</p>
@@ -384,10 +396,10 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                         key={conv.id}
                         onClick={() => onSelectConversation(conv.id, conv.partner_id)}
                         className={cn(
-                            "flex items-center gap-3.5 px-3 py-3 mx-2 my-1.5 cursor-pointer transition-all rounded-[24px]",
+                            "flex items-center gap-3.5 px-3 py-3 mx-2 my-1 cursor-pointer transition-all rounded-xl",
                             selectedConversationId === conv.id
-                                ? "bg-[#7b9e89]/10 border border-[#7b9e89]/20 shadow-sm"
-                                : "hover:bg-gray-50 border border-transparent"
+                                ? "bg-[#f0fdfa] border border-[#0c9789]/15"
+                                : "hover:bg-gray-50/80 border border-transparent"
                         )}
                     >
                         <div className="relative shrink-0">
@@ -395,24 +407,28 @@ export function ChatList({ onSelectConversation, selectedConversationId }: ChatL
                                 <AvatarImage src={conv.avatar_url || undefined} />
                                 <AvatarFallback>{conv.full_name[0]?.toUpperCase()}</AvatarFallback>
                             </Avatar>
+                            {/* Online indicator — only for actually online users */}
+                            {isOnline && isOnline(conv.partner_id) && (
+                                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                            )}
                             {conv.unread_count > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold text-white bg-[#7b9e89] rounded-full flex items-center justify-center">
+                                <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] font-bold text-white bg-[#0c9789] rounded-full flex items-center justify-center">
                                     {conv.unread_count}
                                 </span>
                             )}
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-baseline">
-                                <span className={cn("font-semibold text-sm truncate", conv.unread_count > 0 ? "text-stone-900" : "text-stone-700")}>
+                                <span className={cn("font-semibold text-sm truncate", conv.unread_count > 0 ? "text-gray-900" : "text-gray-700")}>
                                     {conv.full_name}
                                 </span>
                                 {conv.last_message_at && (
-                                    <span className="text-[10px] text-stone-400 shrink-0 ml-2">
+                                    <span className="text-[10px] text-gray-400 shrink-0 ml-2">
                                         {formatDistanceToNow(new Date(conv.last_message_at), { addSuffix: false, locale: tr })}
                                     </span>
                                 )}
                             </div>
-                            <p className={cn("text-xs truncate mt-0.5", conv.unread_count > 0 ? "text-stone-800 font-medium" : "text-stone-400")}>
+                            <p className={cn("text-xs truncate mt-0.5", conv.unread_count > 0 ? "text-gray-800 font-medium" : "text-gray-400")}>
                                 {conv.last_message_preview || "Sohbet başlat..."}
                             </p>
                         </div>

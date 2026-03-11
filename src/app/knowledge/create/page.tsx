@@ -11,6 +11,27 @@ import { Label } from "@/components/ui/label";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
+
+
+const SPECIAL_EDUCATION_CATEGORIES = [
+    "Otizm Spektrum Bozukluğu",
+    "DEHB (Dikkat Eksikliği ve Hiperaktivite)",
+    "Özgül Öğrenme Güçlüğü",
+    "Zihinsel Yetersizlik",
+    "İşitme Yetersizliği",
+    "Görme Yetersizliği",
+    "Fiziksel Yetersizlik",
+    "Dil ve Konuşma Bozuklukları",
+    "Üstün Zekalılar ve Yetenekliler",
+    "Erken Çocuklukta Özel Eğitim",
+    "Davranış Bozuklukları",
+    "Kaynaştırma ve Bütünleştirme",
+    "Aile Eğitimi ve Danışmanlığı",
+    "BEP Hazırlama Süreçleri",
+    "Duyu Bütünleme",
+    "Genel"
+];
+
 export default function CreateArticlePage() {
     const router = useRouter();
     const [title, setTitle] = useState("");
@@ -54,10 +75,10 @@ export default function CreateArticlePage() {
                     <Button variant="ghost" size="sm" onClick={() => router.back()}>
                         <ArrowLeft className="h-4 w-4 mr-1" /> Geri
                     </Button>
-                    <h1 className="text-2xl font-bold text-stone-800">Yeni Bilgi Paylaş</h1>
+                    <h1 className="text-2xl font-bold text-gray-800">Yeni Bilgi Paylaş</h1>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
                             <Label htmlFor="title">Başlık</Label>
@@ -76,9 +97,15 @@ export default function CreateArticlePage() {
                                 id="category"
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                placeholder="Örn: İletişim, Eğitim, Beslenme"
+                                placeholder="Listeden seçin veya kendi kategorinizi yazın..."
+                                list="knowledge-categories"
                                 required
                             />
+                            <datalist id="knowledge-categories">
+                                {SPECIAL_EDUCATION_CATEGORIES.map(cat => (
+                                    <option key={cat} value={cat} />
+                                ))}
+                            </datalist>
                         </div>
 
                         <div className="space-y-2">
@@ -103,7 +130,7 @@ export default function CreateArticlePage() {
                                 className="min-h-[300px]"
                                 required
                             />
-                            <p className="text-xs text-stone-500">
+                            <p className="text-xs text-gray-500">
                                 Markdown formatını destekler. (Opsiyonel)
                             </p>
                         </div>

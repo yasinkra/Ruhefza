@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { formatDistanceToNow } from "date-fns";
@@ -28,9 +30,10 @@ interface CommentSectionProps {
     postAuthorId: string;
     isQuestion: boolean;
     onCommentAdded?: () => void;
+    onCommentDeleted?: () => void;
 }
 
-export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdded }: CommentSectionProps) {
+export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdded, onCommentDeleted }: CommentSectionProps) {
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState("");
     const [loading, setLoading] = useState(true);
@@ -106,13 +109,38 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
 
         setSubmitting(true);
         try {
-            const { error } = await createClient().from("post_comments").insert({
+            const { data: newCommentData, error } = await createClient().from("post_comments").insert({
                 post_id: postId,
                 user_id: userId,
                 content: newComment.trim()
-            });
+            }).select(`
+                id,
+                content,
+                created_at,
+                user_id,
+                is_best_answer,
+                profiles (
+                    full_name,
+                    avatar_url,
+                    is_verified_expert
+                )
+            `).single();
 
             if (error) throw error;
+
+            // Optimistic update for the inserted comment
+            if (newCommentData) {
+                const mappedComment = {
+                    ...newCommentData,
+                    profiles: Array.isArray(newCommentData.profiles) ? newCommentData.profiles[0] : newCommentData.profiles
+                } as unknown as Comment;
+                
+                // Add the new comment sequentially avoiding duplicates from potential real-time clash
+                setComments(prev => {
+                    if (prev.find(c => c.id === mappedComment.id)) return prev;
+                    return [...prev, mappedComment];
+                });
+            }
 
             setNewComment("");
             if (onCommentAdded) onCommentAdded();
@@ -132,6 +160,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
             if (error) throw error;
             // Optimistic update
             setComments(comments.filter(c => c.id !== commentId));
+            if (onCommentDeleted) onCommentDeleted();
         } catch (error) {
             console.error("Error deleting comment:", error);
             alert("Yorum silinirken bir hata oluştu.");
@@ -189,7 +218,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
         }
     };
 
-    if (loading) return <div className="text-center py-4 text-xs text-stone-400">Yorumlar yükleniyor...</div>;
+    if (loading) return <div className="text-center py-4 text-xs text-gray-400">Yorumlar yükleniyor...</div>;
 
     // Sort to show best answer first
     const sortedComments = [...comments].sort((a, b) => {
@@ -202,16 +231,18 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
         <div className="space-y-4 pt-2">
             <div className="space-y-3 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
                 {sortedComments.length === 0 ? (
-                    <p className="text-center text-sm text-stone-400 py-2">Henüz yorum yok. İlk yorumu sen yap!</p>
+                    <p className="text-center text-sm text-gray-400 py-2">Henüz yorum yok. İlk yorumu sen yap!</p>
                 ) : (
                     sortedComments.map((comment) => (
                         <div key={comment.id} className="flex gap-3 group">
-                            <Avatar className="h-8 w-8">
-                                <AvatarImage src={comment.profiles?.avatar_url || undefined} />
-                                <AvatarFallback>{comment.profiles?.full_name?.[0]?.toUpperCase() || "U"}</AvatarFallback>
-                            </Avatar>
+                            <Link href={`/profile/${comment.user_id}`}>
+                                <Avatar className="h-8 w-8 cursor-pointer hover:ring-2 hover:ring-[#0c9789]/50 transition-all">
+                                    <AvatarImage src={comment.profiles?.avatar_url || undefined} />
+                                    <AvatarFallback>{comment.profiles?.full_name?.[0]?.toUpperCase() || "U"}</AvatarFallback>
+                                </Avatar>
+                            </Link>
                             <div className={cn("flex-1 p-3 rounded-xl rounded-tl-none relative",
-                                comment.is_best_answer ? "bg-emerald-50 border border-emerald-100" : "bg-stone-50")}
+                                comment.is_best_answer ? "bg-emerald-50 border border-emerald-100" : "bg-gray-50")}
                             >
                                 {comment.is_best_answer && (
                                     <div className="absolute -top-3 right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1">
@@ -219,17 +250,17 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                     </div>
                                 )}
                                 <div className="flex items-center justify-between">
-                                    <span className="text-xs font-semibold text-stone-900 inline-flex items-center gap-1">
+                                    <Link href={`/profile/${comment.user_id}`} className="text-xs font-semibold text-gray-900 hover:text-[#0c9789] transition-colors inline-flex items-center gap-1 cursor-pointer">
                                         {comment.profiles?.full_name}
                                         {comment.profiles?.is_verified_expert && (
-                                            <BadgeCheck className="h-3.5 w-3.5 text-[#7b9e89]" aria-label="Doğrulanmış Uzman" />
+                                            <BadgeCheck className="h-3.5 w-3.5 text-[#0c9789]" aria-label="Doğrulanmış Uzman" />
                                         )}
-                                    </span>
-                                    <span className="text-[10px] text-stone-400">
+                                    </Link>
+                                    <span className="text-[10px] text-gray-400">
                                         {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true, locale: tr })}
                                     </span>
                                 </div>
-                                <p className={cn("text-sm mt-1", comment.is_best_answer ? "text-emerald-800 font-medium" : "text-stone-700")}>
+                                <p className={cn("text-sm mt-1", comment.is_best_answer ? "text-emerald-800 font-medium" : "text-gray-700")}>
                                     {comment.content}
                                 </p>
                             </div>
@@ -237,7 +268,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                 {userId === postAuthorId && isQuestion && !comment.is_best_answer && (
                                     <button
                                         onClick={() => handleMarkBestAnswer(comment.id)}
-                                        className="text-xs text-stone-400 hover:text-[#6ba88f] bg-white p-1 rounded-md shadow-sm border border-stone-100"
+                                        className="text-xs text-gray-400 hover:text-[#0a7c70] bg-white p-1 rounded-md shadow-sm border border-gray-100"
                                         title="Çözüm olarak işaretle"
                                     >
                                         <BadgeCheck className="h-4 w-4" />
@@ -246,7 +277,7 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                 {userId === comment.user_id && (
                                     <button
                                         onClick={() => handleDelete(comment.id)}
-                                        className="text-stone-400 hover:text-red-500 bg-white p-1 rounded-md shadow-sm border border-stone-100"
+                                        className="text-gray-400 hover:text-red-500 bg-white p-1 rounded-md shadow-sm border border-gray-100"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </button>
@@ -258,16 +289,16 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
             </div>
 
             {userId && (
-                <form onSubmit={handleSubmit} className="flex gap-2 items-center border-t border-stone-100 pt-3">
+                <form onSubmit={handleSubmit} className="flex gap-2 items-center border-t border-gray-100 pt-3">
                     <Avatar className="h-8 w-8 hidden sm:block">
                         {/* Current user avatar would go here if we fetched it, skipping for now to keep it simple */}
-                        <AvatarFallback className="bg-[#eaf2ed] text-[#557b66]">S</AvatarFallback>
+                        <AvatarFallback className="bg-[#f0fdfa] text-[#0c9789]">S</AvatarFallback>
                     </Avatar>
                     <Input
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Bir yorum yaz..."
-                        className="flex-1 h-9 text-sm bg-stone-50 border-stone-200 focus:bg-white transition-colors"
+                        className="flex-1 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white transition-colors"
                         maxLength={500}
                     />
                     <Button

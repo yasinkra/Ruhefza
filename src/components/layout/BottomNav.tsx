@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, MessageCircle, User, BookOpen, LayoutDashboard, Bell } from "lucide-react";
+import { Home, MessageCircle, User, BookOpen, Bell } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { createClient } from "@/utils/supabase/client";
 
 const navigation = [
-    { name: "Ana Sayfa", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Topluluk", href: "/feed", icon: Home },
+    { name: "Ana Sayfa", href: "/feed", icon: Home },
     { name: "Mesajlar", href: "/messages", icon: MessageCircle },
     { name: "Bilgi", href: "/knowledge", icon: BookOpen },
     { name: "Bildirim", href: "/notifications", icon: Bell },
@@ -61,10 +60,9 @@ export function BottomNav() {
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-            {/* Glassmorphism bottom bar */}
-            <div className="glass-nav border-t border-stone-200/50 shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+            <div className="bg-white/90 backdrop-blur-xl border-t border-gray-200/60 shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
                 <div
-                    className="flex items-center justify-around h-[72px]"
+                    className="flex items-center justify-around h-[68px]"
                     style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
                 >
                     {navigation.map((item) => {
@@ -76,18 +74,17 @@ export function BottomNav() {
                                 className="flex flex-col items-center justify-center w-full h-full active:scale-95 transition-transform"
                             >
                                 <div className={cn(
-                                    "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
-                                    isActive ? "text-[#7b9e89]" : "text-stone-400"
+                                    "flex flex-col items-center justify-center gap-0.5 transition-all duration-200 relative",
+                                    isActive ? "text-[#0c9789]" : "text-gray-400"
                                 )}>
-                                    {/* Active pill background */}
                                     {isActive && (
-                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-12 h-[30px] bg-[#eaf2ed] rounded-full -z-10 animate-scale-in" />
+                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-10 h-[28px] bg-[#0c9789]/10 rounded-full -z-10 animate-scale-in" />
                                     )}
                                     <div className="relative">
                                         <item.icon
                                             className={cn(
                                                 "h-[22px] w-[22px] transition-all duration-200",
-                                                isActive && "text-[#7b9e89]"
+                                                isActive && "text-[#0c9789]"
                                             )}
                                             strokeWidth={isActive ? 2.5 : 1.8}
                                         />
@@ -99,7 +96,7 @@ export function BottomNav() {
                                     </div>
                                     <span className={cn(
                                         "text-[10px] transition-all duration-200",
-                                        isActive ? "font-semibold text-[#6ba88f]" : "font-medium"
+                                        isActive ? "font-semibold text-[#0c9789]" : "font-medium"
                                     )}>
                                         {item.name}
                                     </span>
