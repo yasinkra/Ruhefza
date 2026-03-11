@@ -61,9 +61,9 @@ export function BottomNav() {
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-            <div className="bg-white/95 backdrop-blur-xl border-t border-gray-200/60 shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+            <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100/60 shadow-[0_-8px_32px_rgba(0,0,0,0.06)]">
                 <div
-                    className="flex items-center justify-between h-[72px] px-1"
+                    className="flex items-center justify-between h-[72px] px-2"
                     style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
                 >
                     {navigation.map((item) => {
@@ -75,19 +75,19 @@ export function BottomNav() {
                                 className="flex flex-col items-center justify-center flex-1 h-full active:scale-90 transition-transform"
                             >
                                 <div className={cn(
-                                    "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
+                                    "flex flex-col items-center justify-center gap-1.5 transition-all duration-200 relative",
                                     isActive ? "text-[#0c9789]" : "text-gray-400"
                                 )}>
                                     {isActive && (
-                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-8 h-[24px] bg-[#0c9789]/8 rounded-full -z-10 animate-scale-in" />
+                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-12 h-[30px] bg-[#0c9789]/8 rounded-full -z-10 animate-scale-in" />
                                     )}
-                                    <div className="relative">
+                                    <div className="relative flex items-center justify-center">
                                         <item.icon
                                             className={cn(
-                                                "h-5 w-5 transition-all duration-200",
+                                                "h-[22px] w-[22px] transition-all duration-200",
                                                 isActive && "text-[#0c9789]"
                                             )}
-                                            strokeWidth={isActive ? 2.5 : 1.8}
+                                            strokeWidth={isActive ? 2.5 : 2}
                                         />
                                         {item.name === "Mesajlar" && unreadCount > 0 && (
                                             <span className="absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-2 ring-white px-0.5 animate-scale-in">
@@ -96,7 +96,7 @@ export function BottomNav() {
                                         )}
                                     </div>
                                     <span className={cn(
-                                        "text-[9px] sm:text-[10px] transition-all duration-200 truncate px-0.5",
+                                        "text-[10px] sm:text-[11px] transition-all duration-200 truncate px-0.5",
                                         isActive ? "font-bold text-[#0c9789]" : "font-medium"
                                     )}>
                                         {item.name}
