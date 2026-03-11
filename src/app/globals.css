@@ -10,7 +10,7 @@
    ═══════════════════════════════════════════ */
 
 @theme {
-  --font-sans: 'Inter', var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', var(--font-plus-jakarta), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
