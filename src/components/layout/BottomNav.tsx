@@ -75,13 +75,13 @@ export function BottomNav() {
                                 className="flex flex-col items-center justify-center flex-1 h-full active:scale-90 transition-transform"
                             >
                                 <div className={cn(
-                                    "flex flex-col items-center justify-center gap-1.5 transition-all duration-200 relative",
+                                    "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
                                     isActive ? "text-[#0c9789]" : "text-gray-400"
                                 )}>
-                                    {isActive && (
-                                        <div className="absolute -top-1.5 inset-x-0 mx-auto w-12 h-[30px] bg-[#0c9789]/8 rounded-full -z-10 animate-scale-in" />
-                                    )}
-                                    <div className="relative flex items-center justify-center">
+                                    <div className="relative flex items-center justify-center h-8 w-12">
+                                        {isActive && (
+                                            <div className="absolute inset-x-0 mx-auto w-12 h-full bg-[#0c9789]/8 rounded-full -z-10 animate-scale-in" />
+                                        )}
                                         <item.icon
                                             className={cn(
                                                 "h-[22px] w-[22px] transition-all duration-200",
@@ -90,7 +90,7 @@ export function BottomNav() {
                                             strokeWidth={isActive ? 2.5 : 2}
                                         />
                                         {item.name === "Mesajlar" && unreadCount > 0 && (
-                                            <span className="absolute -top-1.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-2 ring-white px-0.5 animate-scale-in">
+                                            <span className="absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-2 ring-white px-0.5 animate-scale-in">
                                                 {unreadCount > 99 ? '99+' : unreadCount}
                                             </span>
                                         )}
