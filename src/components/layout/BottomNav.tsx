@@ -62,9 +62,15 @@ export function BottomNav() {
             setIsVisible(!isKeyboardOpen);
         };
 
+        // Custom Event Listeners for explicit control
+        const handleHide = () => setIsVisible(false);
+        const handleShow = () => setIsVisible(true);
+
         document.addEventListener('focusin', handleFocusIn);
         document.addEventListener('focusout', handleFocusOut);
         window.visualViewport?.addEventListener('resize', handleViewportChange);
+        window.addEventListener('hide-bottom-nav', handleHide);
+        window.addEventListener('show-bottom-nav', handleShow);
 
         fetchUnreadCount();
 
@@ -85,6 +91,8 @@ export function BottomNav() {
             document.removeEventListener('focusin', handleFocusIn);
             document.removeEventListener('focusout', handleFocusOut);
             window.visualViewport?.removeEventListener('resize', handleViewportChange);
+            window.removeEventListener('hide-bottom-nav', handleHide);
+            window.removeEventListener('show-bottom-nav', handleShow);
             subscription.unsubscribe();
             createClient().removeChannel(channel);
         };

@@ -642,8 +642,18 @@ export function ChatWindow({ conversationId, partnerId, onBack, isOnline }: Chat
                                 if (newMessage.trim()) handleSendMessage(e as unknown as React.FormEvent);
                             }
                         }}
+                        onFocus={() => {
+                            window.dispatchEvent(new CustomEvent('hide-bottom-nav'));
+                        }}
+                        onBlur={() => {
+                            window.dispatchEvent(new CustomEvent('show-bottom-nav'));
+                        }}
                         placeholder="Mesajınızı yazın..."
                         rows={1}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        inputMode="text"
                         className="flex-1 resize-none rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0c9789]/20 focus:border-[#0c9789]/40 focus:bg-white transition-all max-h-32 overflow-y-auto min-h-[40px]"
                     />
                     <Button type="submit" size="icon"
