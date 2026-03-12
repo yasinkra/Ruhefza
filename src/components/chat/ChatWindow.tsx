@@ -647,8 +647,11 @@ export function ChatWindow({ conversationId, partnerId, onBack, isOnline }: Chat
                             document.body.setAttribute('data-hide-nav', 'true');
                         }}
                         onBlur={() => {
-                            window.dispatchEvent(new CustomEvent('show-bottom-nav'));
-                            document.body.removeAttribute('data-hide-nav');
+                            // Small delay to allow click events on buttons to register before layout shifts
+                            setTimeout(() => {
+                                window.dispatchEvent(new CustomEvent('show-bottom-nav'));
+                                document.body.removeAttribute('data-hide-nav');
+                            }, 200);
                         }}
                         placeholder="Mesajınızı yazın..."
                         rows={1}
