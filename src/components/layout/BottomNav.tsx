@@ -42,7 +42,7 @@ export function BottomNav() {
         // Keyboard/Focus Detection
         const handleFocusIn = (e: FocusEvent) => {
             const isInput = (e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA';
-            if (isInput && window.innerWidth < 768) {
+            if (isInput) {
                 setIsVisible(false);
             }
         };
@@ -57,11 +57,9 @@ export function BottomNav() {
         // Extra safety for iOS Viewport changes
         const handleViewportChange = () => {
             if (!window.visualViewport) return;
-            const threshold = 150; // pixels
+            const threshold = 100; // pixels
             const isKeyboardOpen = window.visualViewport.height < window.innerHeight - threshold;
-            if (window.innerWidth < 768) {
-                setIsVisible(!isKeyboardOpen);
-            }
+            setIsVisible(!isKeyboardOpen);
         };
 
         document.addEventListener('focusin', handleFocusIn);
@@ -94,8 +92,8 @@ export function BottomNav() {
 
     return (
         <div className={cn(
-            "fixed bottom-0 left-0 right-0 z-50 md:hidden transition-transform duration-300 ease-in-out",
-            !isVisible ? "translate-y-full" : "translate-y-0"
+            "fixed bottom-0 left-0 right-0 z-50 md:hidden",
+            !isVisible && "hidden"
         )}>
             <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100/60 shadow-[0_-8px_32px_rgba(0,0,0,0.06)]">
                 <div
