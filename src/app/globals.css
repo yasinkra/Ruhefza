@@ -19,6 +19,11 @@ body[data-hide-nav="true"] #mobile-bottom-nav {
   display: none !important;
 }
 
+/* Force remove the ghost space reserved for BottomNav */
+body[data-hide-nav="true"] #app-main-content {
+  padding-bottom: 0 !important;
+}
+
 :root {
   --radius: 0.5rem;
 
