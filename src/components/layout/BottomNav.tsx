@@ -19,6 +19,7 @@ const navigation = [
 export function BottomNav() {
     const pathname = usePathname();
     const [unreadCount, setUnreadCount] = useState(0);
+    const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
         let mounted = true;
@@ -38,6 +39,35 @@ export function BottomNav() {
             }
         };
 
+        // Keyboard/Focus Detection
+        const handleFocusIn = (e: FocusEvent) => {
+            const isInput = (e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA';
+            if (isInput && window.innerWidth < 768) {
+                setIsVisible(false);
+            }
+        };
+
+        const handleFocusOut = (e: FocusEvent) => {
+            const isInput = (e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA';
+            if (isInput) {
+                setIsVisible(true);
+            }
+        };
+
+        // Extra safety for iOS Viewport changes
+        const handleViewportChange = () => {
+            if (!window.visualViewport) return;
+            const threshold = 150; // pixels
+            const isKeyboardOpen = window.visualViewport.height < window.innerHeight - threshold;
+            if (window.innerWidth < 768) {
+                setIsVisible(!isKeyboardOpen);
+            }
+        };
+
+        document.addEventListener('focusin', handleFocusIn);
+        document.addEventListener('focusout', handleFocusOut);
+        window.visualViewport?.addEventListener('resize', handleViewportChange);
+
         fetchUnreadCount();
 
         const { data: { subscription } } = createClient().auth.onAuthStateChange(() => {
@@ -54,13 +84,19 @@ export function BottomNav() {
 
         return () => {
             mounted = false;
+            document.removeEventListener('focusin', handleFocusIn);
+            document.removeEventListener('focusout', handleFocusOut);
+            window.visualViewport?.removeEventListener('resize', handleViewportChange);
             subscription.unsubscribe();
             createClient().removeChannel(channel);
         };
     }, []);
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+        <div className={cn(
+            "fixed bottom-0 left-0 right-0 z-50 md:hidden transition-transform duration-300 ease-in-out",
+            !isVisible ? "translate-y-full" : "translate-y-0"
+        )}>
             <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100/60 shadow-[0_-8px_32px_rgba(0,0,0,0.06)]">
                 <div
                     className="flex items-center justify-between h-[72px] px-2"
