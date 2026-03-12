@@ -14,17 +14,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Hide Mobile Nav when typing in Chat */
-body[data-hide-nav="true"] #mobile-bottom-nav {
-  display: none !important;
-}
-
-/* Force remove the ghost space reserved for BottomNav */
-body[data-hide-nav="true"] #app-main-content {
-  padding-bottom: 0 !important;
-}
-
 :root {
+  --nav-height: 72px;
   --radius: 0.5rem;
 
   /* Brand Colors — Stitch Teal Theme */
@@ -85,6 +76,27 @@ body[data-hide-nav="true"] #app-main-content {
   --sidebar-accent-foreground: oklch(0.3 0.05 180);
   --sidebar-border: oklch(0.93 0.005 180);
   --sidebar-ring: oklch(0.6 0.12 175);
+}
+
+/* Hide Mobile Nav when typing in Chat */
+body[data-hide-nav="true"] #mobile-bottom-nav {
+  display: none !important;
+}
+
+/* Force remove the ghost space reserved for BottomNav */
+body[data-hide-nav="true"] #app-main-content {
+  padding-bottom: 0 !important;
+}
+
+/* Base rule for main content padding - accounting for nav + safe area */
+#app-main-content {
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+@media (min-width: 768px) {
+  #app-main-content {
+    padding-bottom: 0 !important;
+  }
 }
 
 @theme inline {

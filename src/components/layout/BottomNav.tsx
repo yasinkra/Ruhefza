@@ -39,11 +39,12 @@ export function BottomNav() {
             }
         };
 
-        // Keyboard/Focus Detection
+        // Global Focus Detection to hide Nav on all inputs (Universal Fix)
         const handleFocusIn = (e: FocusEvent) => {
             const isInput = (e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA';
             if (isInput) {
                 setIsVisible(false);
+                document.body.setAttribute('data-hide-nav', 'true');
             }
         };
 
@@ -51,13 +52,22 @@ export function BottomNav() {
             const isInput = (e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA';
             if (isInput) {
                 setIsVisible(true);
+                // We use a small delay here to match ChatWindow's double-tap fix and avoid flicker
+                setTimeout(() => {
+                    document.body.removeAttribute('data-hide-nav');
+                }, 100);
             }
         };
 
-        // Extra safety for iOS Viewport changes removed to avoid conflict with explicit hiding
-        // Custom Event Listeners for explicit control
-        const handleHide = () => setIsVisible(false);
-        const handleShow = () => setIsVisible(true);
+        const handleHide = () => {
+            setIsVisible(false);
+            document.body.setAttribute('data-hide-nav', 'true');
+        };
+
+        const handleShow = () => {
+            setIsVisible(true);
+            document.body.removeAttribute('data-hide-nav');
+        };
 
         document.addEventListener('focusin', handleFocusIn);
         document.addEventListener('focusout', handleFocusOut);
@@ -91,21 +101,19 @@ export function BottomNav() {
 
     return (
         <div id="mobile-bottom-nav" className={cn(
-            "fixed bottom-0 left-0 right-0 z-50 md:hidden",
-            !isVisible && "hidden"
+            "fixed bottom-0 left-0 right-0 z-50 md:hidden transition-all duration-300",
+            !isVisible && "opacity-0 pointer-events-none translate-y-10"
         )}>
             <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100/60 shadow-[0_-8px_32px_rgba(0,0,0,0.06)]">
-                <div
-                    className="flex items-center justify-between h-[72px] px-2"
-                    style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
-                >
+                {/* Navigation Items - Fixed 72px area for perfect icon centering */}
+                <div className="flex items-center justify-between h-[72px] px-2">
                     {navigation.map((item) => {
                         const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
                         return (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="flex flex-col items-center justify-center flex-1 h-full active:scale-90 transition-transform"
+                                className="flex flex-col items-center justify-center flex-1 h-full active:scale-95 transition-transform"
                             >
                                 <div className={cn(
                                     "flex flex-col items-center justify-center gap-1 transition-all duration-200 relative",
@@ -139,6 +147,11 @@ export function BottomNav() {
                         );
                     })}
                 </div>
+                {/* Safe Area Spacer - ONLY visible on devices with Home Indicator (iPhone 10+) */}
+                <div 
+                    className="h-[env(safe-area-inset-bottom,0px)]" 
+                    aria-hidden="true" 
+                />
             </div>
         </div>
     );
