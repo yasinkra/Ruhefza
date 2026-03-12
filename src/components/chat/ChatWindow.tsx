@@ -644,9 +644,11 @@ export function ChatWindow({ conversationId, partnerId, onBack, isOnline }: Chat
                         }}
                         onFocus={() => {
                             window.dispatchEvent(new CustomEvent('hide-bottom-nav'));
+                            document.body.setAttribute('data-hide-nav', 'true');
                         }}
                         onBlur={() => {
                             window.dispatchEvent(new CustomEvent('show-bottom-nav'));
+                            document.body.removeAttribute('data-hide-nav');
                         }}
                         placeholder="Mesajınızı yazın..."
                         rows={1}

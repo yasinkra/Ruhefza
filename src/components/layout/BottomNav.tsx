@@ -54,21 +54,13 @@ export function BottomNav() {
             }
         };
 
-        // Extra safety for iOS Viewport changes
-        const handleViewportChange = () => {
-            if (!window.visualViewport) return;
-            const threshold = 100; // pixels
-            const isKeyboardOpen = window.visualViewport.height < window.innerHeight - threshold;
-            setIsVisible(!isKeyboardOpen);
-        };
-
+        // Extra safety for iOS Viewport changes removed to avoid conflict with explicit hiding
         // Custom Event Listeners for explicit control
         const handleHide = () => setIsVisible(false);
         const handleShow = () => setIsVisible(true);
 
         document.addEventListener('focusin', handleFocusIn);
         document.addEventListener('focusout', handleFocusOut);
-        window.visualViewport?.addEventListener('resize', handleViewportChange);
         window.addEventListener('hide-bottom-nav', handleHide);
         window.addEventListener('show-bottom-nav', handleShow);
 
@@ -90,7 +82,6 @@ export function BottomNav() {
             mounted = false;
             document.removeEventListener('focusin', handleFocusIn);
             document.removeEventListener('focusout', handleFocusOut);
-            window.visualViewport?.removeEventListener('resize', handleViewportChange);
             window.removeEventListener('hide-bottom-nav', handleHide);
             window.removeEventListener('show-bottom-nav', handleShow);
             subscription.unsubscribe();
@@ -99,7 +90,7 @@ export function BottomNav() {
     }, []);
 
     return (
-        <div className={cn(
+        <div id="mobile-bottom-nav" className={cn(
             "fixed bottom-0 left-0 right-0 z-50 md:hidden",
             !isVisible && "hidden"
         )}>

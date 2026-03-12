@@ -14,6 +14,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Hide Mobile Nav when typing in Chat */
+body[data-hide-nav="true"] #mobile-bottom-nav {
+  display: none !important;
+}
+
 :root {
   --radius: 0.5rem;
 
