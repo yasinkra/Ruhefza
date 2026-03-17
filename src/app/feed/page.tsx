@@ -133,7 +133,7 @@ export default function FeedPage() {
                                     activeFeedTab === 'following' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
                                 )}
                             >
-                                Takip Ettiklerin
+                                Bağlantıların
                                 {activeFeedTab === 'following' && (
                                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
                                 )}
