@@ -83,7 +83,7 @@ export default function FeedPage() {
 
     return (
         <AppShell fullWidth>
-            <div className="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-6 xl:gap-8 px-4 md:px-6 py-6 md:py-8 pb-24 md:pb-8 min-h-screen">
+            <div className="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-6 xl:gap-8 px-4 md:px-6 py-0 md:py-8 pb-24 md:pb-8 min-h-screen">
                 {/* Main Feed Column */}
                 <div className="flex-1 min-w-0 relative flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
                     {/* Welcome Sticky Header */}
@@ -100,7 +100,7 @@ export default function FeedPage() {
                         </div>
                     </header>
                     {/* Feed Tabs - Keşfet / Bağlantıların */}
-                    <nav className="flex items-center border-b border-gray-100 sticky top-16 xl:static z-30 bg-white -mx-4 md:-mx-6 px-2 md:px-4 shadow-sm">
+                    <nav className="flex items-center border-b border-gray-100 sticky top-0 xl:static z-30 bg-white -mx-4 md:-mx-6 px-2 md:px-4 shadow-sm">
                         <button
                             onClick={() => setActiveFeedTab('discover')}
                             className={cn(
