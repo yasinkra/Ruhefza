@@ -21,6 +21,8 @@ export default function FeedPage() {
     const [userName, setUserName] = useState("");
     const [recommendedExperts, setRecommendedExperts] = useState<{ id: string, full_name: string, role: string | null, avatar_url: string | null, seed?: string }[]>([]);
     const [activeFeedTab, setActiveFeedTab] = useState<'discover' | 'following'>('discover');
+    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
 
     const categories = ["Sizin İçin", "Otizm Bakımı", "Nöroçeşitlilik", "Günlük Başarılar", "Terapi Sohbeti"];
 
@@ -77,6 +79,42 @@ export default function FeedPage() {
         fetchAnnouncement();
     }, []);
 
+    useEffect(() => {
+        const scrollContainer = document.getElementById('app-main-content');
+        if (!scrollContainer) return;
+
+        const handleScroll = () => {
+            // Only apply on mobile/tablet (below XL which is 1280px)
+            if (window.innerWidth >= 1280) {
+                if (!isHeaderVisible) setIsHeaderVisible(true);
+                return;
+            }
+
+            const currentScrollY = scrollContainer.scrollTop;
+            
+            // Show at the very top
+            if (currentScrollY < 50) {
+                setIsHeaderVisible(true);
+                setLastScrollY(currentScrollY);
+                return;
+            }
+
+            // Directional scroll handling
+            if (currentScrollY > lastScrollY && currentScrollY > 120) {
+                // Scrolling down - hide
+                setIsHeaderVisible(false);
+            } else if (currentScrollY < lastScrollY - 10) {
+                // Scrolling up - show
+                setIsHeaderVisible(true);
+            }
+            
+            setLastScrollY(currentScrollY);
+        };
+
+        scrollContainer.addEventListener('scroll', handleScroll);
+        return () => scrollContainer.removeEventListener('scroll', handleScroll);
+    }, [lastScrollY, isHeaderVisible]);
+
     const handlePostCreated = () => {
         setRefreshTrigger(prev => prev + 1);
     };
@@ -88,7 +126,10 @@ export default function FeedPage() {
                 <div className="flex-1 min-w-0 relative flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
                     {/* Welcome Sticky Header */}
                     {/* Welcome Header */}
-                    <header className="flex flex-col gap-4 bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-10 backdrop-blur-md bg-white/90">
+                    <header className={cn(
+                        "flex flex-col gap-4 bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-20 backdrop-blur-md bg-white/90 transition-all duration-500 ease-in-out",
+                        !isHeaderVisible && "-translate-y-full opacity-0 pointer-events-none"
+                    )}>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <h2 className="text-[17px] md:text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
