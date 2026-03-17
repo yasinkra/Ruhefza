@@ -21,8 +21,6 @@ export default function FeedPage() {
     const [userName, setUserName] = useState("");
     const [recommendedExperts, setRecommendedExperts] = useState<{ id: string, full_name: string, role: string | null, avatar_url: string | null, seed?: string }[]>([]);
     const [activeFeedTab, setActiveFeedTab] = useState<'discover' | 'following'>('discover');
-    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
 
     const categories = ["Sizin İçin", "Otizm Bakımı", "Nöroçeşitlilik", "Günlük Başarılar", "Terapi Sohbeti"];
 
@@ -79,42 +77,6 @@ export default function FeedPage() {
         fetchAnnouncement();
     }, []);
 
-    useEffect(() => {
-        const scrollContainer = document.getElementById('app-main-content');
-        if (!scrollContainer) return;
-
-        const handleScroll = () => {
-            // Only apply on mobile/tablet (below XL which is 1280px)
-            if (window.innerWidth >= 1280) {
-                if (!isHeaderVisible) setIsHeaderVisible(true);
-                return;
-            }
-
-            const currentScrollY = scrollContainer.scrollTop;
-            
-            // Show at the very top
-            if (currentScrollY < 50) {
-                setIsHeaderVisible(true);
-                setLastScrollY(currentScrollY);
-                return;
-            }
-
-            // Directional scroll handling
-            if (currentScrollY > lastScrollY && currentScrollY > 120) {
-                // Scrolling down - hide
-                setIsHeaderVisible(false);
-            } else if (currentScrollY < lastScrollY - 10) {
-                // Scrolling up - show
-                setIsHeaderVisible(true);
-            }
-            
-            setLastScrollY(currentScrollY);
-        };
-
-        scrollContainer.addEventListener('scroll', handleScroll);
-        return () => scrollContainer.removeEventListener('scroll', handleScroll);
-    }, [lastScrollY, isHeaderVisible]);
-
     const handlePostCreated = () => {
         setRefreshTrigger(prev => prev + 1);
     };
@@ -125,62 +87,45 @@ export default function FeedPage() {
                 {/* Main Feed Column */}
                 <div className="flex-1 min-w-0 relative flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
                     {/* Welcome Sticky Header */}
-                    {/* Welcome Header */}
-                    <header className={cn(
-                        "flex flex-col gap-4 bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-20 backdrop-blur-md bg-white/90 transition-all duration-500 ease-in-out",
-                        !isHeaderVisible && "-translate-y-full opacity-0 pointer-events-none"
-                    )}>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <h2 className="text-[17px] md:text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Link href="/notifications" className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
-                                    <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white group-hover:scale-110 transition-transform"></span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
-                                </Link>
-                            </div>
+                    {/* Desktop Header */}
+                    <header className="hidden xl:flex items-center justify-between bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-20 backdrop-blur-md bg-white/90">
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
                         </div>
-
-                        {/* Mobile Search - Visible only below XL */}
-                        <div className="xl:hidden relative w-full">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <Input
-                                placeholder="Ara..."
-                                className="w-full pl-11 pr-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0c9789]/20 focus:border-[#0c9789]/40 transition-all"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
+                        <div className="flex items-center gap-4">
+                            <Link href="/notifications" className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
+                                <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white group-hover:scale-110 transition-transform"></span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
+                            </Link>
                         </div>
-
-                        {/* Feed Tabs - Keşfet / Takip Ettiklerin */}
-                        <nav className="flex items-center border-t border-gray-50 mt-1 pt-2">
-                            <button
-                                onClick={() => setActiveFeedTab('discover')}
-                                className={cn(
-                                    "flex-1 py-3 text-sm font-semibold transition-all relative",
-                                    activeFeedTab === 'discover' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
-                                )}
-                            >
-                                Keşfet
-                                {activeFeedTab === 'discover' && (
-                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
-                                )}
-                            </button>
-                            <button
-                                onClick={() => setActiveFeedTab('following')}
-                                className={cn(
-                                    "flex-1 py-3 text-sm font-semibold transition-all relative",
-                                    activeFeedTab === 'following' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
-                                )}
-                            >
-                                Bağlantıların
-                                {activeFeedTab === 'following' && (
-                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
-                                )}
-                            </button>
-                        </nav>
                     </header>
+                    {/* Feed Tabs - Keşfet / Bağlantıların */}
+                    <nav className="flex items-center border-b border-gray-100 mt-1">
+                        <button
+                            onClick={() => setActiveFeedTab('discover')}
+                            className={cn(
+                                "flex-1 py-3.5 text-sm font-semibold transition-all relative",
+                                activeFeedTab === 'discover' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
+                            )}
+                        >
+                            Keşfet
+                            {activeFeedTab === 'discover' && (
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
+                            )}
+                        </button>
+                        <button
+                            onClick={() => setActiveFeedTab('following')}
+                            className={cn(
+                                "flex-1 py-3.5 text-sm font-semibold transition-all relative",
+                                activeFeedTab === 'following' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
+                            )}
+                        >
+                            Bağlantıların
+                            {activeFeedTab === 'following' && (
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
+                            )}
+                        </button>
+                    </nav>
 
                     {/* Create Post or Info Banner */}
                     {!loadingProfile && isExpert ? (

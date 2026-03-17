@@ -1,7 +1,7 @@
-"use client";
-
 import { Sidebar } from "./Sidebar";
 import { BottomNav } from "./BottomNav";
+import { MobileHeader } from "./MobileHeader";
+import { MobileSidebar } from "./MobileSidebar";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { ShieldAlert, LogOut } from "lucide-react";
@@ -16,6 +16,7 @@ interface AppShellProps {
 export function AppShell({ children, fullWidth = false }: AppShellProps) {
     const [isBanned, setIsBanned] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -70,14 +71,22 @@ export function AppShell({ children, fullWidth = false }: AppShellProps) {
             {/* Desktop Sidebar */}
             <Sidebar />
 
+            {/* Mobile Navigation */}
+            <MobileHeader onOpenMenu={() => setIsMobileMenuOpen(true)} />
+            <MobileSidebar 
+                isOpen={isMobileMenuOpen} 
+                onClose={() => setIsMobileMenuOpen(false)} 
+                onLogout={handleLogout}
+            />
+
             {/* Main Content Area */}
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
                 {fullWidth ? (
-                    <div id="app-main-content" className="flex-1 overflow-y-auto custom-scrollbar">
+                    <div id="app-main-content" className="flex-1 overflow-y-auto custom-scrollbar mt-16 xl:mt-0">
                         {children}
                     </div>
                 ) : (
-                    <div id="app-main-content" className="flex-1 overflow-y-auto custom-scrollbar">
+                    <div id="app-main-content" className="flex-1 overflow-y-auto custom-scrollbar mt-16 xl:mt-0">
                         <div className="container mx-auto max-w-2xl px-4 py-4 md:px-8 md:py-8 lg:max-w-4xl">
                             {children}
                         </div>
