@@ -6,10 +6,9 @@ import Link from "next/link";
 import { CreatePost } from "@/components/feed/CreatePost";
 import { PostList } from "@/components/feed/PostList";
 import { Input } from "@/components/ui/input";
-import { Info, Search, Megaphone, Sparkles, TrendingUp, ChevronRight, CheckCircle, BookOpen, Clock, Menu } from "lucide-react";
+import { Info, Search, Megaphone, Sparkles, TrendingUp, ChevronRight, CheckCircle, BookOpen, Clock } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { createClient } from "@/utils/supabase/client";
-import Image from "next/image";
 
 export default function FeedPage() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -128,43 +127,27 @@ export default function FeedPage() {
                     {/* Welcome Sticky Header */}
                     {/* Welcome Header */}
                     <header className={cn(
-                        "flex flex-col gap-4 bg-white px-5 py-4 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-20 backdrop-blur-md bg-white/90 transition-all duration-500 ease-in-out",
+                        "flex flex-col gap-4 bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-20 backdrop-blur-md bg-white/90 transition-all duration-500 ease-in-out",
                         !isHeaderVisible && "-translate-y-full opacity-0 pointer-events-none"
                     )}>
                         <div className="flex items-center justify-between">
-                            {/* Left: Menu/Welcome */}
                             <div className="flex items-center gap-3">
-                                <Menu className="xl:hidden h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-900 transition-colors" />
-                                <h2 className="hidden xl:block text-[17px] md:text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
+                                <h2 className="text-[17px] md:text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
                             </div>
-
-                            {/* Center: Mobile Logo */}
-                            <div className="xl:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
-                                <div className="relative w-8 h-8 rounded-lg overflow-hidden shadow-sm border border-gray-100">
-                                    <Image src="/logo.png" alt="Logo" fill className="object-cover" />
-                                </div>
-                                <span className="font-bold text-gray-900 tracking-tight">Ruhefza</span>
-                            </div>
-
-                            {/* Right: Desktop Icons ONLY */}
                             <div className="flex items-center gap-4">
-                                <Link href="/notifications" className="hidden xl:flex p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
+                                <Link href="/notifications" className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
                                     <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white group-hover:scale-110 transition-transform"></span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
                                 </Link>
-                                {/* Mobile Search Trigger (Icon) if we want to toggle input, but for now let's keep the input as requested by masam layout reference images which often show search icon next to logo */}
-                                <div className="xl:hidden p-2 text-gray-500">
-                                    <Search className="h-5 w-5" />
-                                </div>
                             </div>
                         </div>
 
-                        {/* Search Input - Refined for mobile */}
-                        <div className="xl:hidden relative w-full mt-1">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        {/* Mobile Search - Visible only below XL */}
+                        <div className="xl:hidden relative w-full">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                             <Input
-                                placeholder="Gündemi keşfet..."
-                                className="w-full pl-10 pr-4 py-2 bg-gray-50/50 border border-transparent rounded-2xl text-sm focus:bg-white focus:border-[#0c9789]/30 transition-all"
+                                placeholder="Ara..."
+                                className="w-full pl-11 pr-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0c9789]/20 focus:border-[#0c9789]/40 transition-all"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
