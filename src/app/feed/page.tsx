@@ -95,34 +95,34 @@ export default function FeedPage() {
                         <div className="flex items-center gap-4">
                             <Link href="/notifications" className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
                                 <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white group-hover:scale-110 transition-transform"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
                             </Link>
                         </div>
                     </header>
                     {/* Feed Tabs - Keşfet / Bağlantıların */}
-                    <nav className="flex items-center border-b border-gray-100 sticky top-16 xl:static z-30 bg-white/95 backdrop-blur-md">
+                    <nav className="flex items-center border-b border-gray-100 sticky top-16 xl:static z-30 bg-white -mx-4 md:-mx-6 px-2 md:px-4 shadow-sm">
                         <button
                             onClick={() => setActiveFeedTab('discover')}
                             className={cn(
-                                "flex-1 py-3.5 text-sm font-semibold transition-all relative",
+                                "flex-1 py-4 text-sm font-bold transition-all relative",
                                 activeFeedTab === 'discover' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
                             )}
                         >
                             Keşfet
                             {activeFeedTab === 'discover' && (
-                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#0c9789] rounded-t-full shadow-[0_-1px_4px_rgba(12,151,137,0.3)]" />
                             )}
                         </button>
                         <button
                             onClick={() => setActiveFeedTab('following')}
                             className={cn(
-                                "flex-1 py-3.5 text-sm font-semibold transition-all relative",
+                                "flex-1 py-4 text-sm font-bold transition-all relative",
                                 activeFeedTab === 'following' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
                             )}
                         >
                             Bağlantıların
                             {activeFeedTab === 'following' && (
-                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-[#0c9789] rounded-t-full shadow-[0_-1px_4px_rgba(12,151,137,0.3)]" />
                             )}
                         </button>
                     </nav>
