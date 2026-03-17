@@ -100,7 +100,7 @@ export default function FeedPage() {
                         </div>
                     </header>
                     {/* Feed Tabs - Keşfet / Bağlantıların */}
-                    <nav className="flex items-center border-b border-gray-100 mt-1">
+                    <nav className="flex items-center border-b border-gray-100 sticky top-16 xl:static z-30 bg-white/95 backdrop-blur-md">
                         <button
                             onClick={() => setActiveFeedTab('discover')}
                             className={cn(
