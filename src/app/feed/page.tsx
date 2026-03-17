@@ -84,25 +84,28 @@ export default function FeedPage() {
         <AppShell fullWidth>
             <div className="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-6 xl:gap-8 px-4 md:px-6 py-6 md:py-8 pb-24 md:pb-8 min-h-screen">
                 {/* Main Feed Column */}
-                <div className="flex-1 min-w-0 overflow-y-auto relative h-full flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
+                <div className="flex-1 min-w-0 relative flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
                     {/* Welcome Sticky Header */}
-                    <header className="flex flex-col gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-200 sticky top-0 z-10 backdrop-blur-sm bg-opacity-90">
+                    {/* Welcome Header */}
+                    <header className="flex flex-col gap-4 bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-10 backdrop-blur-md bg-white/90">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <h2 className="text-base md:text-xl font-bold text-gray-900">Hoş geldin, {userName} 👋</h2>
+                                <h2 className="text-[17px] md:text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
                             </div>
                             <div className="flex items-center gap-4">
-                                <Link href="/notifications" className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition-colors relative">
-                                    <span className="material-symbols-outlined absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
+                                <Link href="/notifications" className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
+                                    <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white group-hover:scale-110 transition-transform"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
                                 </Link>
                             </div>
                         </div>
-                        <div className="relative w-full">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+
+                        {/* Mobile Search - Visible only below XL */}
+                        <div className="xl:hidden relative w-full">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                             <Input
                                 placeholder="Ara..."
-                                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#0c9789] focus:border-transparent transition-all shadow-none"
+                                className="w-full pl-11 pr-4 py-2.5 bg-gray-50/50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0c9789]/20 focus:border-[#0c9789]/40 transition-all"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -155,7 +158,18 @@ export default function FeedPage() {
                 </div>
 
                 {/* Right Sidebar — Widgets */}
-                <aside className="hidden xl:flex w-[330px] flex-shrink-0 bg-gray-50/50 border-l border-transparent overflow-y-auto pl-8 py-6 pr-4 flex-col gap-6">
+                <aside className="hidden xl:flex w-[330px] flex-shrink-0 flex-col gap-6 sticky top-6 h-fit pl-8 py-6 pr-4">
+                    
+                    {/* Search Widget */}
+                    <div className="relative w-full mb-2">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Input
+                            placeholder="Kullanıcı veya post ara..."
+                            className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-2xl text-[15px] focus:outline-none focus:ring-2 focus:ring-[#0c9789]/20 focus:border-[#0c9789]/30 transition-all shadow-[0_2px_10px_rgb(0,0,0,0.02)]"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
                     
                     {/* Announcement Widget */}
                     <div className="rounded-[24px] bg-[#11988a] p-6 shadow-sm">
