@@ -167,7 +167,7 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
     };
 
     return (
-        <article className="overflow-hidden bg-white rounded-[2rem] border border-gray-100 hover:shadow-md transition-all duration-300 mb-8 group">
+        <article className="overflow-hidden bg-white rounded-[2.5rem] border border-gray-100/80 shadow-[0_2px_15px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 mb-6 group">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 sm:p-6 pb-2 sm:pb-4 gap-4">
                 <div className="flex items-center gap-3">
                     {post.is_anonymous ? (
@@ -194,8 +194,8 @@ export function PostItem({ post, currentUserId, isAdmin, onDelete }: PostItemPro
                                 <Link href={`/profile/${post.author_id}`} onClick={(e) => e.stopPropagation()} className="font-bold text-gray-800 hover:text-[#0c9789] transition-colors text-[15px] truncate inline-flex items-center gap-1 cursor-pointer">
                                     {post.profiles?.full_name || "İsimsiz Kullanıcı"}
                                     {post.profiles?.is_verified_expert && (
-                                        <span className="flex items-center gap-1 bg-[#0c9789]/10 text-[#0c9789] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#0c9789]/20 uppercase ml-1">
-                                            <BadgeCheck className="h-3 w-3" /> Doğrulanmış Uzman
+                                        <span className="flex items-center gap-1.5 bg-[#0c9789] text-white text-[9px] font-black px-2.5 py-1 rounded-full shadow-sm uppercase ml-1.5 translate-y-[1px]">
+                                            <BadgeCheck className="h-3 w-3 fill-white text-[#0c9789]" /> Doğrulanmış Uzman
                                         </span>
                                     )}
                                 </Link>

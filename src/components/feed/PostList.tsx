@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { PostItem } from "./PostItem";
+import { BookOpen } from "lucide-react";
 
 interface Post {
     id: string;
@@ -26,12 +27,14 @@ export function PostList({
     refreshTrigger,
     categoryFilter,
     searchQuery = "",
-    sortOption = "recent"
+    sortOption = "recent",
+    activeTab = "discover"
 }: {
     refreshTrigger: number;
     categoryFilter?: string | null;
     searchQuery?: string;
     sortOption?: string;
+    activeTab?: 'discover' | 'following';
 }) {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
@@ -51,6 +54,30 @@ export function PostList({
     useEffect(() => {
         const fetchPosts = async () => {
             setLoading(true);
+
+            let connectionIds: string[] = [];
+            
+            // If Following tab is selected, fetch connected user IDs
+            if (activeTab === 'following' && userId) {
+                const { data: connections } = await createClient()
+                    .from("connection_requests")
+                    .select("sender_id, receiver_id")
+                    .eq("status", "accepted")
+                    .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`);
+                
+                if (connections) {
+                    connectionIds = connections.map(c => 
+                        c.sender_id === userId ? c.receiver_id : c.sender_id
+                    );
+                }
+                
+                // If no connections, and in following tab, we can show empty early
+                if (connectionIds.length === 0) {
+                    setPosts([]);
+                    setLoading(false);
+                    return;
+                }
+            }
 
             let query = createClient()
                 .from("posts")
@@ -72,6 +99,11 @@ export function PostList({
                         role
                     )
                 `);
+
+            // Apply Tab Filter (Following)
+            if (activeTab === 'following' && connectionIds.length > 0) {
+                query = query.in('author_id', connectionIds);
+            }
 
             // Apply Sort
             if (sortOption === "popular") {
@@ -132,7 +164,7 @@ export function PostList({
         };
 
         fetchPosts();
-    }, [refreshTrigger, userId, categoryFilter, searchQuery, sortOption]);
+    }, [refreshTrigger, userId, categoryFilter, searchQuery, sortOption, activeTab]);
 
     if (loading) {
         return (
@@ -162,7 +194,27 @@ export function PostList({
     }
 
     if (posts.length === 0) {
-        return <div className="text-center py-10 text-stone-500">Henüz hiç gönderi yok. İlk paylaşan siz olun!</div>;
+        return (
+            <div className="text-center py-16 px-4 bg-white border border-stone-100 rounded-[28px] shadow-sm">
+                <div className="bg-stone-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <BookOpen className="w-8 h-8 text-stone-300" />
+                </div>
+                <h3 className="text-gray-900 font-bold mb-2">Henüz içerik yok</h3>
+                <p className="text-stone-500 text-sm max-w-[240px] mx-auto leading-relaxed">
+                    {activeTab === 'following' 
+                        ? "Bağlantıların henüz bir şey paylaşmamış veya henüz kimseyle bağlantı kurmamışsın." 
+                        : "Henüz hiç gönderi yok. İlk paylaşan siz olun!"}
+                </p>
+                {activeTab === 'following' && (
+                    <button 
+                        onClick={() => window.location.href = '/experts'}
+                        className="mt-6 text-[#0c9789] text-sm font-bold hover:underline"
+                    >
+                        Uzmanları Keşfet →
+                    </button>
+                )}
+            </div>
+        );
     }
 
     return (

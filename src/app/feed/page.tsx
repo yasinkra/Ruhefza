@@ -20,6 +20,7 @@ export default function FeedPage() {
     const [announcement, setAnnouncement] = useState<{ message: string, active: boolean } | null>(null);
     const [userName, setUserName] = useState("");
     const [recommendedExperts, setRecommendedExperts] = useState<{ id: string, full_name: string, role: string | null, avatar_url: string | null, seed?: string }[]>([]);
+    const [activeFeedTab, setActiveFeedTab] = useState<'discover' | 'following'>('discover');
 
     const categories = ["Sizin İçin", "Otizm Bakımı", "Nöroçeşitlilik", "Günlük Başarılar", "Terapi Sohbeti"];
 
@@ -110,6 +111,34 @@ export default function FeedPage() {
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>
+
+                        {/* Feed Tabs - Keşfet / Takip Ettiklerin */}
+                        <nav className="flex items-center border-t border-gray-50 mt-1 pt-2">
+                            <button
+                                onClick={() => setActiveFeedTab('discover')}
+                                className={cn(
+                                    "flex-1 py-3 text-sm font-semibold transition-all relative",
+                                    activeFeedTab === 'discover' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
+                                )}
+                            >
+                                Keşfet
+                                {activeFeedTab === 'discover' && (
+                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
+                                )}
+                            </button>
+                            <button
+                                onClick={() => setActiveFeedTab('following')}
+                                className={cn(
+                                    "flex-1 py-3 text-sm font-semibold transition-all relative",
+                                    activeFeedTab === 'following' ? "text-[#0c9789]" : "text-gray-400 hover:text-gray-600"
+                                )}
+                            >
+                                Takip Ettiklerin
+                                {activeFeedTab === 'following' && (
+                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#0c9789] rounded-t-full" />
+                                )}
+                            </button>
+                        </nav>
                     </header>
 
                     {/* Create Post or Info Banner */}
@@ -154,11 +183,12 @@ export default function FeedPage() {
                         categoryFilter={selectedCategory}
                         searchQuery={searchQuery}
                         sortOption={sortOption}
+                        activeTab={activeFeedTab}
                     />
                 </div>
 
                 {/* Right Sidebar — Widgets */}
-                <aside className="hidden xl:flex w-[330px] flex-shrink-0 flex-col gap-6 sticky top-6 h-fit pl-8 py-6 pr-4">
+                <aside className="hidden xl:flex w-[330px] flex-shrink-0 flex-col gap-6 sticky top-6 h-[calc(100vh-4rem)] overflow-y-auto pl-8 py-6 pr-4 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
                     
                     {/* Search Widget */}
                     <div className="relative w-full mb-2">
@@ -172,10 +202,10 @@ export default function FeedPage() {
                     </div>
                     
                     {/* Announcement Widget */}
-                    <div className="rounded-[24px] bg-[#11988a] p-6 shadow-sm">
+                    <div className="rounded-[24px] bg-[#11988a] p-6 shadow-[0_8px_30px_rgb(12,151,137,0.15)] group/announcement hover:scale-[1.02] transition-all duration-300">
                         <div className="flex items-center gap-3 mb-4">
-                            <Megaphone className="text-white w-5 h-5" strokeWidth={2.5} />
-                            <h3 className="font-bold text-sm tracking-widest uppercase text-white">Duyuru</h3>
+                            <Megaphone className="text-white w-5 h-5 group-hover/announcement:rotate-12 transition-transform" strokeWidth={2.5} />
+                            <h3 className="font-bold text-sm tracking-widest uppercase text-white/90">Duyuru</h3>
                         </div>
                         <p className="text-[15px] leading-relaxed mb-6 text-white font-medium">
                             {announcement?.active && announcement.message ? announcement.message : 'Bu hafta sonu "Alternatif İletişim Yöntemleri" konulu ücretsiz online seminerimize davetlisiniz.'}
@@ -186,9 +216,9 @@ export default function FeedPage() {
                     </div>
 
                     {/* Guidance / Support Widget */}
-                    <div className="rounded-[28px] bg-[#f3a88f] p-6 shadow-sm flex flex-col items-center text-center">
-                        <div className="bg-white/20 w-12 h-12 rounded-2xl flex items-center justify-center mb-4">
-                            <Megaphone className="text-white w-6 h-6" strokeWidth={2} />
+                    <div className="rounded-[28px] bg-[#f3a88f] p-6 shadow-[0_8px_30px_rgb(243,168,143,0.15)] flex flex-col items-center text-center group/support hover:scale-[1.02] transition-all duration-300">
+                        <div className="bg-white/20 w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover/support:bg-white/30 transition-colors">
+                            <Clock className="text-white w-6 h-6" strokeWidth={2} />
                         </div>
                         <h3 className="font-bold text-xl text-white tracking-tight mb-2">
                             Rehberlik mi Arıyorsunuz?
@@ -197,7 +227,6 @@ export default function FeedPage() {
                             Sertifikalı çocuk gelişim uzmanlarımızla nazik bir 1-on-1 görüşme planlayın.
                         </p>
                         <button className="w-full bg-white text-[#f3a88f] hover:bg-gray-50 py-3.5 rounded-[20px] text-[14px] font-bold transition-all shadow-sm flex items-center justify-center gap-2">
-                            <Clock className="w-4 h-4" />
                             Destek Randevusu Al
                         </button>
                     </div>
@@ -212,7 +241,7 @@ export default function FeedPage() {
                             {[
                                 "#BEP-Desteği", "#DuyusalOkullar", "#NazikEbeveynlik", "#SözelOlmayanİletişim", "#KonuşmaYolculuğu"
                             ].map((tag) => (
-                                <div key={tag} className="px-4 py-2 bg-[#f1faf5] border border-[#d2efe2] text-[#3e7e61] text-[13.5px] font-semibold rounded-full cursor-pointer hover:bg-[#e2f5ec] transition-colors">
+                                <div key={tag} className="px-4 py-2 bg-[#f1faf5] border border-[#d2efe2] text-[#3e7e61] text-[13px] font-semibold rounded-2xl cursor-pointer hover:bg-[#0c9789] hover:text-white hover:border-[#0c9789] transition-all duration-200">
                                     {tag}
                                 </div>
                             ))}
