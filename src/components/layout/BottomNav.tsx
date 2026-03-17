@@ -16,27 +16,9 @@ const navigation = [
 
 export function BottomNav() {
     const pathname = usePathname();
-    const [unreadCount, setUnreadCount] = useState(0);
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        let mounted = true;
-
-        const fetchUnreadCount = async () => {
-            const { data: { user } } = await createClient().auth.getUser();
-            if (!user) return;
-
-            const { count, error } = await createClient()
-                .from('messages')
-                .select('*', { count: 'exact', head: true })
-                .neq('sender_id', user.id)
-                .eq('is_read', false);
-
-            if (!error && count !== null && mounted) {
-                setUnreadCount(count);
-            }
-        };
-
         // Global Focus Detection to hide Nav on all inputs (Universal Fix)
         const handleFocusIn = (e: FocusEvent) => {
             const isInput = (e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA';
@@ -72,28 +54,11 @@ export function BottomNav() {
         window.addEventListener('hide-bottom-nav', handleHide);
         window.addEventListener('show-bottom-nav', handleShow);
 
-        fetchUnreadCount();
-
-        const { data: { subscription } } = createClient().auth.onAuthStateChange(() => {
-            fetchUnreadCount();
-        });
-
-        const channel = createClient().channel('bottomnav-unread')
-            .on(
-                'postgres_changes',
-                { event: '*', schema: 'public', table: 'messages' },
-                () => { fetchUnreadCount(); }
-            )
-            .subscribe();
-
         return () => {
-            mounted = false;
             document.removeEventListener('focusin', handleFocusIn);
             document.removeEventListener('focusout', handleFocusOut);
             window.removeEventListener('hide-bottom-nav', handleHide);
             window.removeEventListener('show-bottom-nav', handleShow);
-            subscription.unsubscribe();
-            createClient().removeChannel(channel);
         };
     }, []);
 
@@ -128,11 +93,6 @@ export function BottomNav() {
                                             )}
                                             strokeWidth={isActive ? 2.5 : 2}
                                         />
-                                        {item.name === "Mesajlar" && unreadCount > 0 && (
-                                            <span className="absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-2 ring-white px-0.5 animate-scale-in">
-                                                {unreadCount > 99 ? '99+' : unreadCount}
-                                            </span>
-                                        )}
                                     </div>
                                     <span className={cn(
                                         "text-[10px] sm:text-[11px] transition-all duration-200 truncate px-0.5",
