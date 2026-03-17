@@ -11,8 +11,6 @@ const navigation = [
     { name: "Akış", href: "/feed", icon: Home },
     { name: "Uzmanlar", href: "/experts", icon: Sparkles },
     { name: "Bilgi", href: "/knowledge", icon: BookOpen },
-    { name: "Mesajlar", href: "/messages", icon: MessageCircle },
-    { name: "Bildirim", href: "/notifications", icon: Bell },
     { name: "Profil", href: "/profile", icon: User },
 ];
 
