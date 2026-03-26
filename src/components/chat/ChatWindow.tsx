@@ -566,7 +566,7 @@ export function ChatWindow({ conversationId, partnerId, onBack, isOnline }: Chat
                                                     {msg._temp ? "⏳" : msg.is_read ? "✓✓" : "✓"}
                                                 </span>
                                             )}
-                                            {isExpiringSoon && !msg._temp && (
+                                            {isExpiringSoon && !msg._temp && (msg.type === "image" || msg.type === "document") && (
                                                 <span className="text-[10px] text-amber-500 flex items-center gap-0.5">
                                                     <Clock className="h-2.5 w-2.5" />
                                                     {daysLeft === 0 ? "bugün silinecek" : "yarın silinecek"}
