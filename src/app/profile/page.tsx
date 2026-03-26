@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ShieldCheck, Loader2, LogOut, Save, Copy, Check, X, Edit2, Instagram, Twitter, Facebook, Globe, Music, ExternalLink, Bookmark, FileText, Clock } from "lucide-react";
+import { ShieldCheck, Loader2, LogOut, Save, Copy, Check, X, Edit2, Instagram, Twitter, Facebook, Globe, Music, ExternalLink, Bookmark, FileText, Clock, Camera, User } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { toast } from "sonner";
@@ -26,6 +26,8 @@ interface Profile {
     username_last_changed: string | null;
     full_name: string;
     avatar_url: string | null;
+    cover_url: string | null;
+    gender: 'male' | 'female' | 'other' | null;
     is_admin?: boolean;
     role: 'parent' | 'teacher' | 'student' | null;
     verification_status: 'none' | 'unverified' | 'pending' | 'approved';
@@ -80,17 +82,11 @@ export default function ProfilePage() {
         };
     };
 
-    // Faceless, minimalist human avatars for all users
-    const NEUTRAL_AVATARS = [
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Felix&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon=",
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Anita&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon=",
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Oliver&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon=",
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Maya&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon=",
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Leo&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon=",
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Bella&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon=",
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Jack&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon=",
-        "https://api.dicebear.com/9.x/notionists/svg?seed=Nora&eyes=&lips=&nose=&brows=&beard=&glasses=&gesture=&bodyIcon="
-    ];
+    const getDefaultAvatar = (gender: Profile['gender']) => {
+        if (gender === 'male') return "https://api.dicebear.com/9.x/notionists/svg?seed=Felix&backgroundColor=b6e3f4";
+        if (gender === 'female') return "https://api.dicebear.com/9.x/notionists/svg?seed=Anita&backgroundColor=ffd5dc";
+        return "https://api.dicebear.com/9.x/notionists/svg?seed=Oliver&backgroundColor=f1f5f9";
+    };
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -255,6 +251,8 @@ export default function ProfilePage() {
                     bio: formData.bio,
                     special_note: formData.special_note,
                     avatar_url: formData.avatar_url,
+                    cover_url: formData.cover_url,
+                    gender: formData.gender,
                     social_links: formData.social_links
                 })
                 .eq("id", profile.id);
@@ -310,6 +308,53 @@ export default function ProfilePage() {
         }
     };
 
+    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'avatar' | 'cover') => {
+        const file = e.target.files?.[0];
+        if (!file || !profile) return;
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4'];
+        if (!allowedTypes.includes(file.type)) {
+            toast.error("Yalnızca JPEG, PNG, WEBP, GIF ve MP4 dosyaları yüklenebilir.");
+            return;
+        }
+
+        setSaving(true);
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${profile.id}/${type}_${Date.now()}.${fileExt}`;
+
+            const { error: uploadError } = await createClient()
+                .storage
+                .from('profile-assets')
+                .upload(fileName, file, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = createClient()
+                .storage
+                .from('profile-assets')
+                .getPublicUrl(fileName);
+
+            const updateData = type === 'avatar' ? { avatar_url: publicUrl } : { cover_url: publicUrl };
+            
+            const { error: updateError } = await createClient()
+                .from('profiles')
+                .update(updateData)
+                .eq('id', profile.id);
+
+            if (updateError) throw updateError;
+
+            setProfile(prev => prev ? { ...prev, ...updateData } : null);
+            setFormData(prev => ({ ...prev, ...updateData }));
+            toast.success(`${type === 'avatar' ? 'Profil fotoğrafı' : 'Kapak fotoğrafı'} güncellendi!`);
+        } catch (error) {
+            console.error("Upload error:", error);
+            toast.error("Yükleme sırasında bir hata oluştu.");
+        } finally {
+            setSaving(false);
+        }
+    };
+
 
     const handleLogout = async () => {
         await createClient().auth.signOut();
@@ -357,40 +402,47 @@ export default function ProfilePage() {
                 {/* Profile Header Card */}
                 <div className="bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden mb-8">
                     {/* Banner/Cover area */}
-                    <div className="h-48 bg-[#F0FDFA] relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#14B8A6]/5 to-transparent"></div>
+                    <div className="h-48 relative group/banner">
+                        {profile.cover_url ? (
+                            profile.cover_url.endsWith('.mp4') ? (
+                                <video src={profile.cover_url} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+                            ) : (
+                                <img src={profile.cover_url} alt="Cover" className="w-full h-full object-cover" />
+                            )
+                        ) : (
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#14B8A6]/20 to-[#F0FDFA]"></div>
+                        )}
                         
+                        {/* Cover Upload Button */}
+                        <label className="absolute top-4 right-4 cursor-pointer opacity-0 group-hover/banner:opacity-100 transition-opacity">
+                            <div className="bg-white/90 backdrop-blur-sm p-3 rounded-2xl shadow-lg border border-white hover:bg-white transition-all">
+                                <Camera className="w-5 h-5 text-[#0c9789]" />
+                            </div>
+                            <input type="file" className="hidden" accept="image/*,video/mp4" onChange={(e) => handleUpload(e, 'cover')} />
+                        </label>
+
                         {/* Avatar (Overlapping) */}
-                        <div className="absolute -bottom-16 left-8">
+                        <div className="absolute -bottom-16 left-8 group/avatar">
                             <div className="relative">
-                                <Avatar className="h-32 w-32 border-[4px] border-white shadow-lg bg-white">
-                                    <AvatarImage src={profile.avatar_url || undefined} className="object-cover" />
+                                <Avatar className="h-32 w-32 border-[4px] border-white shadow-xl bg-white overflow-hidden">
+                                    <AvatarImage src={profile.avatar_url || getDefaultAvatar(profile.gender)} className="object-cover" />
                                     <AvatarFallback className="text-3xl font-bold bg-gray-50 text-gray-300">
                                         {profile.full_name?.[0]}
                                     </AvatarFallback>
                                 </Avatar>
+                                
+                                {/* Avatar Upload Button */}
+                                <label className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer rounded-full">
+                                    <Camera className="w-8 h-8 text-white" />
+                                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'avatar')} />
+                                </label>
+
                                 {profile.verification_status === 'approved' && (
-                                    <div className="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+                                    <div className="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md z-10 border border-teal-50">
                                         <ShieldCheck className="w-5 h-5 text-[#14B8A6]" fill="currentColor" />
                                     </div>
                                 )}
                             </div>
-                        </div>
-
-                        {/* Top Actions */}
-                        <div className="absolute top-6 right-8 flex gap-3">
-                            <Button
-                                onClick={() => setIsEditing(true)}
-                                className="bg-white hover:bg-gray-50 text-gray-600 rounded-2xl px-6 h-12 font-bold border border-gray-200 shadow-sm transition-all hover:-translate-y-1"
-                            >
-                                <Edit2 className="h-4 w-4 mr-2 text-[#0c9789]" /> Profili Düzenle
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="bg-white hover:bg-gray-50 text-gray-400 h-10 w-10 p-0 rounded-xl border border-gray-100 shadow-sm"
-                            >
-                                <Globe className="w-4 h-4" />
-                            </Button>
                         </div>
                     </div>
 
@@ -502,22 +554,39 @@ export default function ProfilePage() {
                                 </div>
                                 <div className="space-y-4">
                                     <Label className="text-sm font-black text-gray-800 uppercase tracking-widest flex items-center gap-2">
-                                        <div className="w-1 h-3 bg-[#0c9789] rounded-full" /> Avatar Seçimi
+                                        <div className="w-1 h-3 bg-[#0c9789] rounded-full" /> Cinsiyet
                                     </Label>
-                                    <div className="flex flex-wrap gap-3">
-                                        {NEUTRAL_AVATARS.map((url, idx) => (
-                                            <button
-                                                key={idx}
-                                                type="button"
-                                                onClick={() => setFormData({ ...formData, avatar_url: url })}
-                                                className={cn(
-                                                    "w-12 h-12 rounded-2xl border-2 transition-all hover:scale-110 p-0.5 overflow-hidden",
-                                                    formData.avatar_url === url ? "border-[#0c9789] bg-[#f0fdfa] shadow-lg shadow-[#0c9789]/20 font-bold" : "border-gray-100 bg-gray-50"
-                                                )}
-                                            >
-                                                <img src={url} alt={`Avatar ${idx}`} className="w-full h-full object-cover" />
-                                            </button>
-                                        ))}
+                                    <div className="flex gap-4">
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, gender: 'male' })}
+                                            className={cn(
+                                                "flex-1 h-14 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 font-bold",
+                                                formData.gender === 'male' ? "border-[#3b82f6] bg-blue-50 text-blue-700 shadow-md" : "border-gray-100 bg-gray-50 text-gray-400"
+                                            )}
+                                        >
+                                            <div className="w-2 h-2 rounded-full bg-[#3b82f6]" /> Erkek
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, gender: 'female' })}
+                                            className={cn(
+                                                "flex-1 h-14 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 font-bold",
+                                                formData.gender === 'female' ? "border-[#ec4899] bg-pink-50 text-pink-700 shadow-md" : "border-gray-100 bg-gray-50 text-gray-400"
+                                            )}
+                                        >
+                                            <div className="w-2 h-2 rounded-full bg-[#ec4899]" /> Kadın
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, gender: 'other' })}
+                                            className={cn(
+                                                "flex-1 h-14 rounded-2xl border-2 transition-all flex items-center justify-center gap-2 font-bold",
+                                                formData.gender === 'other' ? "border-gray-400 bg-gray-100 text-gray-700 shadow-md" : "border-gray-100 bg-gray-50 text-gray-400"
+                                            )}
+                                        >
+                                            Diğer
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -611,12 +680,19 @@ export default function ProfilePage() {
                                 </div>
                             </div>
 
-                            <div className="flex justify-end gap-4 pt-6">
-                                <Button variant="ghost" onClick={() => setIsEditing(false)} className="rounded-2xl font-bold px-8 h-12">İptal</Button>
+                            {/* Actions */}
+                            <div className="flex justify-end gap-3 pt-6">
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => setIsEditing(false)}
+                                    className="rounded-2xl px-8 h-12 font-bold"
+                                >
+                                    İptal
+                                </Button>
                                 <Button
                                     onClick={handleSave}
                                     disabled={saving}
-                                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-2xl px-10 h-12 font-bold shadow-xl transition-all hover:-translate-y-1"
+                                    className="bg-gray-900 hover:bg-black text-white rounded-2xl px-12 h-12 font-bold shadow-lg transition-all hover:-translate-y-1"
                                 >
                                     {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
                                     Profilini Güncelle
@@ -624,7 +700,7 @@ export default function ProfilePage() {
                             </div>
                         </div>
                     ) : (
-                        <div className="space-y-12">
+                        <div className="space-y-8 animate-in fade-in duration-500">
                             {profile.role === 'teacher' && profile.verification_status && (
                                 <VerificationStatus
                                     userId={profile.id}
@@ -664,8 +740,7 @@ export default function ProfilePage() {
 
                                 <TabsContent value="about" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16">
-                                        {/* Left Column: Personal Info & Bio */}
-                                        <div className="lg:col-span-7 xl:col-span-8 space-y-8 lg:space-y-12">
+                                        <div className="lg:col-span-7 xl:col-span-8 space-y-8">
                                             <div className="bg-white p-8 lg:p-12 rounded-[40px] border border-gray-100 shadow-sm space-y-10 relative overflow-hidden group">
                                                 <div className="absolute top-0 right-0 w-48 h-48 bg-gray-50 rounded-bl-[120px] -z-0 transition-all group-hover:scale-110"></div>
                                                 <div className="relative z-10">
@@ -714,8 +789,7 @@ export default function ProfilePage() {
                                             </div>
                                         </div>
 
-                                        {/* Right Column: Social & Badges */}
-                                        <div className="lg:col-span-5 xl:col-span-4 space-y-8 lg:space-y-12">
+                                        <div className="lg:col-span-5 xl:col-span-4 space-y-8">
                                             <div className="bg-white p-8 lg:p-10 rounded-[40px] border border-gray-100 shadow-sm space-y-8 relative overflow-hidden group">
                                                 <div className="absolute top-0 left-0 w-24 h-24 bg-gray-50 rounded-br-[80px] -z-0"></div>
                                                 <div className="relative z-10">
@@ -724,18 +798,18 @@ export default function ProfilePage() {
                                                         <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">Sosyal Bağlantılar</h3>
                                                     </div>
                                                     <div className="flex flex-wrap items-center gap-5">
-                                                        {getSocialLinks(formData).website && (
-                                                            <a href={getSocialLinks(formData).website} target="_blank" rel="noopener" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#14B8A6] hover:bg-[#F0FDFA] transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
+                                                        {profile.social_links?.website && (
+                                                            <a href={profile.social_links.website} target="_blank" rel="noopener" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#14B8A6] hover:bg-[#F0FDFA] transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
                                                                 <Globe className="w-7 h-7" />
                                                             </a>
                                                         )}
-                                                        {getSocialLinks(formData).instagram && (
-                                                            <a href="#" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:bg-pink-50 transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
+                                                        {profile.social_links?.instagram && (
+                                                            <a href={`https://instagram.com/${profile.social_links.instagram.replace('@','')}`} target="_blank" rel="noopener" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:bg-pink-50 transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
                                                                 <Instagram className="w-7 h-7" />
                                                             </a>
                                                         )}
-                                                        {getSocialLinks(formData).twitter && (
-                                                            <a href="#" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#1DA1F2] hover:bg-blue-50 transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
+                                                        {profile.social_links?.twitter && (
+                                                            <a href={`https://twitter.com/${profile.social_links.twitter.replace('@','')}`} target="_blank" rel="noopener" className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#1DA1F2] hover:bg-blue-50 transition-all border border-gray-100 shadow-sm hover:-translate-y-1">
                                                                 <Twitter className="w-7 h-7" />
                                                             </a>
                                                         )}
@@ -747,26 +821,15 @@ export default function ProfilePage() {
                                             </div>
 
                                             <div className="bg-white p-8 lg:p-10 rounded-[40px] border border-gray-100 shadow-sm space-y-8">
-                                                <div className="flex items-center justify-between mb-6">
-                                                    <h3 className="text-xl font-bold text-gray-900">Rozetler</h3>
-                                                </div>
+                                                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Başarılar & Rozetler</h3>
                                                 <div className="flex flex-col gap-4">
-                                                    <div className="p-5 rounded-[32px] bg-gray-50/50 border border-gray-50 flex items-center gap-5 transition-all hover:bg-white hover:shadow-lg">
-                                                        <div className="w-14 h-14 rounded-full bg-[#E0E7FF] flex items-center justify-center text-[#4F46E5] flex-shrink-0">
-                                                            <ShieldCheck className="w-7 h-7" />
+                                                    <div className="flex items-center gap-4 p-4 rounded-3xl bg-gray-50/50 border border-gray-50">
+                                                        <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600">
+                                                            <ShieldCheck className="w-6 h-6" />
                                                         </div>
-                                                        <div className="flex-1 min-w-0">
-                                                            <div className="text-base font-bold text-gray-900 leading-tight">Doğrulanmış Üye</div>
-                                                            <div className="text-[12px] font-medium text-gray-500 mt-0.5">Kimlik doğrulaması tamamlandı.</div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="p-5 rounded-[32px] bg-gray-50/50 border border-gray-50 flex items-center gap-5 transition-all hover:bg-white hover:shadow-lg">
-                                                        <div className="w-14 h-14 rounded-full bg-[#FFF7ED] flex items-center justify-center text-[#EA580C] flex-shrink-0">
-                                                            <Edit2 className="w-7 h-7" />
-                                                        </div>
-                                                        <div className="flex-1 min-w-0">
-                                                            <div className="text-base font-bold text-gray-900 leading-tight">İlk Gönderi</div>
-                                                            <div className="text-[12px] font-medium text-gray-500 mt-0.5">Topluluğa ilk katkı yapıldı.</div>
+                                                        <div>
+                                                            <div className="text-sm font-bold text-gray-900">Doğrulanmış Üye</div>
+                                                            <div className="text-[10px] text-gray-400 font-medium">Topluluk onaylı hesap</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -847,4 +910,3 @@ export default function ProfilePage() {
         </AppShell>
     );
 }
-
