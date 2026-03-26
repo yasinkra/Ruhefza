@@ -88,15 +88,26 @@ export default function FeedPage() {
                 <div className="flex-1 min-w-0 relative flex flex-col gap-4 md:gap-6 pb-20 md:pb-6">
                     {/* Welcome Sticky Header */}
                     {/* Desktop Header */}
-                    <header className="hidden xl:flex items-center justify-between bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-20 backdrop-blur-md bg-white/90">
-                        <div className="flex items-center gap-3">
-                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
+                    <header className="hidden xl:flex flex-col gap-4 bg-white p-5 rounded-[28px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100/80 sticky top-0 z-20 backdrop-blur-md bg-white/90">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <h2 className="text-xl font-bold text-gray-900 tracking-tight">Hoş geldin, {userName} 👋</h2>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <Link href="/notifications" className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
+                                    <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white group-hover:scale-110 transition-transform"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
+                                </Link>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <Link href="/notifications" className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 transition-all relative group">
-                                <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white group-hover:scale-110 transition-transform"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80"><path d="M6 8a6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
-                            </Link>
+                        <div className="relative w-full">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-gray-400" />
+                            <Input
+                                placeholder="Ara..."
+                                className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0c9789]/20 focus:border-[#0c9789]/30 transition-all"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                         </div>
                     </header>
                     {/* Feed Tabs - Keşfet / Bağlantıların */}
