@@ -8,7 +8,7 @@ import { tr } from "date-fns/locale";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Share2, Bookmark, BookOpen, Trash2, Loader2, ArrowUp, Clock, Type, ThumbsUp, ChevronLeft, Check } from "lucide-react";
+import { ArrowLeft, Share2, Bookmark, BookOpen, Trash2, Loader2, ArrowUp, Clock, Type, ThumbsUp, ChevronLeft, Check, FileText, Upload } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { cn } from "@/utils/cn";
@@ -21,6 +21,8 @@ interface ArticleDetail {
     title: string;
     content: string;
     image_url: string | null;
+    file_url: string | null;
+    file_name: string | null;
     category: string;
     created_at: string;
     author_id: string;
@@ -65,6 +67,8 @@ export default function ArticleDetailPage() {
                     title,
                     content,
                     image_url,
+                    file_url,
+                    file_name,
                     category,
                     created_at,
                     author:author_id (
@@ -247,6 +251,30 @@ export default function ArticleDetailPage() {
 
                         {/* Article Text Content */}
                         <div className="flex-1 max-w-[700px]">
+                            {article.file_url && (
+                                <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 rounded-3xl border border-amber-200/60 p-6 sm:p-8 mb-8 flex flex-col md:flex-row gap-6 items-center justify-between shadow-sm relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
+                                    <div className="flex items-center gap-4 relative z-10 w-full md:w-auto">
+                                        <div className="w-14 h-14 bg-white rounded-2xl shadow-sm border border-amber-100 flex items-center justify-center shrink-0">
+                                            <FileText className="h-7 w-7 text-amber-500" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <span className="text-[11px] font-bold text-amber-600 tracking-wider uppercase block">PAYLAŞILAN BELGE</span>
+                                            <h3 className="font-bold text-slate-800 text-base sm:text-lg mt-0.5 truncate">{article.file_name || article.title}</h3>
+                                            <p className="text-xs text-slate-400 mt-1">İndirmek veya görüntülemek için tıklayın</p>
+                                        </div>
+                                    </div>
+                                    <a
+                                        href={article.file_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#fb923c] hover:bg-[#f97316] text-white font-bold rounded-full shadow-md shadow-orange-500/10 transition-all hover:-translate-y-0.5 duration-300 relative z-10 hover:shadow-lg"
+                                    >
+                                        <Upload className="h-4 w-4 rotate-180" /> Belgeyi Görüntüle / İndir
+                                    </a>
+                                </div>
+                            )}
+
                             <article className={cn(
                                 "prose prose-slate max-w-none text-slate-800",
                                 // Beautiful crisp typography rules
@@ -279,6 +307,21 @@ export default function ArticleDetailPage() {
                                     return <p key={idx} className="mb-8 whitespace-pre-line text-slate-700 font-normal">{paragraph}</p>;
                                 })}
                             </article>
+
+                            {article.file_url && article.file_url.toLowerCase().endsWith('.pdf') && (
+                                <div className="mt-8 mb-12 hidden md:block">
+                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <BookOpen className="w-4 h-4 text-emerald-500" /> Belge Önizleme
+                                    </h3>
+                                    <div className="aspect-[4/3] w-full rounded-3xl overflow-hidden border border-slate-100 shadow-inner bg-slate-50">
+                                        <iframe
+                                            src={article.file_url}
+                                            className="w-full h-full border-0"
+                                            title={article.title}
+                                        />
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Divider */}
                             <div className="flex items-center justify-center gap-2 my-16 opacity-30">

@@ -4,7 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, BookOpen, Trash2, Loader2, Bookmark, Share2, Clock, Puzzle, Brain, Activity, MessageCircle, Scale, BadgeCheck, ThumbsUp } from "lucide-react";
+import { ArrowRight, BookOpen, Trash2, Loader2, Bookmark, Share2, Clock, Puzzle, Brain, Activity, MessageCircle, Scale, BadgeCheck, ThumbsUp, FileText } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
@@ -18,6 +18,8 @@ export interface Article {
     summary: string;
     category: string;
     image_url?: string | null;
+    file_url?: string | null;
+    file_name?: string | null;
     created_at: string;
     author_id: string;
     author: {
@@ -209,10 +211,16 @@ export function ArticleCard({
                     </div>
                 </div>
 
-                <div className="relative -mt-3 ml-6 z-10 w-fit">
+                <div className="relative -mt-3 ml-6 z-10 w-fit flex gap-2">
                     <div className="bg-white px-3 py-1 rounded-full text-[10px] font-black tracking-widest shadow-[0_2px_10px_rgb(0,0,0,0.06)] uppercase">
                         <span className={categoryStyle.tagColor}>{article.category}</span>
                     </div>
+                    {article.file_url && (
+                        <div className="bg-amber-50 border border-amber-200 px-3 py-1 rounded-full text-[10px] font-black tracking-widest shadow-[0_2px_10px_rgb(0,0,0,0.06)] uppercase text-amber-600 flex items-center gap-1">
+                            <FileText className="h-3 w-3" />
+                            <span>BELGE</span>
+                        </div>
+                    )}
                 </div>
 
                 <Link href={`/knowledge/${article.id}`} className="flex-1 flex flex-col">
