@@ -264,11 +264,11 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                     {comment.content}
                                 </p>
                             </div>
-                            <div className="flex flex-col gap-1 items-center self-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="flex flex-col gap-1 items-center self-center transition-all">
                                 {userId === postAuthorId && isQuestion && !comment.is_best_answer && (
                                     <button
                                         onClick={() => handleMarkBestAnswer(comment.id)}
-                                        className="text-xs text-gray-400 hover:text-[#0a7c70] bg-white p-1 rounded-md shadow-sm border border-gray-100"
+                                        className="text-xs text-gray-400 hover:text-[#0c9789] bg-white p-1.5 rounded-lg shadow-sm border border-gray-100 transition-colors"
                                         title="Çözüm olarak işaretle"
                                     >
                                         <BadgeCheck className="h-4 w-4" />
@@ -277,7 +277,8 @@ export function CommentSection({ postId, postAuthorId, isQuestion, onCommentAdde
                                 {userId === comment.user_id && (
                                     <button
                                         onClick={() => handleDelete(comment.id)}
-                                        className="text-gray-400 hover:text-red-500 bg-white p-1 rounded-md shadow-sm border border-gray-100"
+                                        className="text-gray-300 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-all"
+                                        title="Yorumu sil"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </button>

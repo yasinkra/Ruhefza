@@ -163,16 +163,16 @@ export default function KnowledgeBasePage() {
                         <p className="text-[15px] text-gray-500 font-medium mt-2">Ebeveynlik yolculuğunuz için özenle seçilmiş kaynaklar</p>
                     </div>
                     {/* Placeholder for top right widgets like Notifications / Profile in design */}
-                    <div className="hidden md:flex items-center gap-3">
-                        {!loadingUser && canCreate && (
+                    {!loadingUser && canCreate && (
+                        <div className="flex items-center gap-3">
                             <Button
                                 onClick={() => router.push('/knowledge/create')}
                                 className="bg-[#4ade80] hover:bg-[#22c55e] text-white shadow-sm rounded-full h-10 px-6 font-bold transition-all border-none"
                             >
                                 + Paylaşımda Bulun
                             </Button>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Hero Banner Area */}
