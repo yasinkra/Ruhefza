@@ -19,6 +19,7 @@ import { cn } from "@/utils/cn";
 interface ArticleDetail {
     id: string;
     title: string;
+    summary: string;
     content: string;
     image_url: string | null;
     file_url: string | null;
@@ -65,6 +66,7 @@ export default function ArticleDetailPage() {
                 .select(`
                     id,
                     title,
+                    summary,
                     content,
                     image_url,
                     file_url,
@@ -251,6 +253,12 @@ export default function ArticleDetailPage() {
 
                         {/* Article Text Content */}
                         <div className="flex-1 max-w-[700px]">
+                            {article.summary && (
+                                <p className="text-[17px] sm:text-[20px] font-medium text-slate-500 leading-relaxed mb-8 italic border-l-4 border-emerald-500 pl-4 bg-slate-50 py-3 rounded-r-2xl">
+                                    {article.summary}
+                                </p>
+                            )}
+
                             {article.file_url && (
                                 <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 rounded-3xl border border-amber-200/60 p-6 sm:p-8 mb-8 flex flex-col md:flex-row gap-6 items-center justify-between shadow-sm relative overflow-hidden group">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
@@ -275,38 +283,40 @@ export default function ArticleDetailPage() {
                                 </div>
                             )}
 
-                            <article className={cn(
-                                "prose prose-slate max-w-none text-slate-800",
-                                // Beautiful crisp typography rules
-                                fontSizeLevel === 0 ? "prose-p:text-base prose-headings:text-2xl prose-p:leading-[1.7]" :
-                                fontSizeLevel === 1 ? "prose-p:text-[19px] prose-p:leading-[1.85] prose-headings:text-3xl" :
-                                "prose-p:text-[22px] prose-p:leading-[1.9] prose-headings:text-4xl",
-                                "prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-a:text-emerald-600 prose-a:no-underline hover:prose-a:underline prose-strong:font-bold prose-strong:text-slate-900"
-                            )}>
-                                {article.content.split('\n\n').map((paragraph, idx) => {
-                                    if (paragraph.startsWith('# ')) return <h1 key={idx} className="mt-14 mb-8 font-serif">{paragraph.replace('# ', '')}</h1>;
-                                    if (paragraph.startsWith('## ')) return <h2 key={idx} className="mt-12 mb-6">{paragraph.replace('## ', '')}</h2>;
-                                    if (paragraph.startsWith('### ')) return <h3 key={idx} className="mt-10 mb-4">{paragraph.replace('### ', '')}</h3>;
-                                    
-                                    if (paragraph.trim().startsWith('- ')) {
-                                        return (
-                                            <ul key={idx} className="my-8 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-                                                {paragraph.split('\n').map((item, i) => {
-                                                    if(!item.trim()) return null;
-                                                    return (
-                                                        <li key={i} className="flex gap-4 items-start mb-3 last:mb-0">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-[11px] shrink-0" />
-                                                            <span className="text-slate-700">{item.replace('- ', '')}</span>
-                                                        </li>
-                                                    );
-                                                })}
-                                            </ul>
-                                        );
-                                    }
+                            {(!article.file_url || !article.content.startsWith("Bu paylaşım bir dosya/belge içermektedir.")) && (
+                                <article className={cn(
+                                    "prose prose-slate max-w-none text-slate-800",
+                                    // Beautiful crisp typography rules
+                                    fontSizeLevel === 0 ? "prose-p:text-base prose-headings:text-2xl prose-p:leading-[1.7]" :
+                                    fontSizeLevel === 1 ? "prose-p:text-[19px] prose-p:leading-[1.85] prose-headings:text-3xl" :
+                                    "prose-p:text-[22px] prose-p:leading-[1.9] prose-headings:text-4xl",
+                                    "prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 prose-a:text-emerald-600 prose-a:no-underline hover:prose-a:underline prose-strong:font-bold prose-strong:text-slate-900"
+                                )}>
+                                    {article.content.split('\n\n').map((paragraph, idx) => {
+                                        if (paragraph.startsWith('# ')) return <h1 key={idx} className="mt-14 mb-8 font-serif">{paragraph.replace('# ', '')}</h1>;
+                                        if (paragraph.startsWith('## ')) return <h2 key={idx} className="mt-12 mb-6">{paragraph.replace('## ', '')}</h2>;
+                                        if (paragraph.startsWith('### ')) return <h3 key={idx} className="mt-10 mb-4">{paragraph.replace('### ', '')}</h3>;
+                                        
+                                        if (paragraph.trim().startsWith('- ')) {
+                                            return (
+                                                <ul key={idx} className="my-8 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+                                                    {paragraph.split('\n').map((item, i) => {
+                                                        if(!item.trim()) return null;
+                                                        return (
+                                                            <li key={i} className="flex gap-4 items-start mb-3 last:mb-0">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-[11px] shrink-0" />
+                                                                <span className="text-slate-700">{item.replace('- ', '')}</span>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            );
+                                        }
 
-                                    return <p key={idx} className="mb-8 whitespace-pre-line text-slate-700 font-normal">{paragraph}</p>;
-                                })}
-                            </article>
+                                        return <p key={idx} className="mb-8 whitespace-pre-line text-slate-700 font-normal">{paragraph}</p>;
+                                    })}
+                                </article>
+                            )}
 
                             {article.file_url && article.file_url.toLowerCase().endsWith('.pdf') && (
                                 <div className="mt-8 mb-12 hidden md:block">
