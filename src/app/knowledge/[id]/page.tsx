@@ -183,7 +183,7 @@ export default function ArticleDetailPage() {
                         <Badge className="bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border-none mb-6 px-4 py-1.5 rounded-full text-[13px] font-bold tracking-widest uppercase shadow-sm">
                             {article.category}
                         </Badge>
-                        <h1 className="text-4xl sm:text-5xl md:text-[56px] font-black text-slate-900 leading-[1.15] mb-8 tracking-[-0.02em]">
+                        <h1 className="text-3xl sm:text-5xl md:text-[56px] font-black text-slate-900 leading-[1.15] mb-8 tracking-[-0.02em] break-words">
                             {article.title}
                         </h1>
 
@@ -195,7 +195,7 @@ export default function ArticleDetailPage() {
                                 </Avatar>
                                 <div className="text-left">
                                     <div className="font-bold text-slate-900 text-[15px]">{article.author?.full_name}</div>
-                                    <div className="text-[13px] font-medium text-slate-500 mt-0.5 flex items-center gap-2">
+                                    <div className="text-[13px] font-medium text-slate-500 mt-0.5 flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1">
                                         <span>{article.author?.special_note || "Editör"}</span>
                                         <span className="hidden sm:inline-block w-1 h-1 rounded-full bg-slate-300"></span>
                                         <span>{formatDistanceToNow(new Date(article.created_at), { addSuffix: true, locale: tr })}</span>
@@ -260,9 +260,9 @@ export default function ArticleDetailPage() {
                             )}
 
                             {article.file_url && (
-                                <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 rounded-3xl border border-amber-200/60 p-6 sm:p-8 mb-8 flex flex-col md:flex-row gap-6 items-center justify-between shadow-sm relative overflow-hidden group">
+                                <div className="bg-gradient-to-br from-amber-50 to-orange-50/50 rounded-3xl border border-amber-200/60 p-6 sm:p-8 mb-8 flex flex-col md:flex-row gap-6 items-center justify-between shadow-sm relative overflow-hidden group w-full min-w-0">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
-                                    <div className="flex items-center gap-4 relative z-10 w-full md:w-auto">
+                                    <div className="flex items-center gap-4 relative z-10 w-full md:w-auto min-w-0">
                                         <div className="w-14 h-14 bg-white rounded-2xl shadow-sm border border-amber-100 flex items-center justify-center shrink-0">
                                             <FileText className="h-7 w-7 text-amber-500" />
                                         </div>
@@ -283,7 +283,7 @@ export default function ArticleDetailPage() {
                                 </div>
                             )}
 
-                            {(!article.file_url || !article.content.startsWith("Bu paylaşım bir dosya/belge içermektedir.")) && (
+                            {!article.file_url && (
                                 <article className={cn(
                                     "prose prose-slate max-w-none text-slate-800",
                                     // Beautiful crisp typography rules
